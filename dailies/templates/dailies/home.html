@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% load static %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NOMY – Dailies</title>
+
+  <!-- DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --title:#2e2840;
+      --morning:#eaeaf5;  /* Morning ellipse */
+      --evening:#564d74;  /* Evening ellipse */
+      --text-dark:#1f1f25;
+      --text-light:#fff;
+      --shadow: 0 18px 45px rgba(0,0,0,.12);
+      --overlap: clamp(70px, 8vw, 110px); /* how much they cross */
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg);
+      font-family:"DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--text-dark);
+      display:flex; align-items:flex-start; justify-content:center;
+    }
+
+    .wrap{
+      width:min(980px, 100%); padding:48px 20px 96px; text-align:center;
+    }
+
+    h1{
+      margin:0 0 56px; color:var(--title);
+      font-weight:500; letter-spacing:.2px; font-size:clamp(26px, 4vw, 44px);
+    }
+
+    /* LAYOUT FOR THE TWO OVALS */
+    .ovals{
+      position:relative;
+      width: max(560px, 62vw); /* overall stage width */
+      margin-inline:auto;
+      display:flex; justify-content:center; align-items:center;
+      height: clamp(150px, 26vw, 230px);  /* stage height (not the ovals) */
+    }
+
+    .oval{
+      position:absolute;
+      width: clamp(320px, 42vw, 520px);
+      height: clamp(140px, 18vw, 200px);
+      border-radius: 999px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; letter-spacing:.2px;
+      font-size: clamp(20px, 3vw, 36px);
+      box-shadow: var(--shadow);
+      user-select:none; text-decoration:none;
+      transition: transform .12s ease, box-shadow .25s ease;
+    }
+    .oval:hover{ transform:translateY(-2px); box-shadow:0 24px 56px rgba(0,0,0,.16); }
+
+    /* Place them so they overlap by --overlap */
+    .oval.morning{
+      background:var(--morning); color:var(--title); z-index:2;
+      left: 50%; transform: translate(calc(-100% + var(--overlap)), 0);
+    }
+    .oval.evening{
+      background:var(--evening); color:var(--text-light); z-index:1;
+      left: 50%; transform: translate(calc(0% - var(--overlap)), 0);
+    }
+
+    /* Optional mascot on the overlap */
+    .mascot{
+      position:absolute; inset:auto 0 8% 0; margin:auto; z-index:3;
+      width: clamp(70px, 10vw, 110px); height:auto; pointer-events:none;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.14));
+      transform: translateY(-6%);
+    }
+
+    /* Small screens: reduce overlap a bit so both labels stay readable */
+    @media (max-width: 560px){
+      :root{ --overlap: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main">
+    <h1>Dailies</h1>
+
+    <section class="ovals" aria-label="Choose a check-in">
+      <!-- Update hrefs to your routes -->
+      <a class="oval morning" href="/dailies/morning" aria-label="Morning">Morning</a>
+      <a class="oval evening" href="/dailies/evening" aria-label="Evening">Evening</a>
+
+      <!-- Replace with your asset or remove -->
+      <img class="mascot" src="{% static 'images/dailies.png' %}" alt="" /> -->
+
+    </section>
+  </main>
+</body>
+</html>

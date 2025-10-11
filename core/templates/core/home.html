@@ -1,0 +1,97 @@
+<!-- templates/home.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  {% load static %}
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/nomy_favicon_32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="64x64" href="{% static 'images/nomy_favicon_64x64.png' %}">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOMY</title>
+
+  <!-- DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --text: #4c2e6f;
+      --bg1: #E9E0FF;
+      --bg2: #D9CCFF;
+      --bg3: #C7B6FF;
+      --glow: rgba(151, 120, 255, .35);
+    }
+    *{ box-sizing:border-box }
+    html,body{ height:100%; margin:0; font-family:"DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif; }
+
+    /* canvas-like purple haze background */
+    body{
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 15%, var(--bg1), transparent 65%),
+        radial-gradient(900px 500px at 85% 25%, var(--bg2), transparent 60%),
+        radial-gradient(800px 700px at 50% 90%, var(--bg3), transparent 60%),
+        #f7f3ff;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding:8vh 4vw;
+      position:relative;
+      isolation:isolate;
+    }
+
+    /* soft vignette & glow blobs */
+    .wrap::before,
+    .wrap::after{
+      content:"";
+      position:absolute; inset:-20vmax;
+      background: radial-gradient(35vmax 35vmax at 25% 30%, var(--glow), transparent 60%),
+                  radial-gradient(30vmax 30vmax at 80% 40%, var(--glow), transparent 60%);
+      filter: blur(40px);
+      z-index:-1; pointer-events:none;
+      opacity:.7;
+    }
+
+    .hero{ text-align:center; text-decoration:none; color:inherit }
+
+    .title{
+      margin:0 0 .75rem;
+      line-height:.88;           /* compact, Canva-like */
+      letter-spacing:-.01em;
+      font-weight:900;
+      text-transform:uppercase;
+      font-size:clamp(64px, 16vw, 220px);
+
+      /* White fill with soft shadow like the screenshot */
+      color:#fff;
+      text-shadow:
+        0 8px 30px rgba(64, 24, 120, .25),
+        0 2px 8px rgba(64, 24, 120, .18);
+    }
+
+    /* keeps the two-line stack even when responsive */
+    .title span{ display:inline-block }
+    .subtitle{
+      margin:0;
+      font-size:clamp(16px, 2.5vw, 24px);
+      font-weight:500;
+      color:#4c2e6f;
+      opacity:.9;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a href="{% url 'nomy-options' %}" class="hero" aria-labelledby="title">
+      <h1 id="title" class="title">
+        <span>NO</span><br />
+        <span>MY</span>
+      </h1>
+      <p class="subtitle">here to support your journey of unmasking and self-expression.</p>
+    </a>
+  </main>
+</body>
+</html>

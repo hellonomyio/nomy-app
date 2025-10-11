@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOMY • Emotionfy</title>
+
+  <!-- DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:#ffffff;
+      --oval:#e9c3f1; 
+      --text:#22163c;
+      --muted:#5e4f79;
+      --shadow:0 10px 30px rgba(19,7,63,.08);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family:'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    main.wrap {
+      max-width: 1100px;
+      width: 100%;
+      padding: clamp(72px, 12vh, 160px) 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-weight: 800;
+      font-size: clamp(22px, 3.6vw, 40px);
+      line-height: 1.25;
+      letter-spacing: .2px;
+    }
+
+    .sub {
+      margin: 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: clamp(14px, 1.8vw, 18px);
+    }
+
+    /* Grid layout for 2x2 ovals + centered icon */
+    .grid {
+      position: relative;
+      margin-top: 12px;
+      width: 100%;
+      max-width: 600px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 40px;
+      justify-items: center;
+      align-items: center;
+    }
+
+    .oval {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 240px;              /* slightly wider */
+        height: 130px;             /* taller for the soft ellipse */
+        background: #e9c3f1;       /* your lavender */
+        border-radius: 50% / 58%;  /* makes it oval, not pill */
+        text-decoration: none;
+        color: #22163c;
+        font-weight: 200;
+        font-size: 20px;
+        box-shadow: 0 12px 30px rgba(19, 7, 63, 0.08);
+        transition: transform 0.12s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    }
+
+    .oval:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px rgba(19, 7, 63, 0.14);
+        filter: saturate(1.06);
+    }
+
+    /* Center illustration over grid */
+    .art {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: auto;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .more {
+      margin-top: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #3a2c6b;
+      border: 1px solid #e6e0f5;
+      border-radius: 999px;
+      padding: 10px 14px;
+      box-shadow: 0 6px 22px rgba(19,7,63,.06);
+      transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .more:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(19,7,63,.10);
+      background: #faf7ff;
+    }
+
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 22px;
+      }
+      .art {
+        position: static;
+        transform: none;
+        margin: 12px auto;
+      }
+      .oval {
+        width: min(80vw, 320px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Which emotion would <br>you like to discover?</h1>
+    <p class="sub">Should there be some sub text here?</p>
+
+    <section class="grid" aria-label="Emotion options">
+      <a class="oval" href="{% url 'emotionfy:emotionfy-story' %}?emotion=anxiety">Anxiety</a>
+      <a class="oval" href="{% url 'emotionfy:emotionfy-story' %}?emotion=shame">Shame</a>
+
+      <a class="oval" href="{% url 'emotionfy:emotionfy-story' %}?emotion=overwhelm">Overwhelm</a>
+      <a class="oval" href="{% url 'emotionfy:emotionfy-story' %}?emotion=frustration">Frustration</a>
+
+      <!-- centered illustration -->
+      <img class="art" src="{% static 'images/emotionfy.svg' %}" alt="">
+    </section>
+
+    <a class="more" href="{% url 'emotionfy:emotionfy-all' %}">Explore more emotions →</a>
+  </main>
+</body>
+</html>
