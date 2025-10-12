@@ -3,10 +3,10 @@ from django.utils.text import slugify
 
 # Create your views here.
 def home(request):
-    return render(request, 'emotionfy/home.html')
+    return render(request, 'emotionize/home.html')
 
-def emotionfyAll(request):
-    return render(request, 'emotionfy/emotionfy-all.html')
+def emotionizeAll(request):
+    return render(request, 'emotionize/emotionize-all.html')
 
 SLIDES = {
     "anxiety": [
@@ -59,7 +59,7 @@ SLIDES = {
     ]
 }
 
-def emotionStory(request):
+def emotionizeStory(request):
     slug = slugify(request.GET.get("emotion", "anxiety"))
     slides = SLIDES.get(slug)
     if not slides:
@@ -70,4 +70,4 @@ def emotionStory(request):
         "title": slug.capitalize(), # page title/heading use
         "slides": slides,           # list of dicts for template loop
     }
-    return render(request, "emotionfy/emotionfy-story.html", ctx)
+    return render(request, "emotionize/emotionize-story.html", ctx)

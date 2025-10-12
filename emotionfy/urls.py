@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 app_name = 'emotionfy'
 urlpatterns = [
-    path('', views.home, name='emotionfy-home'),
-    path('emotionfy-all', views.emotionfyAll, name='emotionfy-all'),
-    path('emotionfy-story/', views.emotionStory, name='emotionfy-story'),
+    path('', views.home, name='emotionize-home'),
+    path('emotionize-all', views.emotionizeAll, name='emotionize-all'),
+    path('emotionize-story/', views.emotionizeStory, name='emotionize-story'),
 ]
