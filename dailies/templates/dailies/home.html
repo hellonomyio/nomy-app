@@ -7,54 +7,60 @@
   <title>NOMY – Dailies</title>
 
   <!-- DM Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-        --bg:#fff; --title:#2e2840;
-        --morning:#eaeaf5; --evening:#564d74;
-        --text-dark:#2e2840; --text-light:#fff;
-        --shadow: 0 18px 45px rgba(0,0,0,.12);
+      --bg:#fff; --title:#2e2840;
+      --morning:#eaeaf5; --evening:#564d74;
+      --text-dark:#2e2840; --text-light:#fff;
+      --shadow: 0 18px 45px rgba(0,0,0,.12);
+      --overlap: 0px; /* no overlap by default */
     }
-  
+
+    /* time-aware background tints (subtle) */
+    body[data-phase="morning"]{ background: #ffffff; }
+    body[data-phase="evening"]{ background: #fbfaff; }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-        margin:0; background:var(--bg);
-        font-family:"DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-        color:var(--text-dark); display:flex; justify-content:center;
+      margin:0;
+      font-family:"DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      color:var(--text-dark);
+      display:flex; justify-content:center;
+      transition: background .25s ease;
     }
+
     .wrap{ width:min(980px,100%); padding:72px 20px 120px; text-align:center; }
-    h1{ margin:0 0 80px; color:var(--title); font-weight:600; letter-spacing:.2px;
-        font-size:clamp(24px,3.2vw,36px); }
+    h1{ margin:0 0 80px; color:var(--title); font-weight:700; letter-spacing:.2px;
+        font-size:clamp(24px,3.2vw,36px); text-transform:lowercase; }
 
     .ovals{
       position:relative;
       width:min(820px,92vw);
       margin:0 auto;
-      display:flex;              /* <<< side-by-side, no absolute positioning */
-      align-items:center;
-      justify-content:center;
+      display:flex; align-items:center; justify-content:center;
     }
-  
+
     .oval{
       width:clamp(280px,36vw,380px);
       height:clamp(120px,16vw,160px);
       border-radius:50% / 58%;
-      display:flex;align-items:center;justify-content:center;
+      display:flex; align-items:center; justify-content:center;
       box-shadow:var(--shadow);
       font:500 clamp(18px,2.6vw,28px)/1 "DM Sans",sans-serif;
       text-decoration:none; user-select:none;
       transition:transform .12s ease, box-shadow .25s ease;
     }
     .oval:hover{ transform:translateY(-2px); box-shadow:0 16px 40px rgba(0,0,0,.14); }
-  
+
     .oval.morning{ background:var(--morning); color:var(--title); z-index:2; }
     .oval.evening{ background:var(--evening); color:var(--text-light); z-index:1; }
-  
-    /* create overlap by pulling the second pill left (keep 0 for no overlap) */
+
+    /* optional overlap: tweak --overlap to reintroduce it */
     .oval + .oval{ margin-left: calc(-1 * var(--overlap)); }
-  
+
     /* mascot at the seam */
     .mascot{
       position:absolute;
@@ -64,23 +70,74 @@
       filter:drop-shadow(0 8px 14px rgba(0,0,0,.15));
       z-index:3; pointer-events:none;
     }
-  
+
+    /* soft nudge toast */
+    .toast{
+      position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
+      background:#2e2840; color:#fff; padding:10px 14px; border-radius:999px;
+      font:600 14px "DM Sans",sans-serif; box-shadow:0 12px 30px rgba(0,0,0,.18);
+      opacity:0; pointer-events:none; transition:opacity .2s ease;
+    }
+    .toast.show{ opacity:1; }
+
     @media (max-width:560px){
-      :root{ --overlap: 0px; }   /* keep readable on phones */
+      .wrap{ padding-top:56px }
+      h1{ margin-bottom:56px }
     }
   </style>
-  
 </head>
-<body>
+<body data-phase="morning">
   <main class="wrap" role="main">
-    <h1>Dailies</h1>
+    <h1 id="greet">Dailies</h1>
 
     <section class="ovals" aria-label="Choose a check-in">
-        <a class="oval morning" href="/dailies/morning" aria-label="Morning">Morning</a>
-        <a class="oval evening" href="/dailies/evening" aria-label="Evening">Evening</a>
-        <img class="mascot" src="{% static 'images/dailies.svg' %}" alt="">
-      </section>
-      
+      <a class="oval morning" href="{% url 'dailies:morning' %}" aria-label="Morning">Morning</a>
+      <a class="oval evening" href="/dailies/evening" aria-label="Evening">Evening</a>
+      <img class="mascot" src="{% static 'images/dailies.svg' %}" alt="">
+    </section>
   </main>
+
+  <!-- soft nudge -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // --- time buckets (tweak if you like)
+    const now = new Date();
+    const h = now.getHours();
+    const isMorning = (h >= 4 && h < 14); // 04:00–13:59 morning
+    const phase = isMorning ? "morning" : "evening";
+
+    // greeting + tint
+    document.body.dataset.phase = phase;
+    const greet = document.getElementById('greet');
+    greet.textContent = phase === "morning" ? "good morning" : "good evening";
+
+    // inclusive soft-guard: show a nudge on mismatch; second tap proceeds
+    const toast = document.getElementById('toast');
+    let allowNextClickUntil = 0;
+
+    function nudge(msg){
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(()=> toast.classList.remove('show'), 2200);
+    }
+
+    function softGuard(e, targetPhase){
+      if (targetPhase === phase) return; // matches current time, proceed
+      const nowMs = Date.now();
+      if (nowMs < allowNextClickUntil){
+        // second click within window → allow
+        return;
+      } else {
+        e.preventDefault();
+        allowNextClickUntil = nowMs + 2500; // 2.5s window to click again
+        const other = phase === "morning" ? "morning" : "evening";
+        nudge(`It's ${phase} now — you're welcome to fill the ${targetPhase} reflection. Tap again to continue.`);
+      }
+    }
+
+    document.querySelector('.oval.morning')?.addEventListener('click', (e)=> softGuard(e, 'morning'));
+    document.querySelector('.oval.evening')?.addEventListener('click', (e)=> softGuard(e, 'evening'));
+  </script>
 </body>
 </html>

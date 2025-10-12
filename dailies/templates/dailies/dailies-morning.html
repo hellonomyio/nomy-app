@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NOMY – Morning</title>
+
+  <!-- DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#2e2840;          /* headings/text */
+      --muted:#6b647d;        /* helper text */
+      --panel:#eaeaf5;        /* card/textarea */
+      --shadow:0 24px 60px rgba(0,0,0,.10);
+      --radius:26px;
+    }
+
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:"DM Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      display:flex; justify-content:center;
+    }
+
+    main{ width:min(980px,92vw); padding:56px 16px 80px; text-align:center; }
+
+    h1{
+      margin:0 0 40px;
+      font-weight:700;
+      letter-spacing:.2px;
+      font-size:clamp(24px,3.2vw,40px);
+    }
+
+    /* two-column grid */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(20px, 3vw, 40px);
+      align-items:start;
+      margin-top:24px;
+    }
+
+    .block label{
+      display:block;
+      text-align:left;
+      font-weight:700;
+      margin:0 0 14px 8px;
+      font-size:clamp(16px,1.6vw,22px);
+    }
+
+    textarea{
+      width:100%;
+      height: clamp(220px, 32vh, 300px);
+      padding:22px 20px;
+      border:none;
+      background:var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      color:var(--ink);
+      font:500 16px/1.5 "DM Sans",sans-serif;
+      resize: vertical;
+      outline: none;
+    }
+
+    .hint{
+      margin:8px 8px 0;
+      text-align:left;
+      color:var(--ink);
+      opacity:.75;
+      font-size:clamp(13px,1.3vw,16px);
+    }
+
+    /* button */
+    .actions{ margin:48px 0 0; }
+    button{
+      appearance:none; border:0; cursor:pointer;
+      padding:14px 22px;
+      border-radius:999px;
+      background:#f4f1ff;
+      color:var(--ink);
+      font:700 16px "DM Sans",sans-serif;
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
+      transition:transform .12s ease, box-shadow .25s ease;
+    }
+    button:hover{ transform:translateY(-2px); box-shadow:0 18px 40px rgba(0,0,0,.14); }
+    button:active{ transform:translateY(0); }
+
+    /* mobile */
+    @media (max-width: 760px){
+      .grid{ grid-template-columns: 1fr; }
+      .hint{ text-align:center; margin-left:0; }
+      .block label{ text-align:center; margin-left:0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>good morning</h1>
+
+    <form class="grid" action="#" method="post">
+      <div class="block">
+        <label for="affirmation">my daily affirmation</label>
+        <textarea id="affirmation" name="affirmation" placeholder="Type your affirmation…"></textarea>
+        <p class="hint">examples:</p>
+      </div>
+
+      <div class="block">
+        <label for="goal">today’s goal</label>
+        <textarea id="goal" name="goal" placeholder="What one thing will you focus on today?"></textarea>
+        <p class="hint">remember, no goal is too big or too small</p>
+      </div>
+
+      <div class="actions" style="grid-column:1/-1;">
+        <button type="submit">save to my dailies</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
