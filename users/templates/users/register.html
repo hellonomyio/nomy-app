@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOMY — Create your account</title>
+
+  <!-- DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#eaeaf5;        /* page */
+      --panel:#fff;        /* card */
+      --panel-tint:#e1dcf9;
+      --accent:#d3cbf9;    /* focus/button */
+      --ink:#2e2840;
+      --muted:#6b647d;
+      --danger:#b00020;
+      --radius:18px;
+      --shadow:0 16px 40px rgba(18,14,32,.08);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:"DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height:1.6; letter-spacing:.2px;
+    }
+
+    .wrap{min-height:100%; display:flex; align-items:center; justify-content:center; padding:24px;}
+    .card{
+      width:100%; max-width:520px; background:var(--panel); border:1px solid var(--panel-tint);
+      border-radius:var(--radius); box-shadow:var(--shadow); padding:24px;
+    }
+    h1{margin:0 0 6px 0; font-size:1.6rem; font-weight:700; letter-spacing:.3px;}
+    .lead{margin:0; color:var(--muted); font-size:.98rem;}
+
+    /* Works with {{ form }} or {{ form.as_p }} */
+    form{margin-top:18px;}
+    form p{ /* each field when using as_p */
+      margin:0 0 14px 0; display:flex; flex-direction:column; gap:6px;
+    }
+    label{font-weight:600; font-size:.98rem;}
+
+    input, select, textarea{
+      font:inherit; color:var(--ink); background:#fff;
+      border:2px solid var(--panel-tint); border-radius:12px; padding:14px;
+      outline:none; transition:border-color .15s ease, box-shadow .15s ease;
+      width:100%;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(211,203,249,.45);
+    }
+
+    /* Django help text & errors */
+    .helptext{ color:var(--muted); font-size:.92rem; }
+    ul.errorlist{ list-style:none; padding:0; margin:6px 0 0 0; }
+    ul.errorlist li{
+      color:var(--danger); background: #ffeef1; border:1px solid #ffd0d8;
+      padding:8px 10px; border-radius:10px; font-size:.95rem;
+    }
+    /* Non-field errors (wrap {{ form.non_field_errors }} above {{ form }}) */
+    .nonfield{ margin:0 0 12px 0; }
+
+    .actions{ display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+    .btn{
+      appearance:none; border:none; border-radius:14px; padding:14px 16px;
+      font-weight:700; font-size:1rem; cursor:pointer; width:100%;
+      background:var(--accent); color:#1e1635; box-shadow:0 8px 24px rgba(46,40,64,.10);
+      transition:transform .06s ease, box-shadow .15s ease;
+    }
+    .btn:hover{transform:translateY(-1px)} .btn:active{transform:translateY(0) scale(.99)}
+
+    .subtle{ text-align:center; color:var(--muted); font-size:.96rem; border-top:1px dashed var(--panel-tint); padding-top:12px; margin-top:10px;}
+    .subtle a{ color:#3d2e7a; text-underline-offset:3px; }
+
+    @media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-labelledby="join-title">
+      <header>
+        <h1 id="join-title">Create your account</h1>
+        <p class="lead">A few simple steps. Take your time.</p>
+      </header>
+
+      <form method="POST" novalidate aria-describedby="form-help">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <ul class="errorlist nonfield" role="alert" aria-live="polite">
+            {% for err in form.non_field_errors %}<li>{{ err }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+
+        {{ form.as_p }}  {# or just {{ form }} — styles above cover both #}
+
+        <div class="actions">
+          <button class="btn" type="submit">Sign up</button>
+          <div id="form-help" class="helptext" aria-live="polite">
+            You can pause and come back anytime.
+          </div>
+        </div>
+      </form>
+
+      <p class="subtle">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+    </div>
+  </div>
+
+  <!-- Optional: add sensible autocomplete to common fields -->
+  <script>
+    (function(){
+      const byId = id => document.getElementById(id);
+      const set = (id, attr, val) => { const el = byId(id); if(el) el.setAttribute(attr,val); };
+
+      set('id_username', 'autocomplete', 'username');
+      set('id_email', 'autocomplete', 'email');
+      set('id_password1', 'autocomplete', 'new-password');
+      set('id_password2', 'autocomplete', 'new-password');
+    })();
+  </script>
+</body>
+</html>

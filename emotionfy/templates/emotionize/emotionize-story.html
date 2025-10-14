@@ -9,57 +9,136 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   
   <style>
-    :root{
-      --bg:#fff;
+        :root{
+      --bg:#ffffff;
       --ink:#1b1230;
       --muted:#3f335a;
-      --accent:#6b57e5;
       --active:#22163c;
       --inactive:#e9e6f7;
+      --pill-bg:#f4f5f7;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);
-      font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;}
 
-    .story{position:relative;min-height:100vh;display:grid;place-items:center;
-      padding:72px 20px 40px;}
+    *{box-sizing:border-box;}
+    html,body{
+      height:100%;
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    }
 
-    .story__progress{position:fixed;top:12px;left:12px;right:12px;display:flex;gap:8px;z-index:5;}
+    .story{
+      position:relative;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      padding:120px 20px 100px;
+    }
+
+    /* top emotion pill */
+    .emotion-pill{
+      background:var(--pill-bg);
+      color:var(--active);
+      font-weight:400;
+      font-size:clamp(18px,2.5vw,24px);
+      padding:16px 44px;
+      border-radius:999px;
+      box-shadow:0 8px 24px rgba(0,0,0,.04);
+      margin-bottom:60px;
+      text-align:center;
+    }
+
+    .emotion-pill[data-emotion="excitement"] { background:#f4f5f7; }
+    .emotion-pill[data-emotion="anxiety"]    { background:#e1dcf9; }
+    .emotion-pill[data-emotion="numbness"]   { background:#ffd1bd; }
+    .emotion-pill[data-emotion="relief"]     { background:#ffebea; }
+
+
+    /* progress bar */
+    .story__progress{
+      position:fixed;
+      top:24px;left:50%;transform:translateX(-50%);
+      display:flex;gap:8px;
+      width:min(280px,60vw);
+      z-index:5;
+    }
     .bar{flex:1;height:6px;background:var(--inactive);border-radius:999px;overflow:hidden;}
     .bar__fill{height:100%;width:0%;background:var(--active);border-radius:inherit;transition:width .25s ease;}
 
-    .slides{width:min(1100px,92vw);margin-inline:auto;}
-    .slide{display:none;text-align:center;animation:fade .24s ease;}
+    /* slides container */
+    .slides{
+      width:min(800px,90vw);
+      margin:0 auto;
+    }
+    .slide{
+      display:none;
+      text-align:center;
+      animation:fade .25s ease;
+    }
     .slide.is-active{display:block;}
     @keyframes fade{from{opacity:.001;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-    .lead{font-size:clamp(22px,3.4vw,40px);line-height:1.35;font-weight:800;margin:0 auto;max-width:22ch;}
-    .sub{font-size:clamp(16px,2.1vw,24px);line-height:1.6;font-weight:700;color:var(--ink);
-      margin:46px auto 0;max-width:34ch;}
-    .muted{font-weight:500;color:var(--muted);}
-    .note{font-size:clamp(16px,2vw,22px);line-height:1.7;max-width:46ch;margin:46px auto 0;}
-    .callout{color:#e4685b;font-weight:800}
+    .lead{
+      font-size:clamp(22px,3.2vw,36px);
+      font-weight:700;
+      line-height:1.4;
+      margin:0 auto 28px;
+      max-width:28ch;
+    }
+    .sub{
+      font-size:clamp(16px,2vw,20px);
+      line-height:1.7;
+      font-weight:200;
+      color:var(--ink);
+      margin:0 auto 24px;
+      max-width:52ch;
+    }
+    .note{
+      font-size:clamp(15px,2vw,19px);
+      line-height:1.7;
+      color:var(--muted);
+      max-width:52ch;
+      margin:0 auto 0;
+      font-weight: 600;
+    }
+    .callout{color:#e4685b;font-weight:700;}
 
+    /* tap zones for story navigation */
     .tap{position:fixed;inset:0;display:grid;grid-template-columns:1fr 1fr;z-index:4;}
     .tap>button{background:none;border:0;padding:0;cursor:pointer;}
-    .footer{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);font-size:14px;color:var(--muted)}
+
+    .footer{
+      position:fixed;
+      bottom:14px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    
   </style>
 
 </head>
 <body>
-<main class="story" aria-live="polite">
-  <div class="story__progress" id="progress"></div>
-
-  <section class="slides" id="slides">
-    {% for s in slides %}
-    <article class="slide{% if forloop.first %} is-active{% endif %}"
-             role="group" aria-roledescription="slide" aria-label="{{ forloop.counter }} of {{ slides|length }}">
-      {% if s.lead %}<p class="lead">{{ s.lead|safe }}</p>{% endif %}
-      {% if s.sub %}<p class="sub muted">{{ s.sub|safe }}</p>{% endif %}
-      {% if s.note %}<p class="note">{{ s.note|safe }}</p>{% endif %}
-    </article>
-    {% endfor %}
-  </section>
+  <main class="story" aria-live="polite">
+    <div class="story__progress" id="progress"></div>
+  
+    <!-- emotion title pill -->
+    <div class="emotion-pill" data-emotion="{{ emotion }}">{{ title }}</div>
+  
+    <section class="slides" id="slides">
+      {% for s in slides %}
+      <article class="slide{% if forloop.first %} is-active{% endif %}"
+               role="group" aria-roledescription="slide" aria-label="{{ forloop.counter }} of {{ slides|length }}">
+        {% if s.lead %}<p class="lead">{{ s.lead|safe }}</p>{% endif %}
+        {% if s.sub %}<p class="sub">{{ s.sub|safe }}</p>{% endif %}
+        {% if s.note %}<p class="note">{{ s.note|safe }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </section>  
 
   <div class="tap" aria-hidden="true">
     <button id="prev" title="Previous"></button>

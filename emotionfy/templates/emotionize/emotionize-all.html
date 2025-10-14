@@ -125,7 +125,7 @@
     <section id="content" class="grid" aria-live="polite"></section>
     <div id="empty" class="empty" hidden>No results. Try another word or theme.</div>
 
-    <a class="back" href="{% url 'emotionfy:emotionfy-home' %}">← Back</a>
+    <a class="back" href="{% url 'emotionfy:emotionize-home' %}">← Back</a>
   </main>
 
   <script>
@@ -220,7 +220,7 @@
         items.forEach(name=>{
           const a = document.createElement("a");
           a.className = "pill";
-          a.href = `{% url 'emotionfy:emotionfy-home' %}?emotion=${slug(name)}`;
+          a.href = `{% url 'emotionfy:emotionize-home' %}?emotion=${slug(name)}`;
           a.setAttribute("aria-label", `Choose ${name}`);
           a.textContent = name;
           list.appendChild(a);

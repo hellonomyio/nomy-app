@@ -39,10 +39,10 @@
       gap: 28px;
     }
 
-    h1 {
+    h2 {
       margin: 0;
       text-align: center;
-      font-weight: 800;
+      font-weight: 400;
       font-size: clamp(22px, 3.6vw, 40px);
       line-height: 1.25;
       letter-spacing: .2px;
@@ -70,20 +70,26 @@
     }
 
     .oval {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 240px;              /* slightly wider */
-        height: 130px;             /* taller for the soft ellipse */
-        background: #e9c3f1;       /* your lavender */
-        border-radius: 50% / 58%;  /* makes it oval, not pill */
-        text-decoration: none;
-        color: #22163c;
-        font-weight: 200;
-        font-size: 20px;
-        box-shadow: 0 12px 30px rgba(19, 7, 63, 0.08);
-        transition: transform 0.12s ease, box-shadow 0.25s ease, filter 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 280px;               /* wider */
+      height: 90px;               /* flatter */
+      background: #e9c3f1;        /* lavender */
+      text-decoration: none;
+      color: #22163c;
+      font-weight: 400;
+      font-size: 20px;
+      border-radius: 60px;        /* gives that soft pill curve */
+      box-shadow: 0 10px 28px rgba(19, 7, 63, 0.08);
+      transition: transform 0.12s ease, box-shadow 0.25s ease, filter 0.25s ease;
     }
+
+    /* Individual emotion colours */
+    .oval.excitement  { background: #f4f5f7; }  /* light grey */
+    .oval.anxiety    { background: #e1dcf9; }  /* lavender */
+    .oval.numbness   { background: #ffd1bd; }  /* peachy tone */
+    .oval.relief     { background: #ffebea; }  /* soft pink */
 
     .oval:hover {
         transform: translateY(-3px);
@@ -106,7 +112,7 @@
     .more {
       margin-top: 12px;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 200;
       color: #3a2c6b;
       border: 1px solid #e6e0f5;
       border-radius: 999px;
@@ -140,19 +146,25 @@
 </head>
 <body>
   <main class="wrap">
-    <h1>Which emotion would <br>you like to discover?</h1>
-    <p class="sub">Should there be some sub text here?</p>
+    {% if messages %}
+      {% for message in messages %}
+        <div class ="alert alert- {{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    <h2>Which emotion would <br>you like to (re)discover?</h2>
 
     <section class="grid" aria-label="Emotion options">
-      <a class="oval" href="{% url 'emotionfy:emotionize-story' %}?emotion=anxiety">Anxiety</a>
-      <a class="oval" href="{% url 'emotionfy:emotionize-story' %}?emotion=shame">Shame</a>
-
-      <a class="oval" href="{% url 'emotionfy:emotionize-story' %}?emotion=overwhelm">Overwhelm</a>
-      <a class="oval" href="{% url 'emotionfy:emotionize-story' %}?emotion=frustration">Frustration</a>
-
+      <a class="oval excitement" href="{% url 'emotionfy:emotionize-story' %}?emotion=excitement">Excitement</a>
+      <a class="oval anxiety" href="{% url 'emotionfy:emotionize-story' %}?emotion=anxiety">Anxiety</a>
+    
+      <a class="oval numbness" href="{% url 'emotionfy:emotionize-story' %}?emotion=numbness">Numbness</a>
+      <a class="oval relief" href="{% url 'emotionfy:emotionize-story' %}?emotion=relief">Relief</a>
+    
       <!-- centered illustration -->
       <img class="art" src="{% static 'images/emotionize.svg' %}" alt="">
-    </section>
+    </section>    
 
     <a class="more" href="{% url 'emotionfy:emotionize-all' %}">Explore more emotions →</a>
   </main>
