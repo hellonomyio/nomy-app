@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -15,7 +17,8 @@
       --oval:#e9c3f1; 
       --text:#22163c;
       --muted:#5e4f79;
-      --shadow:0 10px 30px rgba(19,7,63,.08);
+      --shadow: 0 18px 40px rgba(17, 12, 40, .10);
+      --radius: 26px;
     }
 
     * { box-sizing: border-box; }
@@ -42,9 +45,9 @@
     h2 {
       margin: 0;
       text-align: center;
-      font-weight: 400;
+      font-weight: 200;
       font-size: clamp(22px, 3.6vw, 40px);
-      line-height: 1.25;
+      line-height: 1;
       letter-spacing: .2px;
     }
 
@@ -73,22 +76,28 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 280px;               /* wider */
-      height: 90px;               /* flatter */
-      background: #e9c3f1;        /* lavender */
+      width: 280px;
+      height: 110px;                       /* same as home page tiles */
+      background: #e9c3f1;
       text-decoration: none;
       color: #22163c;
       font-weight: 400;
       font-size: 20px;
-      border-radius: 60px;        /* gives that soft pill curve */
-      box-shadow: 0 10px 28px rgba(19, 7, 63, 0.08);
+      border-radius: 26px;                 /* identical to --radius:26px */
+      box-shadow: 0 18px 40px rgba(17, 12, 40, 0.10);  /* same soft depth */
       transition: transform 0.12s ease, box-shadow 0.25s ease, filter 0.25s ease;
     }
 
+    .oval:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 48px rgba(17, 12, 40, 0.14);
+      filter: saturate(1.05);
+    }
+
     /* Individual emotion colours */
-    .oval.excitement  { background: #f4f5f7; }  /* light grey */
+    .oval.excitement  { background: #ffd1bd; }  /* light grey */
     .oval.anxiety    { background: #e1dcf9; }  /* lavender */
-    .oval.numbness   { background: #ffd1bd; }  /* peachy tone */
+    .oval.numbness   { background: #f4f5f7; }  /* peachy tone */
     .oval.relief     { background: #ffebea; }  /* soft pink */
 
     .oval:hover {
@@ -153,7 +162,7 @@
         </div>
       {% endfor %}
     {% endif %}
-    <h2>Which emotion would <br>you like to (re)discover?</h2>
+    <h2>Which emotion would you like to (re)discover?</h2>
 
     <section class="grid" aria-label="Emotion options">
       <a class="oval excitement" href="{% url 'emotionfy:emotionize-story' %}?emotion=excitement">Excitement</a>
@@ -170,3 +179,4 @@
   </main>
 </body>
 </html>
+{% endblock %}

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}NOMY{% endblock %}</title>
+
+  <!-- DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #22163c;
+      --muted: #5e4f79;
+      --shadow: 0 8px 30px rgba(17, 12, 40, .10);
+      --radius: 20px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    /* 🌿 Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 40px;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    nav .links a {
+      margin-left: 28px;
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    nav .links a:hover {
+      color: var(--text);
+    }
+
+    /* 📱 Mobile version */
+    @media (max-width: 720px) {
+      nav {
+        top: auto;
+        bottom: 20px;
+        left: 5%;
+        right: 5%;
+        width: 90%;
+        border-radius: var(--radius);
+        justify-content: space-around;
+        padding: 10px 0;
+      }
+
+      nav .logo {
+        display: none;
+      }
+
+      nav .links {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      nav .links a {
+        margin: 0;
+        font-size: 18px;
+      }
+    }
+
+    main {
+      padding-top: 80px; /* prevents content from hiding behind top nav */
+    }
+
+    @media (max-width: 720px) {
+      main { padding-top: 20px; padding-bottom: 80px; }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="{% url 'home' %}" class="logo">NOMY</a>
+    <div class="links">
+      <a href="{% url 'emotionfy:emotionize-home' %}">Emotionize</a>
+      <a href="{% url 'dailies:dailies-home' %}">Dailies</a>
+      <a href="#">Express</a>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+</body>
+</html>
