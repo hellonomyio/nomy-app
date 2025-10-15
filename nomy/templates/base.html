@@ -15,22 +15,22 @@
       --text: #22163c;
       --muted: #5e4f79;
       --shadow: 0 8px 30px rgba(17, 12, 40, .10);
-      --radius: 20px;
     }
-
+  
     body {
       margin: 0;
       font-family: 'DM Sans', sans-serif;
       color: var(--text);
       background: var(--bg);
     }
-
-    /* 🌿 Navbar */
+  
+    /* 🌿 Navbar — default (desktop) */
     nav {
       position: fixed;
       top: 0;
+      left: 0;
       width: 100%;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       box-shadow: var(--shadow);
       display: flex;
       justify-content: space-between;
@@ -39,14 +39,14 @@
       z-index: 1000;
       backdrop-filter: blur(10px);
     }
-
+  
     nav .logo {
       font-weight: 700;
       font-size: 20px;
       color: var(--text);
       text-decoration: none;
     }
-
+  
     nav .links a {
       margin-left: 28px;
       text-decoration: none;
@@ -54,48 +54,50 @@
       font-weight: 500;
       transition: color 0.2s ease;
     }
-
+  
     nav .links a:hover {
       color: var(--text);
     }
-
-    /* 📱 Mobile version */
+  
+    main {
+      padding-top: 80px; /* space for top nav */
+    }
+  
+    /* 📱 Mobile version — flat bottom bar */
     @media (max-width: 720px) {
       nav {
         top: auto;
-        bottom: 20px;
-        left: 5%;
-        right: 5%;
-        width: 90%;
-        border-radius: var(--radius);
+        bottom: 0;
+        left: 0;
+        width: 100%;
         justify-content: space-around;
-        padding: 10px 0;
+        padding: 12px 0;
+        box-shadow: 0 -6px 20px rgba(17, 12, 40, .08);
+        border-radius: 0; /* ✅ remove rounded corners */
       }
-
+  
       nav .logo {
-        display: none;
+        display: none; /* hide logo on mobile */
       }
-
+  
       nav .links {
         display: flex;
         width: 100%;
         justify-content: space-around;
       }
-
+  
       nav .links a {
         margin: 0;
-        font-size: 18px;
+        font-size: 16px;
+      }
+  
+      main {
+        padding-top: 20px;
+        padding-bottom: 80px; /* space for bottom nav */
       }
     }
-
-    main {
-      padding-top: 80px; /* prevents content from hiding behind top nav */
-    }
-
-    @media (max-width: 720px) {
-      main { padding-top: 20px; padding-bottom: 80px; }
-    }
-  </style>
+  </style>  
+  
 </head>
 
 <body>
