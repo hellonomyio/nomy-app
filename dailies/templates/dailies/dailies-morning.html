@@ -11,9 +11,9 @@
   <style>
     :root{
       --bg:#ffffff;
-      --ink:#2e2840;          /* headings/text */
-      --muted:#6b647d;        /* helper text */
-      --panel:#eaeaf5;        /* card/textarea */
+      --ink:#2e2840;
+      --muted:#6b647d;
+      --panel:#eaeaf5;
       --shadow:0 24px 60px rgba(0,0,0,.10);
       --radius:26px;
     }
@@ -35,7 +35,6 @@
       font-size:clamp(24px,3.2vw,40px);
     }
 
-    /* two-column grid */
     .grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -63,7 +62,7 @@
       color:var(--ink);
       font:500 16px/1.5 "DM Sans",sans-serif;
       resize: vertical;
-      outline: none;
+      outline:none;
     }
 
     .hint{
@@ -74,7 +73,6 @@
       font-size:clamp(13px,1.3vw,16px);
     }
 
-    /* button */
     .actions{ margin:48px 0 0; }
     button{
       appearance:none; border:0; cursor:pointer;
@@ -87,37 +85,139 @@
       transition:transform .12s ease, box-shadow .25s ease;
     }
     button:hover{ transform:translateY(-2px); box-shadow:0 18px 40px rgba(0,0,0,.14); }
-    button:active{ transform:translateY(0); }
 
-    /* mobile */
-    @media (max-width: 760px){
-      .grid{ grid-template-columns: 1fr; }
-      .hint{ text-align:center; margin-left:0; }
-      .block label{ text-align:center; margin-left:0; }
+    /* saved reflection */
+    .reflection-box{
+      background:#f7f6fb;
+      padding:28px;
+      border-radius:26px;
+      box-shadow:0 12px 30px rgba(0,0,0,.08);
+      max-width:700px;
+      margin:auto;
+      text-align:left;
+    }
+    .reflection-box p{ font-size:18px; line-height:1.5; color:#2e2840; }
+
+    /* gentle reminder */
+    #gentle-reminder{
+      display:none;
+      margin-top:32px;
+      padding:22px 20px;
+      border-radius:24px;
+      background:#faf7ff;
+      box-shadow:0 10px 26px rgba(0,0,0,.05);
+      color:#2e2840;
+      text-align:center;
+      font-size:16px;
+      line-height:1.5;
+      transition:opacity .4s ease;
+    }
+
+    @media (max-width:760px){
+      .grid{ grid-template-columns:1fr; }
+      .hint, .block label{ text-align:center; margin-left:0; }
+      .reflection-box{ text-align:center; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1>good morning</h1>
+  <main id="page"></main>
 
-    <form class="grid" action="#" method="post">
-      <div class="block">
-        <label for="affirmation">my daily affirmation</label>
-        <textarea id="affirmation" name="affirmation" placeholder="Type your affirmation…"></textarea>
-        <p class="hint">examples:</p>
-      </div>
+  <script>
+    const page = document.getElementById('page');
 
-      <div class="block">
-        <label for="goal">today’s goal</label>
-        <textarea id="goal" name="goal" placeholder="What one thing will you focus on today?"></textarea>
-        <p class="hint">remember, no goal is too big or too small</p>
-      </div>
+    function renderForm(entry={}) {
+      page.innerHTML = `
+        <h1>good morning</h1>
+        <form class="grid">
+          <div class="block">
+            <label for="affirmation">my daily affirmation</label>
+            <textarea id="affirmation" placeholder="Type your affirmation…">${entry.affirmation||''}</textarea>
+            <p class="hint">examples: I can move at my own pace, I am enough</p>
+          </div>
+          <div class="block">
+            <label for="goal">today’s goal</label>
+            <textarea id="goal" placeholder="What one thing will you focus on today?">${entry.goal||''}</textarea>
+            <p class="hint">remember, no goal is too big or too small</p>
+          </div>
+          <div class="actions" style="grid-column:1/-1;">
+            <button type="submit">save to my dailies</button>
+          </div>
+        </form>
+        <div id="gentle-reminder">
+          <p>You’ve been doing beautifully reflecting on your days 💜  
+          Would you like to keep your Dailies safe to come back to later?</p>
+          <button id="signup-btn" style="background:#e9c3f1; color:#2e2840; border:0; padding:10px 18px; border-radius:999px; font-weight:600; cursor:pointer;">Save my reflections</button>
+          <button id="guest-btn" style="background:none; border:0; color:#6b647d; font-weight:500; margin-left:12px; cursor:pointer;">Not now</button>
+        </div>
+      `;
 
-      <div class="actions" style="grid-column:1/-1;">
-        <button type="submit">save to my dailies</button>
-      </div>
-    </form>
-  </main>
+      const form = page.querySelector('form');
+      form.onsubmit = saveEntry;
+    }
+
+    function renderSaved(entry) {
+      page.innerHTML = `
+        <h1>your reflection for today 🌿</h1>
+        <div class="reflection-box">
+          <p><strong>Affirmation:</strong><br>${entry.affirmation}</p>
+          <p><strong>Goal:</strong><br>${entry.goal}</p>
+          <div style="margin-top:30px; text-align:center;">
+            <button id="editBtn">Edit</button>
+            <button id="newBtn" style="background:none; border:0; color:#6b647d; font-weight:500; margin-left:16px; cursor:pointer;">Start new</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('editBtn').onclick = () => renderForm(entry);
+      document.getElementById('newBtn').onclick = () => renderForm();
+    }
+
+    function saveEntry(e){
+      e.preventDefault();
+      const entry = {
+        affirmation: document.getElementById('affirmation').value.trim(),
+        goal: document.getElementById('goal').value.trim(),
+        date: new Date().toLocaleDateString()
+      };
+      if(!entry.affirmation && !entry.goal) return;
+
+      // save in localStorage
+      localStorage.setItem('nomy_dailies_last', JSON.stringify(entry));
+
+      // keep list of all entries
+      const all = JSON.parse(localStorage.getItem('nomy_dailies') || '[]');
+      all.push(entry);
+      localStorage.setItem('nomy_dailies', JSON.stringify(all));
+
+      // show saved view
+      renderSaved(entry);
+
+      // gentle reminder after 2 entries
+      if(all.length === 2){
+        setTimeout(()=>{
+          const reminder = document.createElement('div');
+          reminder.id = "gentle-reminder";
+          reminder.style = "margin-top:32px;padding:22px 20px;border-radius:24px;background:#faf7ff;box-shadow:0 10px 26px rgba(0,0,0,.05);color:#2e2840;text-align:center;font-size:16px;line-height:1.5;";
+          reminder.innerHTML = `
+            <p>You’ve been doing beautifully reflecting on your days 💜<br>
+            Would you like to keep your Dailies safe to come back to later?</p>
+            <button id="signup-btn" style="background:#e9c3f1; color:#2e2840; border:0; padding:10px 18px; border-radius:999px; font-weight:600; cursor:pointer;">Save my reflections</button>
+            <button id="guest-btn" style="background:none; border:0; color:#6b647d; font-weight:500; margin-left:12px; cursor:pointer;">Not now</button>
+          `;
+          page.appendChild(reminder);
+          document.getElementById('signup-btn').onclick = () => window.location.href = '/signup/';
+          document.getElementById('guest-btn').onclick = () => reminder.remove();
+        }, 300);
+      }
+    }
+
+    function loadSaved(){
+      const saved = JSON.parse(localStorage.getItem('nomy_dailies_last'));
+      if(saved) renderSaved(saved);
+      else renderForm();
+    }
+
+    loadSaved();
+  </script>
 </body>
 </html>
