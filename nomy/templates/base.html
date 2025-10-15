@@ -11,89 +11,160 @@
 
   <style>
   :root {
-    --bg: #ffffff;
-    --text: #22163c;
-    --muted: #5e4f79;
-    --shadow: 0 8px 30px rgba(17, 12, 40, .10);
+    --bg:#ffffff;
+    --text:#22163c;
+    --muted:#5e4f79;
+    --shadow:0 8px 30px rgba(17, 12, 40, .10);
+    --radius:20px;
   }
 
   body {
-    margin: 0;
-    font-family: 'DM Sans', sans-serif;
-    color: var(--text);
-    background: var(--bg);
+    margin:0;
+    font-family:'DM Sans',sans-serif;
+    color:var(--text);
+    background:var(--bg);
   }
 
-  /* 🌿 Navbar — default (desktop) */
+  /* 🌿 Navbar (desktop) */
   nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: var(--shadow);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 40px;
-    z-index: 1000;
-    backdrop-filter: blur(10px);
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:rgba(255,255,255,0.95);
+    box-shadow:var(--shadow);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 40px;
+    z-index:1000;
+    backdrop-filter:blur(10px);
   }
 
-  nav .logo {
-    font-weight: 700;
-    font-size: 20px;
-    color: var(--text);
-    text-decoration: none;
+  .logo {
+    font-weight:700;
+    font-size:20px;
+    color:var(--text);
+    text-decoration:none;
   }
 
-  nav .links a {
-    margin-left: 28px;
-    text-decoration: none;
-    color: var(--muted);
-    font-weight: 500;
-    transition: color 0.2s ease;
+  .links a {
+    margin-left:28px;
+    text-decoration:none;
+    color:var(--muted);
+    font-weight:500;
+    transition:color .2s ease;
+  }
+  .links a:hover { color:var(--text); }
+
+  /* 🌙 Hamburger icon (hidden on desktop) */
+  .hamburger {
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    width:26px;
+    height:24px;
+    cursor:pointer;
+  }
+  .hamburger span {
+    height:3px;
+    background:var(--text);
+    border-radius:2px;
+    transition:all .3s ease;
   }
 
-  nav .links a:hover {
-    color: var(--text);
+  /* 📱 Sidebar base */
+  .sidebar {
+    position:fixed;
+    top:0;
+    left:-260px;               /* hidden */
+    width:240px;
+    height:100%;
+    background:#fff;
+    box-shadow:4px 0 30px rgba(0,0,0,.08);
+    padding:80px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    transition:left .3s ease;
+    z-index:999;
   }
 
-  main {
-    padding-top: 80px; /* space for top nav */
+  .sidebar a {
+    text-decoration:none;
+    color:var(--text);
+    font-weight:500;
+    font-size:18px;
   }
 
-  /* 📱 Mobile version — flat bottom bar */
-  @media (max-width: 720px) {
-    nav {
-      top: auto;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      justify-content: space-around;
-      padding: 12px 0;
-      box-shadow: 0 -6px 20px rgba(17, 12, 40, .08);
-      border-radius: 0; /* ✅ remove rounded corners */
-    }
-  }
-</style>
+  .sidebar.open { left:0; }
 
-  
+  /* ✨ Active state for hamburger */
+  .hamburger.active span:nth-child(1) {
+    transform:translateY(8px) rotate(45deg);
+  }
+  .hamburger.active span:nth-child(2) {
+    opacity:0;
+  }
+  .hamburger.active span:nth-child(3) {
+    transform:translateY(-8px) rotate(-45deg);
+  }
+
+  /* 🧠 Responsive behaviour */
+  @media (max-width:720px) {
+    .links { display:none; }
+    .hamburger { display:flex; }
+  }
+
+  main { padding-top:80px; }
+  </style>
 </head>
 
 <body>
   <nav>
     <a href="{% url 'nomy-options' %}" class="logo">NOMY</a>
+
+    <!-- Desktop links -->
     <div class="links">
       <a href="{% url 'emotionfy:emotionize-home' %}">Emotionize</a>
       <a href="{% url 'dailies:dailies-home' %}">Dailies</a>
       <a href="#">Express</a>
     </div>
+
+    <!-- Mobile hamburger -->
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
   </nav>
 
+  <!-- Sidebar menu for mobile -->
+  <div class="sidebar" id="sidebar">
+    <a href="{% url 'emotionfy:emotionize-home' %}">Emotionize</a>
+    <a href="{% url 'dailies:dailies-home' %}">Dailies</a>
+    <a href="#">Express</a>
+  </div>
+
   <main>
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
   </main>
+
+  <script>
+  const burger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('active');
+    sidebar.classList.toggle('open');
+  });
+
+  // close sidebar when a link is clicked
+  document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', () => {
+      burger.classList.remove('active');
+      sidebar.classList.remove('open');
+    });
+  });
+  </script>
 </body>
 </html>
