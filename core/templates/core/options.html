@@ -123,13 +123,47 @@
       .tile{ height:120px }
       .art{ width:22% }
     }
+    nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+  }
+
+  nav .logo {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  nav .links a {
+    margin-left: 28px;
+    text-decoration: none;
+    color: var(--muted);
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  nav .links a:hover {
+    color: var(--text);
+  }
   </style>
 </head>
 <body>
+  
   <main class="wrap">
     <h2>What would you like to do today?</h2>
 
-    <nav class="options" aria-label="Main options">
+    <div class="options" aria-label="Main options">
       <a class="tile t1" href="#">
         <span class="label">Express</span>
         <img class="art" src="{% static 'images/express.svg' %}" alt="">
@@ -149,8 +183,7 @@
         <span class="label">Toolkit</span>
         <img class="art" src="{% static 'images/toolkit.svg' %}" alt="">
       </a>
-    </nav>
+    </div>
   </main>
-
 </body>
 </html>

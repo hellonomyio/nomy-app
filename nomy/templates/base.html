@@ -10,99 +10,80 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --bg: #ffffff;
-      --text: #22163c;
-      --muted: #5e4f79;
-      --shadow: 0 8px 30px rgba(17, 12, 40, .10);
-    }
-  
-    body {
-      margin: 0;
-      font-family: 'DM Sans', sans-serif;
-      color: var(--text);
-      background: var(--bg);
-    }
-  
-    /* 🌿 Navbar — default (desktop) */
+  :root {
+    --bg: #ffffff;
+    --text: #22163c;
+    --muted: #5e4f79;
+    --shadow: 0 8px 30px rgba(17, 12, 40, .10);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  /* 🌿 Navbar — default (desktop) */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+  }
+
+  nav .logo {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  nav .links a {
+    margin-left: 28px;
+    text-decoration: none;
+    color: var(--muted);
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  nav .links a:hover {
+    color: var(--text);
+  }
+
+  main {
+    padding-top: 80px; /* space for top nav */
+  }
+
+  /* 📱 Mobile version — flat bottom bar */
+  @media (max-width: 720px) {
     nav {
-      position: fixed;
-      top: 0;
+      top: auto;
+      bottom: 0;
       left: 0;
       width: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      box-shadow: var(--shadow);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 40px;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
+      justify-content: space-around;
+      padding: 12px 0;
+      box-shadow: 0 -6px 20px rgba(17, 12, 40, .08);
+      border-radius: 0; /* ✅ remove rounded corners */
     }
-  
-    nav .logo {
-      font-weight: 700;
-      font-size: 20px;
-      color: var(--text);
-      text-decoration: none;
-    }
-  
-    nav .links a {
-      margin-left: 28px;
-      text-decoration: none;
-      color: var(--muted);
-      font-weight: 500;
-      transition: color 0.2s ease;
-    }
-  
-    nav .links a:hover {
-      color: var(--text);
-    }
-  
-    main {
-      padding-top: 80px; /* space for top nav */
-    }
-  
-    /* 📱 Mobile version — flat bottom bar */
-    @media (max-width: 720px) {
-      nav {
-        top: auto;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        justify-content: space-around;
-        padding: 12px 0;
-        box-shadow: 0 -6px 20px rgba(17, 12, 40, .08);
-        border-radius: 0; /* ✅ remove rounded corners */
-      }
-  
-      nav .logo {
-        display: none; /* hide logo on mobile */
-      }
-  
-      nav .links {
-        display: flex;
-        width: 100%;
-        justify-content: space-around;
-      }
-  
-      nav .links a {
-        margin: 0;
-        font-size: 16px;
-      }
-  
-      main {
-        padding-top: 20px;
-        padding-bottom: 80px; /* space for bottom nav */
-      }
-    }
-  </style>  
+  }
+</style>
+
   
 </head>
 
 <body>
   <nav>
-    <a href="{% url 'home' %}" class="logo">NOMY</a>
+    <a href="{% url 'nomy-options' %}" class="logo">NOMY</a>
     <div class="links">
       <a href="{% url 'emotionfy:emotionize-home' %}">Emotionize</a>
       <a href="{% url 'dailies:dailies-home' %}">Dailies</a>
