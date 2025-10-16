@@ -29,5 +29,6 @@ urlpatterns = [
     path('', include('core.urls')),
     path('', include('emotionfy.urls')),
     path('', include('dailies.urls')),
+    path('', include('express.urls')),
     path('', include('experience.urls'))
 ]

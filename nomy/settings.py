@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'emotionfy',
     'dailies',
     'experience',
+    'express',
     'users.apps.UsersConfig',
 
     # Django defaults

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOMY • Express Intro</title>
+
+  <!-- DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#22163c;
+      --pill:#d3cbf9;         /* <-- your button color */
+      --shadow:0 18px 40px rgba(17,12,40,.10);
+      --radius:28px;
+
+      /* one knob: vertical space between paragraphs */
+      --block-gap: 36px;      /* tweak if you want tighter/looser */
+    }
+
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding: 112px 20px 96px;         /* pushes the content down from the top */
+    }
+
+    .wrap{
+      width:100%;
+      max-width: 980px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 48px;                        /* space between pill and text block */
+    }
+
+    /* The pill “button” — change to <a> if you want it clickable */
+    .pill{
+      display:inline-grid;
+      place-items:center;
+      min-height:92px;
+      padding: 18px 64px;
+      background: var(--pill);
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      font-weight: 500;
+      font-size: clamp(18px, 2.2vw, 22px);
+      color: var(--ink);
+      text-decoration:none;
+    }
+
+    /* Copy block */
+    .copy{
+      max-width: 860px;
+      text-align: center;
+      font-size: clamp(16px, 1.8vw, 20px);
+      line-height: 1.75;
+      letter-spacing: .2px;
+    }
+    .copy p{
+      margin:0;
+    }
+    .copy p + p{
+      margin-top: var(--block-gap);     /* exact, consistent spacing */
+    }
+
+    /* Close (X) button */
+    .close-intro{
+    position: fixed;           /* always top-right of the viewport */
+    top: calc(16px + env(safe-area-inset-top));
+    right: calc(16px + env(safe-area-inset-right));
+    z-index: 1000;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px; height: 40px;
+    border-radius: 12px;
+
+    background: rgba(233,195,241,.25); /* e9c3f1 tint */
+    border: 1px solid rgba(0,0,0,.04);
+    box-shadow: 0 8px 24px rgba(17,12,40,.10);
+    color: #22163c;
+    text-decoration: none;
+    backdrop-filter: blur(6px);
+    }
+
+    .close-intro:hover{ filter: saturate(1.05); }
+    .close-intro:focus-visible{
+    outline: 4px solid rgba(211,203,249,.8);
+    outline-offset: 4px;
+    }
+    .close-intro svg{ width: 22px; height: 22px; }
+    @media (max-width: 640px){
+    .close-intro{ width: 36px; height: 36px; border-radius: 10px; }
+    .close-intro svg{ width: 20px; height: 20px; }
+    }
+    /* optional gentle desktop zoom-out for the whole section */
+    @media (min-width: 1200px){
+      .wrap{ transform: scale(.94); transform-origin: top center; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" aria-labelledby="express-title">
+    <a class="pill" href="#">Express</a>
+    <section class="copy">
+      <p>Here, you’ll be able to reconnect with your voice that exists beneath expectation masking or habit.</p>
+
+      <p>You’ll find short, guided prompts drawn from real experiences autistic adults often navigate like social invitations, interruptions, overstimulation and moments of misunderstanding.</p>
+
+      <p>Each one is an invitation to express yourself with honesty and care, at your own pace.</p>
+
+      <p>There’s no rush, no right tone and no pressure to change.</p>
+
+      <p>Let your words find you.</p>
+    </section>
+  </main>
+</body>
+<a class="close-intro"
+   href="{% url 'emotionfy:emotionize-home' %}"
+   aria-label="Close intro and go to Emotionize">
+  <!-- X icon (accessible, no external assets) -->
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M6.4 6.4L17.6 17.6M17.6 6.4L6.4 17.6"
+          fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</a>
+</html>

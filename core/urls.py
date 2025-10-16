@@ -5,4 +5,5 @@ urlpatterns = [
     path('options/', views.options, name='nomy-options'),
     path('emotionize/', include('emotionfy.urls')),
     path('dailies/', include('dailies.urls')),
+    path('express/', include('express.urls')),
 ]

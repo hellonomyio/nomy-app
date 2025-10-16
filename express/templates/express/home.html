@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NOMY • Express Intro</title>
+
+  <!-- DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#22163c;
+      --pill:#d3cbf9;         /* <-- your button color */
+      --shadow:0 18px 40px rgba(17,12,40,.10);
+      --radius:28px;
+
+      /* one knob: vertical space between paragraphs */
+      --block-gap: 36px;      /* tweak if you want tighter/looser */
+    }
+
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding: 112px 20px 96px;         /* pushes the content down from the top */
+    }
+
+    .wrap{
+      width:100%;
+      max-width: 980px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 48px;                        /* space between pill and text block */
+    }
+
+    /* The pill “button” — change to <a> if you want it clickable */
+    .pill{
+      display:inline-grid;
+      place-items:center;
+      min-height:92px;
+      padding: 18px 64px;
+      background: var(--pill);
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      font-weight: 500;
+      font-size: clamp(18px, 2.2vw, 22px);
+      color: var(--ink);
+      text-decoration:none;
+    }
+
+    /* Copy block */
+    .copy{
+      max-width: 860px;
+      text-align: center;
+      font-size: clamp(16px, 1.8vw, 20px);
+      line-height: 1.75;
+      letter-spacing: .2px;
+    }
+    .copy p{
+      margin:0;
+    }
+    .copy p + p{
+      margin-top: var(--block-gap);     /* exact, consistent spacing */
+    }
+
+    /* optional gentle desktop zoom-out for the whole section */
+    @media (min-width: 1200px){
+      .wrap{ transform: scale(.94); transform-origin: top center; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" aria-labelledby="express-title">
+    <div class="pill" id="express-title" role="heading" aria-level="1">Express</div>
+
+    <section class="copy">
+      <p>Here, you’ll be able to reconnect with your voice that exists beneath expectation masking or habit.</p>
+
+      <p>You’ll find short, guided prompts drawn from real experiences autistic adults often navigate like social invitations, interruptions, overstimulation and moments of misunderstanding.</p>
+
+      <p>Each one is an invitation to express yourself with honesty and care, at your own pace.</p>
+
+      <p>There’s no rush, no right tone and no pressure to change.</p>
+
+      <p>Let your words find you.</p>
+    </section>
+  </main>
+</body>
+</html>
