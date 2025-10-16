@@ -118,7 +118,7 @@
 </head>
 <body>
   <main class="wrap" aria-labelledby="express-title">
-    <a class="pill" href="#">Express</a>
+    <a class="pill" href="{% url 'express:express-home' %}">Express</a>
     <section class="copy">
       <p>Here, you’ll be able to reconnect with your voice that exists beneath expectation masking or habit.</p>
 
@@ -133,7 +133,7 @@
   </main>
 </body>
 <a class="close-intro"
-   href="{% url 'emotionfy:emotionize-home' %}"
+   href="{% url 'express:express-home' %}"
    aria-label="Close intro and go to Emotionize">
   <!-- X icon (accessible, no external assets) -->
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">

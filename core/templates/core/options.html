@@ -111,12 +111,12 @@
     <h2>What would you like to do today?</h2>
 
     <div class="options" aria-label="Main options">
-      <a class="tile t1" href="#">
+      <a class="tile t1" href="{% url 'express:intro' %}">
         <span class="label">Express</span>
         <img class="art" src="{% static 'images/express.png' %}" alt="">
       </a>
 
-      <a class="tile t2" href="{% url 'emotionfy:emotionize-intro' %}">
+      <a class="tile t2" href="{% url 'emotionfy:intro' %}">
         <span class="label">Emotionize</span>
         <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
       </a>

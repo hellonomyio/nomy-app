@@ -4,35 +4,32 @@
   {% load static %}
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NOMY • Express Intro</title>
+  <title>NOMY • Express / Voice</title>
 
   <!-- DM Sans -->
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <style>
     :root{
-      --bg:#ffffff;
       --ink:#22163c;
-      --pill:#d3cbf9;         /* <-- your button color */
+      --muted:#5d4c77;
+      --pill:#d3cbf9;                  /* header pill */
       --shadow:0 18px 40px rgba(17,12,40,.10);
-      --radius:28px;
-
-      /* one knob: vertical space between paragraphs */
-      --block-gap: 36px;      /* tweak if you want tighter/looser */
+      --ring: rgba(211,203,249,.85);   /* focus ring */
     }
 
     *{ box-sizing:border-box }
     html,body{ height:100% }
     body{
       margin:0;
-      background:var(--bg);
-      color:var(--ink);
       font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:#fff;
       min-height:100vh;
       display:flex;
       align-items:flex-start;
       justify-content:center;
-      padding: 112px 20px 96px;         /* pushes the content down from the top */
+      padding: 96px 20px 80px;        /* pushes content down from top */
     }
 
     .wrap{
@@ -41,64 +38,124 @@
       display:flex;
       flex-direction:column;
       align-items:center;
-      gap: 48px;                        /* space between pill and text block */
+      gap: 28px;
     }
 
-    /* The pill “button” — change to <a> if you want it clickable */
+    /* pill header */
     .pill{
       display:inline-grid;
       place-items:center;
-      min-height:92px;
+      min-height: 92px;
       padding: 18px 64px;
       background: var(--pill);
       border-radius: 999px;
       box-shadow: var(--shadow);
       font-weight: 500;
       font-size: clamp(18px, 2.2vw, 22px);
+      text-decoration: none;
       color: var(--ink);
-      text-decoration:none;
+    }
+    .pill:focus-visible{
+      outline:4px solid var(--ring);
+      outline-offset:6px;
     }
 
-    /* Copy block */
-    .copy{
-      max-width: 860px;
+    /* intro line */
+    .intro{
+      max-width: 820px;
       text-align: center;
-      font-size: clamp(16px, 1.8vw, 20px);
-      line-height: 1.75;
-      letter-spacing: .2px;
-    }
-    .copy p{
-      margin:0;
-    }
-    .copy p + p{
-      margin-top: var(--block-gap);     /* exact, consistent spacing */
+      color: var(--muted);
+      font-size: clamp(15px,1.6vw,18px);
+      line-height: 1.7;
+      margin: 0;
     }
 
-    /* optional gentle desktop zoom-out for the whole section */
+    /* scrollable scenarios */
+    .scroller{
+      width: 100%;
+      max-width: 880px;
+      max-height: 46vh;                 /* ← scroll area height */
+      overflow: auto;
+      padding: 8px 0;
+      margin-top: 8px;
+    }
+
+    /* nice, low-stimulus scrollbar (webkit) */
+    .scroller::-webkit-scrollbar{ width:10px }
+    .scroller::-webkit-scrollbar-thumb{
+      background: rgba(211,203,249,.6);
+      border-radius: 10px;
+    }
+    .scroller::-webkit-scrollbar-track{
+      background: transparent;
+    }
+
+    .options{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 18px;
+    }
+
+    .option{
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      color: var(--ink);
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: clamp(18px, 2.4vw, 26px);   /* big, confident text */
+      line-height: 1.35;
+      transition: background .15s ease, transform .08s ease, filter .15s ease;
+    }
+    .option:hover{ filter: saturate(1.04); transform: translateY(-1px); background: rgba(225,220,249,.25) }
+    .option:focus-visible{ outline:4px solid var(--ring); outline-offset: 4px; background: rgba(225,220,249,.25) }
+
+    /* back link */
+    .back{
+      margin-top: 24px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: clamp(16px, 1.8vw, 20px);
+    }
+    .back:focus-visible{ outline:4px solid var(--ring); outline-offset:6px; border-radius:10px; }
+
     @media (min-width: 1200px){
       .wrap{ transform: scale(.94); transform-origin: top center; }
     }
-
     @media (prefers-reduced-motion: reduce){
       *{ transition:none !important; animation:none !important }
     }
   </style>
 </head>
 <body>
-  <main class="wrap" aria-labelledby="express-title">
-    <div class="pill" id="express-title" role="heading" aria-level="1">Express</div>
+  <main class="wrap" aria-labelledby="page-title">
+    <div class="pill" id="page-title" role="heading" aria-level="1">Express</div>
 
-    <section class="copy">
-      <p>Here, you’ll be able to reconnect with your voice that exists beneath expectation masking or habit.</p>
+    <p class="intro">
+      Choose a situation. Pick one that fits how you feel or what you want to
+      build confidence in today.
+    </p>
 
-      <p>You’ll find short, guided prompts drawn from real experiences autistic adults often navigate like social invitations, interruptions, overstimulation and moments of misunderstanding.</p>
+    <!-- scrollable list -->
+    <div class="scroller" role="region" aria-label="Situations">
+      <ul class="options" role="list">
+        <!-- replace # with your Django urls -->
+        <li role="listitem"><a class="option" href="#">Someone invites you to a social event you don’t want to attend</a></li>
+        <li role="listitem"><a class="option" href="#">Your colleague interrupts you during a meeting</a></li>
+        <li role="listitem"><a class="option" href="#">You need clearer instructions at work</a></li>
+        <li role="listitem"><a class="option" href="#">You’re overstimulated in a public space</a></li>
+        <li role="listitem"><a class="option" href="#">A friend doesn’t understand why you need alone time</a></li>
 
-      <p>Each one is an invitation to express yourself with honesty and care, at your own pace.</p>
+        <!-- add as many as you like; it will scroll calmly -->
+        <!-- <li role="listitem"><a class="option" href="#">Another scenario…</a></li> -->
+      </ul>
+    </div>
 
-      <p>There’s no rush, no right tone and no pressure to change.</p>
-
-      <p>Let your words find you.</p>
-    </section>
+    <a class="back" href="{% url 'express:intro' %}">Back</a>
   </main>
 </body>
 </html>

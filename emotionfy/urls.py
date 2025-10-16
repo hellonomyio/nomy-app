@@ -3,7 +3,8 @@ from . import views
 app_name = 'emotionfy'
 urlpatterns = [
     path('', views.home, name='emotionize-home'),
-    path('emotionize-all', views.emotionizeAll, name='emotionize-all'),
-    path('emotionize-story/', views.emotionizeStory, name='emotionize-story'),
-    path('emotionize-intro/', views.emotionizeIntro, name='emotionize-intro'),
+    path('all', views.emotionizeAll, name='all'),
+    path('story/', views.emotionizeStory, name='story'),
+    path('intro/', views.emotionizeIntro, name='intro'),
+    path('energised/', views.emotionizeEnergised, name='energised'),
 ]

@@ -3,5 +3,5 @@ from . import views
 app_name = 'express'
 urlpatterns = [
     path('', views.home, name='express-home'),
-    path('express-intro/', views.expressIntro, name='express-intro'),
+    path('intro/', views.expressIntro, name='intro'),
 ]

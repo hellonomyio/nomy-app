@@ -157,20 +157,20 @@
         </div>
       {% endfor %}
     {% endif %}
-    <h2>Which emotion would you like to (re)discover?</h2>
+    <h2>Which feeling would you like to (re)discover?</h2>
 
     <section class="grid" aria-label="Emotion options">
-      <a class="oval excitement" href="{% url 'emotionfy:emotionize-story' %}?emotion=excitement">Excitement</a>
-      <a class="oval anxiety" href="{% url 'emotionfy:emotionize-story' %}?emotion=anxiety">Anxiety</a>
+      <a class="oval excitement" href="{% url 'emotionfy:story' %}?emotion=excitement">Excitement</a>
+      <a class="oval anxiety" href="{% url 'emotionfy:story' %}?emotion=relief">Relief</a>
     
-      <a class="oval numbness" href="{% url 'emotionfy:emotionize-story' %}?emotion=numbness">Numbness</a>
-      <a class="oval relief" href="{% url 'emotionfy:emotionize-story' %}?emotion=relief">Relief</a>
+      <a class="oval numbness" href="{% url 'emotionfy:story' %}?emotion=exhaustion">Exhaustion</a>
+      <a class="oval relief" href="{% url 'emotionfy:story' %}?emotion=shame">Shame</a>
     
       <!-- centered illustration -->
       <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
     </section>    
 
-    <a class="more" href="{% url 'emotionfy:emotionize-intro' %}">Explore more emotions →</a>
+    <a class="more" href="{% url 'emotionfy:all' %}">Explore more →</a>
   </main>
 </body>
 {% endblock %}
