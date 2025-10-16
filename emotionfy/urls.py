@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.home, name='emotionize-home'),
     path('emotionize-all', views.emotionizeAll, name='emotionize-all'),
     path('emotionize-story/', views.emotionizeStory, name='emotionize-story'),
+    path('emotionize-intro/', views.emotionizeIntro, name='emotionize-intro'),
 ]

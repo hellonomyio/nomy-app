@@ -5,6 +5,9 @@ from django.utils.text import slugify
 def home(request):
     return render(request, 'emotionize/home.html')
 
+def emotionizeIntro(request):
+    return render(request, "emotionize/emotionize-intro.html")
+
 def emotionizeAll(request):
     return render(request, 'emotionize/emotionize-all.html')
 

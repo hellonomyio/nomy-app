@@ -123,6 +123,40 @@
       box-shadow: 0 6px 20px rgba(0,0,0,.08);
     }
 
+    /* Close (X) button */
+    .close-intro{
+    position: fixed;           /* always top-right of the viewport */
+    top: calc(16px + env(safe-area-inset-top));
+    right: calc(16px + env(safe-area-inset-right));
+    z-index: 1000;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px; height: 40px;
+    border-radius: 12px;
+
+    background: rgba(233,195,241,.25); /* e9c3f1 tint */
+    border: 1px solid rgba(0,0,0,.04);
+    box-shadow: 0 8px 24px rgba(17,12,40,.10);
+    color: #22163c;
+    text-decoration: none;
+    backdrop-filter: blur(6px);
+    }
+
+    .close-intro:hover{ filter: saturate(1.05); }
+    .close-intro:focus-visible{
+    outline: 4px solid rgba(211,203,249,.8);
+    outline-offset: 4px;
+    }
+    .close-intro svg{ width: 22px; height: 22px; }
+    @media (max-width: 640px){
+    .close-intro{ width: 36px; height: 36px; border-radius: 10px; }
+    .close-intro svg{ width: 20px; height: 20px; }
+    .pill{ padding:16px 36px; min-height:82px; }
+        .pill .icon{ left:calc(100% - 4px); bottom:-18px; width:clamp(84px,28vw,120px); }
+    }
     @media (max-width: 720px) {
       .back-btn {
         top: 18px;
@@ -161,7 +195,16 @@
       {{ title|capfirst }} • Tip: press ← / → keys
     </div>
   </main>
-
+  <a class="close-intro"
+  href="{% url 'emotionfy:emotionize-home' %}"
+  aria-label="Close intro and go to Emotionize">
+ <!-- X icon (accessible, no external assets) -->
+ <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+   <path d="M6.4 6.4L17.6 17.6M17.6 6.4L6.4 17.6"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round"/>
+ </svg>
+</a>
   <script>
     (function () {
       const slides = Array.from(document.querySelectorAll('.slide'));
