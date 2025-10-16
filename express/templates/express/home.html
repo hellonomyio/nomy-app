@@ -24,8 +24,7 @@
       display:flex;
       align-items:flex-start;
       justify-content:center;
-      padding: 96px 20px 80px;        /* pushes content down from top */
-      padding-top: 112px;
+      padding: 0px 20px 80px;        /* pushes content down from top */
     }
     /* Top-left back button */
     .back-top{
@@ -175,16 +174,7 @@
         <!-- <li role="listitem"><a class="option" href="#">Another scenario…</a></li> -->
       </ul>
     </div>
-    <a class="back-top" href="{% url 'express:intro' %}" aria-label="Back">
-        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-          <path d="M15 19l-7-7 7-7" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Back
-      </a>
   </main>
-  
-  
 </body>
 {% endblock %}
 
