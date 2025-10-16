@@ -7,4 +7,7 @@ urlpatterns = [
     path('story/', views.emotionizeStory, name='story'),
     path('intro/', views.emotionizeIntro, name='intro'),
     path('energised/', views.emotionizeEnergised, name='energised'),
+    path('pleasant/', views.emotionizePleasant, name='pleasant'),
+    path('low-energy/', views.emotionizeLowEnergy, name='low-energy'),
+    path('vulnerable/', views.emotionizeVulnerable, name='vulnerable'),
 ]

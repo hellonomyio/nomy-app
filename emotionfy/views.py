@@ -14,6 +14,15 @@ def emotionizeAll(request):
 def emotionizeEnergised(request):
     return render(request, 'emotionize/emotionize-energised.html')
 
+def emotionizePleasant(request):
+    return render(request, 'emotionize/emotionize-pleasant.html')
+
+def emotionizeLowEnergy(request):
+    return render(request, 'emotionize/emotionize-low-energy.html')
+
+def emotionizeVulnerable(request):
+    return render(request, 'emotionize/emotionize-vulnerable.html')
+
 SLIDES = {
     "excitement": [
         {
