@@ -1,9 +1,4 @@
-{% extends "base.html" %}
-{% load static %}
 
-{% block title %}{{ title }} – Story{% endblock %}
-
-{% block content %}
   <style>
     :root{
       --bg:#ffffff;
@@ -103,9 +98,46 @@
       font-size:14px;
       color:var(--muted);
     }
+
+    .back-btn {
+      position: fixed;
+      top: 28px;
+      left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 500;
+      background: #f8f6ff;
+      padding: 8px 14px;
+      border-radius: 999px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.06);
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+
+    .back-btn:hover,
+    .back-btn:focus {
+      background: #e9c3f1;
+      color: var(--ink);
+      outline: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,.08);
+    }
+
+    @media (max-width: 720px) {
+      .back-btn {
+        top: 18px;
+        left: 14px;
+        font-size: 15px;
+        padding: 6px 12px;
+      }
+    }
+
   </style>
 
   <main class="story" aria-live="polite">
+    <a href="{% url 'emotionfy:emotionize-home' %}" class="back-btn">
+      ← Back to emotions
+    </a>    
     <div class="story__progress" id="progress"></div>
     <div class="emotion-pill" data-emotion="{{ emotion }}">{{ title }}</div>
 
@@ -178,4 +210,3 @@
       render(0);
     })();
   </script>
-{% endblock %}

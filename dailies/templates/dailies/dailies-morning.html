@@ -143,6 +143,10 @@
           <div class="actions" style="grid-column:1/-1;">
             <button type="submit">save to my dailies</button>
           </div>
+          <p style="margin-top:16px; font-size:14px; color:#6b647d; opacity:0.8;">
+          Your reflections are stored safely on this device only.<br>
+          If you’d like to keep them permanently or access them on other devices, you can create a free NOMY account anytime.
+        </p>
         </form>
         <div id="gentle-reminder">
           <p>You’ve been doing beautifully reflecting on your days 💜  
@@ -167,6 +171,10 @@
             <button id="newBtn" style="background:none; border:0; color:#6b647d; font-weight:500; margin-left:16px; cursor:pointer;">Start new</button>
           </div>
         </div>
+        <p style="margin-top:24px; text-align:center; font-size:14px; color:#6b647d; opacity:0.8;">
+        Reflections saved here stay on this device only.<br>
+        Create a free NOMY account anytime to keep them safe across devices.
+      </p>
       `;
       document.getElementById('editBtn').onclick = () => renderForm(entry);
       document.getElementById('newBtn').onclick = () => renderForm();
