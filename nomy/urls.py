@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from users import views as user_views
-from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,5 +29,6 @@ urlpatterns = [
     path('', include('emotionfy.urls')),
     path('', include('dailies.urls')),
     path('', include('express.urls')),
-    path('', include('experience.urls'))
+    path('', include('experience.urls')),
+    path('', include('toolkit.urls')),
 ]

@@ -1,6 +1,4 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render
 
 def home(request):
     return render(request, "core/home.html")
@@ -8,3 +6,11 @@ def home(request):
 def options(request):
     return render(request, "core/options.html")
 
+def about(request):
+    return render(request, "core/about.html")
+
+def settings(request):
+    return render(request, "core/settings.html")
+
+def help(request):
+    return render(request, "core/help.html")

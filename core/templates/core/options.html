@@ -1,10 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  {% load static %}
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NOMY</title>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}NOMY • Express{% endblock %}
+{% block content %}
 
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/nomy_favicon_32x32.png' %}">
   <link rel="icon" type="image/png" sizes="64x64" href="{% static 'images/nomy_favicon_64x64.png' %}">
@@ -104,6 +101,9 @@
 
     /* Motion sensitivity */
     @media (prefers-reduced-motion:reduce){ *{ transition:none !important } }
+
+
+    
   </style>
 </head>
 <body>
@@ -133,4 +133,5 @@
     </div>
   </main>
 </body>
-</html>
+{% endblock %}
+
