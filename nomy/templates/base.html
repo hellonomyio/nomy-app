@@ -41,7 +41,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 40px;
-    z-index: 1000;
+    z-index: 2000;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     transition: padding .3s ease;
@@ -75,6 +75,8 @@
     background:none;
     border:none;
     padding:0;
+    position:relative;
+    z-index:2001; /* ensures visible above blur */
   }
   .site-navbar .hamburger span{
     height:3px;
@@ -98,9 +100,8 @@
     flex-direction: column;
     justify-content: space-between;
     transition: left .3s ease;
-    z-index: 999;
+    z-index: 1999;
   }
-
   .site-sidebar.open{ left: 0; }
 
   .site-sidebar .top-links,
@@ -125,17 +126,33 @@
     margin:24px 0;
   }
 
+  /* ============== RESPONSIVE ============== */
   @media (max-width:720px){
     .site-navbar .links{ display:none; }
-    .site-navbar .hamburger{ display:flex; }
+    .site-navbar .hamburger{
+      display:flex;
+      position:relative;
+      z-index:2001;
+    }
+    .site-navbar .hamburger span{ background:#1b1230; }
     .site-navbar .logo{ display:none; }
-    .site-navbar{ justify-content:flex-start; gap:20px; padding:12px 20px; }
+    .site-navbar{
+      justify-content:flex-start;
+      gap:20px;
+      padding:12px 20px;
+      padding-left:16px;
+    }
   }
 
   main{ padding-top: 80px; }
 
   .container{
     max-width: 1000px; margin: 0 auto; padding: 0 20px;
+  }
+
+  /* Optional smooth fade-in for mobile nav */
+  @media (prefers-reduced-motion: no-preference){
+    .site-sidebar{ transition:left .25s ease; }
   }
   </style>
 </head>

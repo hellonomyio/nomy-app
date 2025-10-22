@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'dailies',
     'experience',
     'express',
+    'toolkit',
     'users.apps.UsersConfig',
 
     # Django defaults

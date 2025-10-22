@@ -26,9 +26,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
  
     path('', include('core.urls')),
-    path('', include('emotionfy.urls')),
-    path('', include('dailies.urls')),
-    path('', include('express.urls')),
-    path('', include('experience.urls')),
-    path('', include('toolkit.urls')),
+
 ]
