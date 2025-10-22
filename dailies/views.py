@@ -12,3 +12,6 @@ def dailiesMorningGoal(request):
 
 def dailiesEvening(request):
     return render(request, 'dailies/dailies-evening.html')
+
+def dailiesStory(request):
+    return render(request, "dailies/dailies-story.html")

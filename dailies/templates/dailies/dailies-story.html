@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}NOMY • My Week{% endblock %}
+
+{% block content %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dailies – My Week</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#1b1230;
+      --muted:#3f335a;
+      --pill:#f4f1ff;
+      --accent:#3a2c6b;
+      --inactive:#e9e6f7;
+      --active:#22163c;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);
+      font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;}
+
+    main.story{
+      position:relative;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      padding:120px 20px 100px;
+      padding-top:140px;
+      text-align:center;
+    }
+
+    .story__progress {
+        position: fixed;
+        top: 110px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        width: min(300px, 70vw);
+        z-index: 1000;
+    }
+
+    .bar{
+      flex:1;
+      height:6px;
+      background:var(--inactive);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .bar__fill{
+      height:100%;
+      width:0%;
+      background:var(--active);
+      border-radius:inherit;
+      transition:width .25s ease;
+    }
+
+    .slides{
+      width:min(780px,90vw);
+      margin:0 auto;
+    }
+
+    .slide{
+      display:none;
+      text-align:center;
+      animation:fade .25s ease;
+    }
+    .slide.is-active{display:block;}
+    @keyframes fade{from{opacity:.001;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+    .lead{
+      font-size:clamp(20px,3vw,32px);
+      font-weight:600;
+      line-height:1.4;
+      margin:0 auto 14px;
+    }
+    .sub{
+      font-size:clamp(16px,2vw,20px);
+      line-height:1.7;
+      color:var(--ink);
+      margin:0 auto 10px;
+    }
+    .note{
+      font-size:clamp(15px,2vw,18px);
+      line-height:1.7;
+      color:var(--muted);
+      max-width:52ch;
+      margin:12px auto 0;
+      font-weight:500;
+    }
+
+    .tap{position:fixed;inset:0;display:grid;grid-template-columns:1fr 1fr;z-index:4;}
+    .tap>button{background:none;border:0;padding:0;cursor:pointer;}
+
+    .footer{
+      position:fixed;
+      bottom:14px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .back-btn {
+        position: fixed;
+        top: 84px;
+        left: 28px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 400;
+        color: #3a2c6b;
+        background: #fff;
+        border: 1px solid #e6e0f5;
+        border-radius: 999px;
+        padding: 8px 16px;
+        box-shadow: 0 6px 22px rgba(19,7,63,.06);
+        transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+        z-index: 2500;
+    }
+
+    .back-btn:hover,
+    .back-btn:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(19,7,63,.10);
+        background: #faf7ff;
+        outline: none;
+    }
+
+    @media (max-width: 640px) {
+        .back-btn {
+            top: 76px;
+            left: 18px;
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+    }
+
+    .empty{
+      margin-top:140px;
+      text-align:center;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="story">
+    <a href="{% url 'dailies:dailies-home' %}" class="back-btn">← Back to Dailies</a>
+
+    <div class="story__progress" id="progress"></div>
+    <section class="slides" id="slides"></section>
+
+    <div class="tap" aria-hidden="true">
+      <button id="prev" title="Previous"></button>
+      <button id="next" title="Next"></button>
+    </div>
+
+    <div class="footer">Your reflections • Swipe or press ← / →</div>
+  </main>
+
+  <script>
+    const slidesContainer = document.getElementById("slides");
+    const progressRoot = document.getElementById("progress");
+
+    const entries = JSON.parse(localStorage.getItem("nomy_dailies") || "[]");
+
+    if (!entries.length) {
+      slidesContainer.innerHTML = `
+        <div class="empty">
+          <p>You haven’t saved any reflections yet 🌿</p>
+          <p>Try writing a Morning or Evening entry first.</p>
+        </div>`;
+      document.querySelector(".footer").style.display = "none";
+    } else {
+      entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      entries.forEach((entry, idx) => {
+        // Parse UK-style "22/10/2025" or fallback to now
+        let dateObj;
+        if (entry.date && entry.date.includes("/")) {
+          const [day, month, year] = entry.date.split("/").map(Number);
+          dateObj = new Date(year, month - 1, day);
+        } else {
+          dateObj = new Date(entry.date || Date.now());
+        }
+
+        const today = new Date();
+        const daysDiff = Math.floor((today - dateObj) / (1000 * 60 * 60 * 24));
+
+        let label;
+        if (daysDiff === 0) label = "Today";
+        else if (daysDiff === 1) label = "Yesterday";
+        else if (daysDiff < 7)
+          label = dateObj.toLocaleDateString("en-GB", { weekday: "long" });
+        else
+          label = dateObj.toLocaleDateString("en-GB", {
+            weekday: "long",
+            day: "numeric",
+            month: "short",
+          });
+
+        const html = `
+          <article class="slide${idx === 0 ? " is-active" : ""}" role="group"
+                   aria-roledescription="slide" aria-label="${idx + 1} of ${entries.length}">
+            <p class="lead">${label}</p>
+            ${entry.affirmation ? `<p class="sub"><strong>Affirmation:</strong> ${entry.affirmation}</p>` : ""}
+            ${entry.goal ? `<p class="note"><strong>Goal:</strong> ${entry.goal}</p>` : ""}
+          </article>`;
+        slidesContainer.insertAdjacentHTML("beforeend", html);
+
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        const fill = document.createElement("div");
+        fill.className = "bar__fill";
+        bar.appendChild(fill);
+        progressRoot.appendChild(bar);
+      });
+
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const fills = Array.from(document.querySelectorAll(".bar__fill"));
+      let i = 0;
+
+      function render(n) {
+        i = Math.max(0, Math.min(slides.length - 1, n));
+        slides.forEach((el, idx) => el.classList.toggle("is-active", idx === i));
+        fills.forEach((f, idx) => (f.style.width = idx <= i ? "100%" : "0%"));
+      }
+
+      function next() { render(i + 1); }
+      function prev() { render(i - 1); }
+
+      document.getElementById("next").addEventListener("click", next);
+      document.getElementById("prev").addEventListener("click", prev);
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") next();
+        if (e.key === "ArrowLeft") prev();
+      });
+
+      // swipe gesture
+      let startX = null;
+      window.addEventListener("touchstart", (e) => (startX = e.touches[0].clientX), { passive: true });
+      window.addEventListener("touchend", (e) => {
+        if (startX == null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) (dx < 0 ? next() : prev());
+        startX = null;
+      });
+
+      render(0);
+    }
+  </script>
+</body>
+</html>
+{% endblock %}
