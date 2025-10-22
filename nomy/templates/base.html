@@ -78,12 +78,14 @@
     position:relative;
     z-index:2001; /* ensures visible above blur */
   }
-  .site-navbar .hamburger span{
-    height:3px;
-    background:var(--text);
-    border-radius:2px;
+  .site-navbar .hamburger span {
+    width: 100%;
+    height: 3px;
+    background: var(--text);
+    border-radius: 2px;
     transition: all .3s ease;
   }
+
   .site-navbar .hamburger.active span:nth-child(1){ transform: translateY(8px) rotate(45deg); }
   .site-navbar .hamburger.active span:nth-child(2){ opacity:0; }
   .site-navbar .hamburger.active span:nth-child(3){ transform: translateY(-8px) rotate(-45deg); }
