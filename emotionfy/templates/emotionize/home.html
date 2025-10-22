@@ -197,19 +197,19 @@
   {% endif %}
 
   <div style="position:relative;display:flex;align-items:center;justify-content:center;">
-    <h2>Explore more emotions</h2>
+    <h2>Which feeling would you like to (re)discover? </h2>
     <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
   </div>
 
-  <p class="sub">Choose a category below that best matches how you feel today.</p>
-
   <section class="grid" aria-label="Emotion options">
-    <a class="oval energised" href="{% url 'emotionfy:energised' %}">Energised</a>
-    <a class="oval pleasant" href="{% url 'emotionfy:pleasant' %}">Pleasant</a>
-    <a class="oval low-energy" href="{% url 'emotionfy:low-energy' %}">Low-Energy</a>
-    <a class="oval vulnerable" href="{% url 'emotionfy:vulnerable' %}">Vulnerable</a>
+    <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=excitement">Excitement</a>
+    <a class="oval pleasant" href="{% url 'emotionfy:story' %}?emotion=relief">Relief</a>
+    <a class="oval low-energy" href="{% url 'emotionfy:story' %}?emotion=exhaustion">Exhaustion</a>
+    <a class="oval vulnerable" href="{% url 'emotionfy:story' %}?emotion=shame">Shame</a>
     <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
   </section>
+  <a class="more" href="{% url 'emotionfy:all' %}">Explore More</a>
+
 </main>
 
 <!-- soft modal popup -->

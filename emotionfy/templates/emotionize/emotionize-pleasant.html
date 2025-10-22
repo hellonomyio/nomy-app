@@ -1,126 +1,210 @@
-<!doctype html>
-<html lang="en">
-<head>
-  {% load static %}
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NOMY • Pleasant</title>
-
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Emotionize • Explore more emotions{% endblock %}
+{% block content %}
   <!-- DM Sans -->
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <style>
-    :root{
-      --ink:#24163f;
-      --pill:#fff3c2;      /* peach */
-      --shadow:0 18px 40px rgba(17,12,40,.10);
-      --radius:28px;
-      --gap:16px;          /* space between pills */
+    :root {
+      --bg:#ffffff;
+      --oval:#e9c3f1; 
+      --text:#22163c;
+      --muted:#5e4f79;
+      --shadow: 0 18px 40px rgba(17, 12, 40, .10);
+      --radius: 26px;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:"DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--ink);
-      background:#fff;
-      min-height:100vh;
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family:'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       display:flex;
       align-items:flex-start;
       justify-content:center;
-      padding: 120px 20px 96px;   /* pushes stack down from top */
     }
 
-    .wrap{
-      width:100%;
-      max-width:560px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
+    main.wrap {
+      max-width: 1100px;
+      width: 100%;
+      padding: clamp(72px, 12vh, 160px) 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
     }
 
-    /* stack of pills */
-    .stack{
-      width:100%;
-      display:flex;
-      flex-direction:column;
-      gap:var(--gap);
-      align-items:center;
+    h2 {
+      margin: 0;
+      text-align: center;
+      font-weight: 100;
+      font-size: clamp(16px, 2.8vw, 32px);
+      line-height: 1;
+      letter-spacing: .2px;
     }
 
-    .pill{
-      width:min(360px, 92%);
-      min-height:74px;
-      border-radius:999px;
-      display:grid;
-      place-items:center;
-      text-decoration:none;
-      color:var(--ink);
-      font-weight:500;
-      font-size: clamp(16px, 2vw, 20px);
-      background:var(--pill);
-      box-shadow:var(--shadow);
-      padding: 10px 18px;
-      transition: transform .12s ease, box-shadow .25s ease, filter .2s ease;
+    .sub {
+      margin: 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: clamp(14px, 1.8vw, 18px);
     }
-    .pill:hover{ transform: translateY(-2px); box-shadow:0 22px 48px rgba(17,12,40,.14); filter:saturate(1.02); }
-    .pill:focus-visible{ outline:4px solid rgba(211,203,249,.8); outline-offset:6px; }
 
-    @media (prefers-reduced-motion:reduce){ *{transition:none !important} }
-    /* Close (X) button */
-    .close-intro{
-    position: fixed;           /* always top-right of the viewport */
-    top: calc(16px + env(safe-area-inset-top));
-    right: calc(16px + env(safe-area-inset-right));
-    z-index: 1000;
+    /* Grid layout for 2x2 ovals + centered icon */
+    .grid {
+      position: relative;
+      margin-top: 12px;
+      width: 100%;
+      max-width: 600px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 40px;
+      justify-items: center;
+      align-items: center;
+    }
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    .oval {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 280px;
+      height: 110px;                       /* same as home page tiles */
+      background: #e9c3f1;
+      text-decoration: none;
+      color: #22163c;
+      font-weight: 400;
+      font-size: 20px;
+      border-radius: 26px;                 /* identical to --radius:26px */
+      box-shadow: 0 18px 40px rgba(17, 12, 40, 0.10);  /* same soft depth */
+      transition: transform 0.12s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    }
 
-    width: 40px; height: 40px;
-    border-radius: 12px;
+    .oval:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 48px rgba(17, 12, 40, 0.14);
+      filter: saturate(1.05);
+    }
 
-    background: rgba(233,195,241,.25); /* e9c3f1 tint */
-    border: 1px solid rgba(0,0,0,.04);
-    box-shadow: 0 8px 24px rgba(17,12,40,.10);
-    color: #22163c;
+    /* Individual emotion category colours */
+    .oval.energised  { background: #f4f8f3; }  
+    .oval.pleasant    { background: #fffaeb; }  
+    .oval.low-energy   { background: #e9f0fa; }  
+    .oval.vulnerable     { background: #f1eeff; }  
+
+    .oval:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px rgba(19, 7, 63, 0.14);
+        filter: saturate(1.06);
+    }
+
+    /* Center illustration over grid */
+    .art {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: auto;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .more {
+      margin-top: 12px;
+      text-decoration: none;
+      font-weight: 200;
+      color: #3a2c6b;
+      border: 1px solid #e6e0f5;
+      border-radius: 999px;
+      padding: 10px 14px;
+      box-shadow: 0 6px 22px rgba(19,7,63,.06);
+      transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .more:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(19,7,63,.10);
+      background: #faf7ff;
+    }
+
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 22px;
+      }
+      .art {
+        position: static;
+        transform: none;
+        margin: 12px auto;
+      }
+      .oval {
+        width: min(80vw, 320px);
+      }
+    }
+
+    .back-btn {
+    position: fixed;
+    top: 84px; /* just below navbar */
+    left: 28px;
     text-decoration: none;
-    backdrop-filter: blur(6px);
-    }
+    font-size: 15px;
+    font-weight: 400;
+    color: #3a2c6b;
+    background: #fff;
+    border: 1px solid #e6e0f5;
+    border-radius: 999px;
+    padding: 8px 16px;
+    box-shadow: 0 6px 22px rgba(19,7,63,.06);
+    transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+    z-index: 2000;
+  }
 
-    .close-intro:hover{ filter: saturate(1.05); }
-    .close-intro:focus-visible{
-    outline: 4px solid rgba(211,203,249,.8);
-    outline-offset: 4px;
+  .back-btn:hover,
+  .back-btn:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(19,7,63,.10);
+    background: #faf7ff;
+    outline: none;
+  }
+
+  @media (max-width: 640px) {
+    .back-btn {
+      top: 76px;
+      left: 18px;
+      font-size: 14px;
+      padding: 6px 12px;
     }
-    .close-intro svg{ width: 22px; height: 22px; }
-    @media (max-width: 640px){
-    .close-intro{ width: 36px; height: 36px; border-radius: 10px; }
-    .close-intro svg{ width: 20px; height: 20px; }
-    }
+  }
   </style>
 </head>
 <body>
-  <main class="wrap" aria-label="Energised options">
-    <nav class="stack">
-      <!-- replace # with your Django URLs -->
-      <a class="pill" href="{% url 'emotionfy:story' %}?emotion=happiness">Happiness</a>
-      <a class="pill" href="{% url 'emotionfy:story' %}?emotion=amusement">Amusement</a>
-      <a class="pill" href="{% url 'emotionfy:story' %}?emotion=contentment">Contentment</a>
-      <a class="pill" href="{% url 'emotionfy:story' %}?emotion=relief">Relief</a>
-    </nav>
+  <!-- Back button floats ABOVE -->
+  <a href="{% url 'emotionfy:all' %}" class="back-btn">← Back</a>
+  <main class="wrap">
+    {% if messages %}
+      {% for message in messages %}
+        <div class ="alert alert- {{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    <h2>Choose a Feeling</h2>
+
+    <section class="grid" aria-label="Emotion options">
+      <a class="oval pleasant" href="{% url 'emotionfy:story' %}?emotion=happiness">Happiness</a>
+      <a class="oval pleasant" href="{% url 'emotionfy:story' %}?emotion=amusement">Amusement</a>
+    
+      <a class="oval pleasant" href="{% url 'emotionfy:story' %}?emotion=contentment">Contentment</a>
+      <a class="oval pleasant" href="{% url 'emotionfy:story' %}?emotion=relief">Relief</a>
+    
+      <!-- centered illustration -->
+      <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
+    </section>    
+
   </main>
 </body>
-<a class="close-intro"
-   href="{% url 'emotionfy:all' %}"
-   aria-label="Close intro and go to Emotionize">
-  <!-- X icon (accessible, no external assets) -->
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path d="M6.4 6.4L17.6 17.6M17.6 6.4L6.4 17.6"
-          fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-</a>
-</html>
+{% endblock %}

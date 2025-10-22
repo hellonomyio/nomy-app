@@ -23,6 +23,30 @@ def emotionizeLowEnergy(request):
 def emotionizeVulnerable(request):
     return render(request, 'emotionize/emotionize-vulnerable.html')
 
+EMOTION_CATEGORIES = {
+    # Energised group
+    "excitement": "energised",
+    "curiosity": "energised",
+
+    # Pleasant group
+    "relief": "pleasant",
+    "happiness": "pleasant",
+
+    # Low-Energy group
+    "exhaustion": "low-energy",
+    "numbness": "low-energy",
+    "sadness": "low-energy",
+    "overwhelm": "low-energy",
+    "uncertainty": "low-energy",
+
+    # Vulnerable group
+    "shame": "vulnerable",
+    "embarrassment": "vulnerable",
+    "loneliness": "vulnerable",
+    "confusion": "vulnerable",
+    "stupidity": "vulnerable",
+}
+
 SLIDES = {
     "excitement": [
         {
@@ -81,8 +105,8 @@ SLIDES = {
     ],
     "overwhelm": [
         {
-            "lead": "Overwhelm happens when too much is coming at you at once - sensations, thoughts, or emotions that feel hard to process all together.",
-            "sub": "For many autistic people, it can build up from bright lights, noise, expectations or rapid changes."
+            "sub": "Overwhelm happens when too much is coming at you at once - sensations, thoughts, or emotions that feel hard to process all together. For many autistic people, it can build up from bright lights, noise, expectations or rapid changes.",
+            "note": "learn more "
         },
         {
             "lead": "Your body might give early signals - tension, zoning out, or the need to withdraw.",
@@ -109,11 +133,16 @@ def emotionizeStory(request):
     slug = slugify(request.GET.get("emotion", "anxiety"))
     slides = SLIDES.get(slug)
     if not slides:
-        # fallback to a safe default
         slug, slides = "anxiety", SLIDES["anxiety"]
+
+    # Determine category (fallback to low-energy if unknown)
+    category = EMOTION_CATEGORIES.get(slug, "low-energy")
+
     ctx = {
-        "emotion": slug,            # e.g., "anxiety"
-        "title": slug.capitalize(), # page title/heading use
-        "slides": slides,           # list of dicts for template loop
+        "emotion": slug,             # e.g. "anxiety"
+        "title": slug.capitalize(),  # "Anxiety"
+        "slides": slides,            # content
+        "category": category,        # e.g. "low-energy"
+        "category_url_name": f"emotionfy:{category}",  # ✅ add this line
     }
     return render(request, "emotionize/emotionize-story.html", ctx)

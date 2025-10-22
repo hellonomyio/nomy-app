@@ -52,6 +52,12 @@
     .emotion-pill[data-emotion="numbness"]   { background:#f4f5f7; }
     .emotion-pill[data-emotion="relief"]     { background:#ffebea; }
 
+    /* Category-based emotion pill colors */
+    .emotion-pill.energised  { background: #f4f8f3; }   
+    .emotion-pill.pleasant   { background: #fffaeb; }   
+    .emotion-pill.low-energy { background: #e9f0fa; }   
+    .emotion-pill.vulnerable { background: #f1eeff; }   
+
     .story__progress{
       position:fixed;
       top:90px;left:50%;transform:translateX(-50%);
@@ -175,11 +181,14 @@
   </style>
 </head>
   <main class="story" aria-live="polite">
-    <a href="{% url 'emotionfy:emotionize-home' %}" class="back-btn">
-      ← Back to emotions
+    <a href="{% url category_url_name %}" class="back-btn">
+      ← {{ category|capfirst }} feelings
     </a>    
+         
     <div class="story__progress" id="progress"></div>
-    <div class="emotion-pill" data-emotion="{{ emotion }}">{{ title }}</div>
+    <div class="emotion-pill {{ category }}" data-emotion="{{ emotion }}">
+      {{ title }}
+    </div>
 
     <section class="slides" id="slides">
       {% for s in slides %}
