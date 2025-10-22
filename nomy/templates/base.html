@@ -34,13 +34,14 @@
   /* ============== NAVBAR ============== */
   .site-navbar{
     position: fixed;
-    top: 0; left: 0; width: 100%;
+    top: 0; left: 0; right: 0; width: 100%;
     background: rgba(255,255,255,.95);
     box-shadow: var(--shadow);
+    box-sizing: border-box; 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 40px;
+    padding: 12px clamp(16px, 4vw, 40px);
     z-index: 2000;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);

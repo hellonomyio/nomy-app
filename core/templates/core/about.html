@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}NOMY • FAQs{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --bg: #f1f1ff;
+    --ink: #1b1230;
+    --muted: #4e3f78;
+    --card1: #e1dcf9;
+    --card2: #d3cbf9;
+    --card3: #b3b0f8;
+    --radius: 24px;
+    --shadow: 0 8px 24px rgba(17,12,40,0.08);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  main {
+    padding: 120px 20px 80px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: clamp(26px, 4vw, 34px);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .faq {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    transition: background 0.2s ease;
+  }
+
+  .faq:hover {
+    background: var(--card1);
+  }
+
+  .faq h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+
+  .faq p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  details {
+    border-radius: var(--radius);
+    background: white;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    padding: 20px 24px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  details[open] {
+    background: var(--card2);
+  }
+
+  summary {
+    font-size: 18px;
+    font-weight: 600;
+    outline: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details p {
+    margin-top: 14px;
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    details p {
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 15px;
+    color: var(--muted);
+    margin-top: 40px;
+  }
+</style>
+
+<body>
+  <h1>Frequently Asked Questions</h1>
+
+  <details>
+    <summary>What is NOMY?</summary>
+    <p>NOMY is your calm space to reflect, express yourself, and build supportive daily routines — designed for neurodivergent and neurotypical minds alike.</p>
+  </details>
+
+  <details>
+    <summary>How can I use NOMY each day?</summary>
+    <p>Try starting and ending your day with the Dailies feature — it’s a gentle check-in to help you notice your thoughts and emotions without pressure.</p>
+  </details>
+
+  <details>
+    <summary>Is NOMY private?</summary>
+    <p>Yes. Everything you write stays completely private to you. Your reflections and entries are not shared or used for analytics.</p>
+  </details>
+
+  <details>
+    <summary>How can NOMY support me when I feel overwhelmed?</summary>
+    <p>The “Toolkit” section has grounding and sensory-friendly exercises. You can use it any time you need calm — no login steps, no pop-ups, no noise.</p>
+  </details>
+
+  <details>
+    <summary>Can I customise my experience?</summary>
+    <p>Absolutely. NOMY lets you personalise colors, timing of reminders, and journaling prompts — so you can shape it around what feels safe and supportive for you.</p>
+  </details>
+
+  <p class="footer-note">Still have questions? Reach out through the Help page - we’re here for you 🌿</p>
+</body>
+  {% endblock %}
