@@ -72,53 +72,56 @@
   .site-navbar .dropbtn:hover{ color:var(--text); }
 
   /* ============== DROPDOWN (HOVER MENU) ============== */
-  .dropdown{
-    position:relative;
-    display:inline-block;
-  }
-  .dropbtn{
-    background:none;
-    border:none;
-    cursor:pointer;
-    font:inherit;
-    color:var(--muted);
-  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    }
 
-  .dropdown-content{
-    display:none;
-    position:absolute;
-    top:28px;
-    left:0;
-    background:#fff;
-    min-width:210px;
-    box-shadow:0 12px 30px rgba(0,0,0,.1);
-    border-radius:14px;
-    padding:10px 0;
-    z-index:2500;
-    opacity:0;
-    transform:translateY(6px);
-    transition:all .25s ease;
-    pointer-events:none;
-  }
-  .dropdown:hover .dropdown-content{
-    display:block;
-    opacity:1;
-    transform:translateY(0);
-    pointer-events:auto;
-  }
+    .dropbtn {
+    background: none;
+    border: none;
+    font: inherit;
+    color: var(--muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color .2s ease;
+    }
 
-  .dropdown-content a{
-    display:block;
-    padding:10px 18px;
-    color:var(--text);
-    text-decoration:none;
-    font-weight:500;
-    transition:background .2s ease, color .2s ease;
-  }
-  .dropdown-content a:hover{
-    background:var(--hover);
-    color:var(--text);
-  }
+    .dropdown:hover .dropbtn {
+    color: var(--text);
+    }
+
+    .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 28px;
+    left: 0;
+    background: #fff;
+    min-width: 210px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.1);
+    border-radius: 14px;
+    padding: 10px 0;
+    z-index: 2500;
+    }
+
+    .dropdown-content a {
+    display: block;
+    padding: 10px 18px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background .2s ease, color .2s ease;
+    }
+
+    .dropdown-content a:hover {
+    background: var(--hover);
+    color: var(--text);
+    }
+
+    .dropdown:hover .dropdown-content {
+    display: block;
+    }
+
 
   /* ============== HAMBURGER (MOBILE) ============== */
   .hamburger{
@@ -225,13 +228,13 @@
       <a href="{% url 'emotionfy:emotionize-home' %}">Emotionize</a>
 
       <div class="dropdown">
-        <button class="dropbtn">Dailies ▾</button>
+        <a href="{% url 'dailies:dailies-home' %}" class="dropbtn">Dailies ▾</a>
         <div class="dropdown-content">
           <a href="{% url 'dailies:morningAffirmation' %}">Affirmations</a>
           <a href="{% url 'dailies:morningGoal' %}">Goals</a>
           <a href="{% url 'dailies:evening' %}">Reflections</a>
         </div>
-      </div>
+      </div>      
 
       <a href="{% url 'express:express-home' %}">Express</a>
       <a href="{% url 'toolkit:toolkit-home' %}">Toolkit</a>
