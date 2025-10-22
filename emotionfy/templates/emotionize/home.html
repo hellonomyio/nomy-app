@@ -1,176 +1,246 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}NOMY • Emotionize{% endblock %}
+{% block title %}Emotionize • Explore more emotions{% endblock %}
 {% block content %}
-  <!-- DM Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg:#ffffff;
-      --oval:#e9c3f1; 
-      --text:#22163c;
-      --muted:#5e4f79;
-      --shadow: 0 18px 40px rgba(17, 12, 40, .10);
-      --radius: 26px;
-    }
+<style>
+  :root {
+    --bg:#ffffff;
+    --oval:#e9c3f1;
+    --text:#22163c;
+    --muted:#5e4f79;
+    --shadow:0 18px 40px rgba(17,12,40,.10);
+    --radius:26px;
+  }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
-    body {
-      font-family:'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-    }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;padding:0}
+  body{
+    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+  }
 
-    main.wrap {
-      max-width: 1100px;
-      width: 100%;
-      padding: clamp(72px, 12vh, 160px) 20px 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 28px;
-    }
+  main.wrap{
+    max-width:1100px;
+    width:100%;
+    padding:clamp(72px,12vh,160px) 20px 80px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:28px;
+    position:relative;
+  }
 
-    h2 {
-      margin: 0;
-      text-align: center;
-      font-weight: 200;
-      font-size: clamp(16px, 2.8vw, 32px);
-      line-height: 1;
-      letter-spacing: .2px;
-    }
+  h2{
+    margin:0;
+    text-align:center;
+    font-weight:100;
+    font-size:clamp(16px,2.8vw,32px);
+    line-height:1;
+    letter-spacing:.2px;
+    position:relative;
+  }
 
-    .sub {
-      margin: 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: clamp(14px, 1.8vw, 18px);
-    }
+  /* i button in h2 corner */
+  .info-btn{
+    position:absolute;
+    top:-4px;
+    right:-36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:rgba(36,22,63,0.08);
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+    cursor:pointer;
+    transition:background .2s ease;
+  }
+  .info-btn:hover,.info-btn:focus{
+    background:rgba(36,22,63,0.15);
+    outline:none;
+  }
 
-    /* Grid layout for 2x2 ovals + centered icon */
-    .grid {
-      position: relative;
-      margin-top: 12px;
-      width: 100%;
-      max-width: 600px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 40px;
-      justify-items: center;
-      align-items: center;
-    }
+  /* popup modal */
+  .info-modal{
+    position:fixed;
+    top:0;left:0;width:100%;height:100%;
+    background:rgba(34,22,60,0.15);
+    backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:2000;
+  }
+  .info-modal.active{
+    opacity:1;
+    pointer-events:auto;
+  }
 
-    .oval {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 280px;
-      height: 110px;                       /* same as home page tiles */
-      background: #e9c3f1;
-      text-decoration: none;
-      color: #22163c;
-      font-weight: 400;
-      font-size: 20px;
-      border-radius: 26px;                 /* identical to --radius:26px */
-      box-shadow: 0 18px 40px rgba(17, 12, 40, 0.10);  /* same soft depth */
-      transition: transform 0.12s ease, box-shadow 0.25s ease, filter 0.25s ease;
-    }
+  .modal-content{
+    background:#f1f1ff;
+    color:var(--text);
+    border-radius:20px;
+    box-shadow:0 18px 40px rgba(17,12,40,.1);
+    padding:32px 28px;
+    max-width:420px;
+    width:90%;
+    text-align:center;
+    line-height:1.6;
+  }
 
-    .oval:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 22px 48px rgba(17, 12, 40, 0.14);
-      filter: saturate(1.05);
-    }
+  .modal-content button{
+    margin-top:20px;
+    background:var(--oval);
+    border:none;
+    border-radius:999px;
+    padding:10px 24px;
+    font-family:'DM Sans',sans-serif;
+    color:var(--text);
+    cursor:pointer;
+    box-shadow:0 6px 22px rgba(19,7,63,.08);
+    transition:background .2s ease;
+  }
+  .modal-content button:hover{
+    background:#e1dcf9;
+  }
 
-    /* Individual emotion colours */
-    .oval.excitement  { background: #ffd1bd; }  /* light grey */
-    .oval.anxiety    { background: #e1dcf9; }  /* lavender */
-    .oval.numbness   { background: #f4f5f7; }  /* peachy tone */
-    .oval.relief     { background: #ffebea; }  /* soft pink */
+  .sub{
+    margin:0;text-align:center;color:var(--muted);
+    font-size:clamp(14px,1.8vw,18px);
+  }
 
-    .oval:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 16px 40px rgba(19, 7, 63, 0.14);
-        filter: saturate(1.06);
-    }
+  /* grid */
+  .grid{
+    position:relative;
+    margin-top:12px;
+    width:100%;
+    max-width:600px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    grid-template-rows:repeat(2,1fr);
+    gap:40px;
+    justify-items:center;
+    align-items:center;
+  }
 
-    /* Center illustration over grid */
-    .art {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 120px;
-      height: auto;
-      pointer-events: none;
-      user-select: none;
-    }
+  .oval{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:280px;
+    height:110px;
+    background:#e9c3f1;
+    text-decoration:none;
+    color:#22163c;
+    font-weight:400;
+    font-size:20px;
+    border-radius:26px;
+    box-shadow:0 18px 40px rgba(17,12,40,.10);
+    transition:transform .12s ease,box-shadow .25s ease,filter .25s ease;
+  }
+  .oval:hover{transform:translateY(-2px);box-shadow:0 22px 48px rgba(17,12,40,.14);filter:saturate(1.05)}
 
-    .more {
-      margin-top: 12px;
-      text-decoration: none;
-      font-weight: 200;
-      color: #3a2c6b;
-      border: 1px solid #e6e0f5;
-      border-radius: 999px;
-      padding: 10px 14px;
-      box-shadow: 0 6px 22px rgba(19,7,63,.06);
-      transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
-    }
+  .oval.energised{background:#f4f8f3}
+  .oval.pleasant{background:#fffaeb}
+  .oval.low-energy{background:#e9f0fa}
+  .oval.vulnerable{background:#f1eeff}
 
-    .more:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(19,7,63,.10);
-      background: #faf7ff;
-    }
+  .art{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:120px;
+    height:auto;
+    pointer-events:none;
+    user-select:none;
+  }
 
-    @media (max-width: 640px) {
-      .grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        gap: 22px;
-      }
-      .art {
-        position: static;
-        transform: none;
-        margin: 12px auto;
-      }
-      .oval {
-        width: min(80vw, 320px);
-      }
-    }
-  </style>
-</head>
-<body>
-  
-  <main class="wrap">
-    {% if messages %}
-      {% for message in messages %}
-        <div class ="alert alert- {{ message.tags }}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-    <h2>Which feeling would you like to (re)discover?</h2>
+  .more{
+    margin-top:12px;
+    text-decoration:none;
+    font-weight:200;
+    color:#3a2c6b;
+    border:1px solid #e6e0f5;
+    border-radius:999px;
+    padding:10px 14px;
+    box-shadow:0 6px 22px rgba(19,7,63,.06);
+    transition:transform .1s ease,box-shadow .2s ease,background .2s ease;
+  }
+  .more:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(19,7,63,.10);background:#faf7ff}
 
-    <section class="grid" aria-label="Emotion options">
-      <a class="oval excitement" href="{% url 'emotionfy:story' %}?emotion=excitement">Excitement</a>
-      <a class="oval anxiety" href="{% url 'emotionfy:story' %}?emotion=relief">Relief</a>
-    
-      <a class="oval numbness" href="{% url 'emotionfy:story' %}?emotion=exhaustion">Exhaustion</a>
-      <a class="oval relief" href="{% url 'emotionfy:story' %}?emotion=shame">Shame</a>
-    
-      <!-- centered illustration -->
-      <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
-    </section>    
+  @media(max-width:640px){
+    .grid{grid-template-columns:1fr;gap:22px}
+    .art{position:static;transform:none;margin:12px auto}
+    .oval{width:min(80vw,320px)}
+    .info-btn{right:-28px;top:-2px}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 
-    <a class="more" href="{% url 'emotionfy:all' %}">Explore more →</a>
-  </main>
-</body>
+<main class="wrap">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+    <h2>Explore more emotions</h2>
+    <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
+  </div>
+
+  <p class="sub">Choose a category below that best matches how you feel today.</p>
+
+  <section class="grid" aria-label="Emotion options">
+    <a class="oval energised" href="{% url 'emotionfy:energised' %}">Energised</a>
+    <a class="oval pleasant" href="{% url 'emotionfy:pleasant' %}">Pleasant</a>
+    <a class="oval low-energy" href="{% url 'emotionfy:low-energy' %}">Low-Energy</a>
+    <a class="oval vulnerable" href="{% url 'emotionfy:vulnerable' %}">Vulnerable</a>
+    <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
+  </section>
+</main>
+
+<!-- soft modal popup -->
+<div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <h3 id="modalTitle" style="margin-top:0;font-weight:600;">About Emotionize</h3>
+    <p>Being diagnosed as autistic in adulthood can feel like discovering a new language 
+      for your own mind and body. Many feelings that were once confusing or muted suddenly 
+      make sense in a new context. This feature is designed to help you reconnect with your 
+      emotions and understand them clearly. At the end of each section, there is an invitation to 
+      reflect or explore the toolkit.</p>
+    <button id="closeInfo" aria-label="Close information popup">Close</button>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('infoModal');
+  const openBtn = document.getElementById('openInfo');
+  const closeBtn = document.getElementById('closeInfo');
+
+  openBtn.addEventListener('click', () => {
+    modal.classList.add('active');
+  });
+  closeBtn.addEventListener('click', () => {
+    modal.classList.remove('active');
+  });
+  modal.addEventListener('click', e => {
+    if (e.target === modal) modal.classList.remove('active');
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') modal.classList.remove('active');
+  });
+</script>
 {% endblock %}
