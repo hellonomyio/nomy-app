@@ -4,8 +4,11 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'dailies/home.html')
 
-def dailiesMorning(request):
-    return render(request, 'dailies/dailies-morning.html')
+def dailiesMorningAffirmation(request):
+    return render(request, 'dailies/dailies-morning-affirmation.html')
+
+def dailiesMorningGoal(request):
+    return render(request, 'dailies/dailies-morning-goal.html')
 
 def dailiesEvening(request):
     return render(request, 'dailies/dailies-evening.html')
