@@ -3,6 +3,9 @@ from django.shortcuts import render
 def home(request):
     return render(request, "core/home.html")
 
+def intro(request):
+    return render(request, "core/intro.html")
+
 def options(request):
     return render(request, "core/options.html")
 
