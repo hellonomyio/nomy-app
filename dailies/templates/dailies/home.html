@@ -253,7 +253,7 @@
     const isMorning = (h >= 4 && h < 14);
     const phase = isMorning ? "morning" : "evening";
     document.body.dataset.phase = phase;
-    document.getElementById('greet').textContent = phase === "morning" ? "Good Morning" : "Good Evening";
+    document.getElementById('greet').textContent = phase === "morning" ? "Good Morning" : "You've reached the quiet end of the day. Would you like to reflect on how things went?";
 
     // --- Gentle soft-guard
     const toast = document.getElementById('toast');

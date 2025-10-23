@@ -3,6 +3,8 @@
 {% block title %}NOMY • FAQs{% endblock %}
 
 {% block content %}
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
   :root {
     --bg: #f1f1ff;
@@ -10,95 +12,89 @@
     --muted: #4e3f78;
     --card1: #e1dcf9;
     --card2: #d3cbf9;
-    --card3: #b3b0f8;
     --radius: 24px;
     --shadow: 0 8px 24px rgba(17,12,40,0.08);
   }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; padding: 0; }
 
   body {
     background: var(--bg);
     color: var(--ink);
     font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 60px 20px 40px;
+    padding-top: 0;
   }
 
-  main {
-    padding: 120px 20px 80px;
+  main.wrap {
     max-width: 800px;
-    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
   }
 
   h1 {
     font-weight: 700;
     font-size: clamp(26px, 4vw, 34px);
     text-align: center;
-    margin-bottom: 40px;
-    background: linear-gradient(120deg, var(--card3), var(--card1));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    margin: 80px 0 40px;
   }
 
-  .faq {
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 24px 28px;
-    margin-bottom: 20px;
-    transition: background 0.2s ease;
-  }
-
-  .faq:hover {
-    background: var(--card1);
-  }
-
-  .faq h2 {
+  h2 {
     font-size: 20px;
     font-weight: 600;
-    margin: 0 0 10px;
+    margin: 48px 0 16px;
     color: var(--ink);
+    text-align: left;
+    width: 100%;
   }
-
-  .faq p {
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--muted);
-    margin: 0;
-  }
+  section:first-of-type h2 { margin-top: 0; }
 
   details {
+    width: 100%;
     border-radius: var(--radius);
     background: white;
     box-shadow: var(--shadow);
     margin-bottom: 16px;
-    padding: 20px 24px;
+    padding: 18px 24px;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background 0.25s ease, transform 0.2s ease;
   }
-
+  details:hover {
+    background: var(--card1);
+  }
   details[open] {
     background: var(--card2);
   }
 
   summary {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     outline: none;
+    line-height: 1.5;
   }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
+  summary::-webkit-details-marker { display: none; }
 
   details p {
-    margin-top: 14px;
+    margin-top: 10px;
     font-size: 16px;
     color: var(--muted);
-    line-height: 1.6;
+    line-height: 1.65;
+    opacity: 0;
+    transform: translateY(-4px);
+    animation: fadeIn .35s ease forwards;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    details p {
-      transition: opacity 0.3s ease;
-    }
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .footer-note {
@@ -107,36 +103,137 @@
     color: var(--muted);
     margin-top: 40px;
   }
+
+  @media (max-width: 640px) {
+    h1 { margin-top: 72px; font-size: 24px; }
+    details { padding: 16px 20px; }
+    summary { font-size: 16px; }
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
 </style>
 
-<main>
+<main class="wrap">
   <h1>Frequently Asked Questions</h1>
 
-  <details>
-    <summary>What is NOMY?</summary>
-    <p>NOMY is your calm space to reflect, express yourself, and build supportive daily routines — designed for neurodivergent and neurotypical minds alike.</p>
-  </details>
+  <!-- SECTION 1 -->
+  <section aria-labelledby="features">
+    <h2 id="features">Features & Using NOMY</h2>
 
-  <details>
-    <summary>How can I use NOMY each day?</summary>
-    <p>Try starting and ending your day with the Dailies feature — it’s a gentle check-in to help you notice your thoughts and emotions without pressure.</p>
-  </details>
+    <details>
+      <summary>What is NOMY?</summary>
+      <p>NOMY is your calm space to reflect, express yourself, and gently build supportive daily habits.  
+      It’s designed for both neurodivergent and neurotypical minds — simple, predictable, and kind by design.</p>
+    </details>
 
-  <details>
-    <summary>Is NOMY private?</summary>
-    <p>Yes. Everything you write stays completely private to you. Your reflections and entries are not shared or used for analytics.</p>
-  </details>
+    <details>
+      <summary>How can I use NOMY each day?</summary>
+      <p>You can start or end your day with the <strong>Dailies</strong> — short morning and evening check-ins to notice how you feel.  
+      On days you need more space, <strong>Express</strong> is there for open journaling or voice notes.  
+      Everything is optional — go at your own pace.</p>
+    </details>
 
-  <details>
-    <summary>How can NOMY support me when I feel overwhelmed?</summary>
-    <p>The “Toolkit” section has grounding and sensory-friendly exercises. You can use it any time you need calm — no login steps, no pop-ups, no noise.</p>
-  </details>
+    <details>
+      <summary>Do I need to log in to use NOMY?</summary>
+      <p>No. You can use most features freely without an account — your reflections are saved in your browser’s local storage.  
+      If you log in later, they’ll sync securely across devices so you can continue wherever you left off.</p>
+    </details>
 
-  <details>
-    <summary>Can I customize my experience?</summary>
-    <p>Absolutely. NOMY lets you personalize colors, timing of reminders, and journaling prompts — so you can shape it around what feels safe and supportive for you.</p>
-  </details>
+    <details>
+      <summary>What’s the difference between Dailies, Emotionfy, Express and Toolkit?</summary>
+      <p><strong>Dailies</strong> – small morning & evening reflections.<br>
+      <strong>Emotionfy</strong> – gentle prompts to name and understand emotions.<br>
+      <strong>Express</strong> – freeform journaling or audio notes.<br>
+      <strong>Toolkit</strong> – quick calming and grounding tools for moments of overwhelm.</p>
+    </details>
 
-  <p class="footer-note">Still have questions? Reach out through the Help page — we’re here for you 🌿</p>
+    <details>
+      <summary>Can I customise my experience?</summary>
+      <p>Yes — you can adjust colours, reminders, and prompt styles to fit what feels comfortable for you.  
+      NOMY is designed to feel like <em>your</em> space.</p>
+    </details>
+
+    <details>
+      <summary>Will my reflections reset if I close the app?</summary>
+      <p>No — your entries stay saved in your browser.  
+      If you clear your browser data or use private mode, your local entries may be removed, but logging in keeps them backed up safely.</p>
+    </details>
+
+    <details>
+      <summary>Do I have to use every feature?</summary>
+      <p>No pressure at all. You can use just one area or all of them.  
+      Many people start with Dailies or Toolkit and add more when they feel ready.</p>
+    </details>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section aria-labelledby="privacy">
+    <h2 id="privacy">Privacy & Safety</h2>
+
+    <details>
+      <summary>Is NOMY private?</summary>
+      <p>Yes. Everything you write stays private to you.  
+      NOMY doesn’t track, share, or analyse your reflections — ever.  
+      Your data is stored locally or securely in your account if you log in.</p>
+    </details>
+
+    <details>
+      <summary>Where is my data stored?</summary>
+      <p>If you’re not logged in, your data is stored only on your own device.  
+      When you log in, encrypted copies are safely stored on NOMY’s private servers so you can access them anywhere.</p>
+    </details>
+
+    <details>
+      <summary>Can I back up my reflections manually?</summary>
+      <p>Yes — you can export your entries at any time to keep your own offline copy.  
+      NOMY will guide you through it gently — no technical setup needed.</p>
+    </details>
+
+    <details>
+      <summary>Does NOMY use cookies or analytics?</summary>
+      <p>No tracking cookies or behavioural analytics are used.  
+      NOMY only stores what’s essential to make sure your account and reflections remain secure.</p>
+    </details>
+
+    <details>
+      <summary>What happens if I delete my account?</summary>
+      <p>All of your reflections and personal data are permanently deleted — nothing is retained.  
+      You can delete your account any time, and the process is simple and clear.</p>
+    </details>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section aria-labelledby="contact">
+    <h2 id="contact">Support & Contact</h2>
+
+    <details>
+      <summary>How can NOMY support me when I feel overwhelmed?</summary>
+      <p>Open the <strong>Toolkit</strong> — it includes short, grounding exercises like breathing, gentle focus, or sensory resets.  
+      No logins, no pop-ups — just calm tools, ready when you need them.</p>
+    </details>
+
+    <details>
+      <summary>Can I use NOMY offline?</summary>
+      <p>Yes, most features work offline.  
+      Dailies, Express, and Toolkit save entries to local storage, and when you reconnect, your data will sync automatically.</p>
+    </details>
+
+    <details>
+      <summary>How can I reach out for help or feedback?</summary>
+      <p>You can message us through the <strong>Help</strong> page to share feedback, ask for support, or suggest features.  
+      Every message is read with care and respect — we’re always listening.</p>
+    </details>
+
+    <details>
+      <summary>What if I find NOMY overwhelming?</summary>
+      <p>That’s okay — NOMY is designed to move at your pace.  
+      You can turn off animations, reduce reminders, or focus on just one section at a time.  
+      It’s a space that meets you where you are, not the other way around.</p>
+    </details>
+  </section>
+
+  <p class="footer-note">Still have questions? Visit the Help page — we’re here for you 🌿</p>
 </main>
 {% endblock %}

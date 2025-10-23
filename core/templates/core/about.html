@@ -1,139 +1,139 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}NOMY • FAQs{% endblock %}
+{% block title %}NOMY • About{% endblock %}
 
 {% block content %}
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
   :root {
-    --bg: #f1f1ff;
-    --ink: #1b1230;
-    --muted: #4e3f78;
-    --card1: #e1dcf9;
-    --card2: #d3cbf9;
-    --card3: #b3b0f8;
-    --radius: 24px;
-    --shadow: 0 8px 24px rgba(17,12,40,0.08);
+    --bg:#f1f1ff;
+    --ink:#1b1230;
+    --muted:#4e3f78;
+    --card1:#e1dcf9;
+    --radius:26px;
+    --shadow:0 8px 24px rgba(17,12,40,0.08);
   }
 
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;padding:0}
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:60px 20px 80px;
+    padding-top:0;
   }
 
-  main {
-    padding: 120px 20px 80px;
-    max-width: 800px;
-    margin: 0 auto;
+  main.wrap{
+    max-width:820px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:24px;
   }
 
-  h1 {
-    font-weight: 700;
-    font-size: clamp(26px, 4vw, 34px);
-    text-align: center;
-    margin-bottom: 40px;
+  h1{
+    font-weight:700;
+    font-size:clamp(26px,4vw,34px);
+    text-align:center;
+    margin:80px 0 20px;
   }
 
-  .faq {
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 24px 28px;
-    margin-bottom: 20px;
-    transition: background 0.2s ease;
+  p.lead{
+    font-size:clamp(18px,2.2vw,20px);
+    line-height:1.8;
+    color:var(--muted);
+    text-align:center;
+    margin:0 auto 36px;
+    max-width:48ch;
   }
 
-  .faq:hover {
-    background: var(--card1);
+  section.card{
+    background:white;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:32px 36px;
+    line-height:1.7;
+    font-size:17px;
+    color:var(--muted);
+    width:100%;
+    transition:background .2s ease;
+  }
+  section.card:hover{background:var(--card1);}
+  section.card strong{color:var(--ink);}
+  section.card p:last-child{margin-bottom:0;}
+
+  .footer-note{
+    text-align:center;
+    font-size:15px;
+    color:var(--muted);
+    margin-top:48px;
   }
 
-  .faq h2 {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0 0 10px;
-    color: var(--ink);
+  @media(max-width:640px){
+    h1{margin-top:72px;font-size:26px;}
+    section.card{padding:24px 22px;font-size:16px;}
   }
 
-  .faq p {
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--muted);
-    margin: 0;
-  }
-
-  details {
-    border-radius: var(--radius);
-    background: white;
-    box-shadow: var(--shadow);
-    margin-bottom: 16px;
-    padding: 20px 24px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-
-  details[open] {
-    background: var(--card2);
-  }
-
-  summary {
-    font-size: 18px;
-    font-weight: 600;
-    outline: none;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-
-  details p {
-    margin-top: 14px;
-    font-size: 16px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    details p {
-      transition: opacity 0.3s ease;
-    }
-  }
-
-  .footer-note {
-    text-align: center;
-    font-size: 15px;
-    color: var(--muted);
-    margin-top: 40px;
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none!important}
   }
 </style>
 
-<body>
-  <h1>Frequently Asked Questions</h1>
+<main class="wrap">
+  <h1>About NOMY</h1>
 
-  <details>
-    <summary>What is NOMY?</summary>
-    <p>NOMY is your calm space to reflect, express yourself, and build supportive daily routines — designed for neurodivergent and neurotypical minds alike.</p>
-  </details>
+  <p class="lead">You’ve just entered a space built differently — on purpose.</p>
 
-  <details>
-    <summary>How can I use NOMY each day?</summary>
-    <p>Try starting and ending your day with the Dailies feature — it’s a gentle check-in to help you notice your thoughts and emotions without pressure.</p>
-  </details>
+  <section class="card">
+    <p>
+      A space that understands the quiet exhaustion of always trying to fit into systems that weren’t made with your mind in mind.
+    </p>
+    <p>
+      Here, you don’t have to mask, explain, or perform. You get to simply be — and explore who that really is.
+    </p>
+    <p>
+      <strong>NOMY</strong> is here to help you reconnect with yourself and meet yourself with understanding, maybe for the first time.
+    </p>
+  </section>
 
-  <details>
-    <summary>Is NOMY private?</summary>
-    <p>Yes. Everything you write stays completely private to you. Your reflections and entries are not shared or used for analytics.</p>
-  </details>
+  <section class="card">
+    <p>
+      Each feature here is a small, steady step toward something softer:
+    </p>
+    <ul style="list-style:none;padding:0;margin:16px 0;color:var(--muted);line-height:1.8;">
+      <li><strong>Emotionize</strong> — understand your feelings.</li>
+      <li><strong>Dailies</strong> — set gentle goals for your day.</li>
+      <li><strong>Toolkit</strong> — find calm when things feel too much.</li>
+      <li><strong>Express</strong> — create, reflect, and release.</li>
+    </ul>
+    <p>
+      As you explore, you’ll notice a quiet companion — your avatar — reflecting your state, growing calmer and more grounded as you do.
+    </p>
+    <p>
+      It’s not here to judge or track you. It’s here to mirror what care looks like when it’s given to yourself.
+    </p>
+  </section>
 
-  <details>
-    <summary>How can NOMY support me when I feel overwhelmed?</summary>
-    <p>The “Toolkit” section has grounding and sensory-friendly exercises. You can use it any time you need calm — no login steps, no pop-ups, no noise.</p>
-  </details>
+  <section class="card">
+    <p>
+      This version of NOMY is an <strong>MVP (Minimum Viable Product)</strong> created for early user testing.  
+      It’s the first gentle step in shaping a tool that truly supports late-diagnosed autistic adults — built with real lived experience in mind.
+    </p>
+    <p>
+      Over time, NOMY will grow into a full mobile app with more personalised features, community options, and sensory-friendly customisation.  
+      Every update will stay true to this same promise: calm, clarity, and care — without overwhelm.
+    </p>
+  </section>
 
-  <details>
-    <summary>Can I customise my experience?</summary>
-    <p>Absolutely. NOMY lets you personalise colors, timing of reminders, and journaling prompts — so you can shape it around what feels safe and supportive for you.</p>
-  </details>
-
-  <p class="footer-note">Still have questions? Reach out through the Help page - we’re here for you 🌿</p>
-</body>
-  {% endblock %}
+  <p class="footer-note">Thank you for being part of NOMY’s early journey 🌿</p>
+</main>
+{% endblock %}
