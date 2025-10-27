@@ -45,6 +45,27 @@
     letter-spacing:.2px;
     position:relative;
   }
+  /* gentle banner toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(34,22,60,0.9);
+    color: #fff;
+    font-size: 15px;
+    padding: 12px 28px;
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(17,12,40,.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease;
+    z-index: 3000;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+  }
 
   /* i button beside heading */
   .info-btn{
@@ -240,6 +261,8 @@
     <img class="art" src="{% static 'images/dailies.png' %}" alt="">
   </section>
   <a class="more" href="{% url 'emotionfy:all' %}">Explore More</a>
+  <!-- Toast / gentle banner -->
+  <div id="toast" class="toast"></div>
 
 </main>
 
