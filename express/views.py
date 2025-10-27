@@ -87,7 +87,6 @@ def expressScenario(request):
     }
     return render(request, "express/express-scenario.html", context)
 
-
 def expressResponse(request):
     """Display the selected response (direct / relational)."""
     situation = request.GET.get("situation")
@@ -107,4 +106,6 @@ def expressResponse(request):
         "response": response_text,
         "situation": situation,
     }
-    return render(request, "express/express-response.html", context)
+
+    # 👇 Go to your new Express intro page instead
+    return render(request, "express/express-intro.html", context)
