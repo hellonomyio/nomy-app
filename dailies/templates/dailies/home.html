@@ -16,7 +16,7 @@
     :root{
       --bg:#fff; 
       --title:#2e2840;
-      --morning:#eaeaf5; 
+      --morning:#e1dcf9; 
       --evening:#564d74;
       --history:#ffffff;
       --text-dark:#2e2840; 
@@ -56,7 +56,6 @@
       display:inline-block;
     }
 
-    /* i button beside h1 */
     .info-btn{
       position:absolute;
       top:4px;
@@ -87,7 +86,6 @@
       font-size:clamp(15px,1.6vw,18px);
     }
 
-    /* modal overlay */
     .info-modal{
       position:fixed;
       top:0;left:0;width:100%;height:100%;
@@ -133,7 +131,6 @@
     }
     .modal-content button:hover{ background:#e1dcf9; }
 
-    /* ovals */
     .ovals{
       position:relative;
       width:min(820px,92vw);
@@ -174,13 +171,21 @@
       border-color:#b8aef5;
     }
 
-    .mascot{
+    /* floating mascot (desktop) */
+    .mascot {
       position:absolute;
-      left:50%;top:50%;
+      left:50%;
+      top:50%;
       width:clamp(64px,9vw,100px);
       transform:translate(-50%,-46%);
       filter:drop-shadow(0 8px 14px rgba(0,0,0,.15));
       pointer-events:none;
+      z-index:1;
+    }
+
+    /* mobile mascot above heading */
+    .mascot--mobile {
+      display:none;
     }
 
     .toast{
@@ -200,28 +205,48 @@
     }
     .toast.show{opacity:1;}
 
+    /* responsive adjustments */
     @media(max-width:560px){
       h1{margin-bottom:4px;}
       .info-btn{right:-28px;top:0;}
       .ovals{gap:22px;}
       .oval{width:min(80vw,320px);height:120px;}
       .modal-content{padding:28px 20px;font-size:15px;}
+
+      .mascot:not(.mascot--mobile){display:none;}
+
+      .mascot--mobile{
+        display:block;
+        position:relative;
+        pointer-events:auto;
+        width:80px;
+        margin:0 auto 20px;
+        left:50%;
+        transform:translateX(-50%);
+        filter:drop-shadow(0 6px 10px rgba(0,0,0,.12));
+        z-index:10;
+      }
     }
   </style>
 </head>
 
 <body data-phase="morning">
   <main class="wrap" role="main">
+
+    <!-- perfectly centered mascot above heading (mobile only) -->
+    <img class="mascot mascot--mobile" src="{% static 'images/dailies.png' %}" alt="">
+
     <div style="position:relative;display:inline-block;">
       <h1>Welcome to Your Dailies</h1>
       <button class="info-btn" id="openInfo" aria-label="About Dailies">i</button>
     </div>
+
     <p class="sub" id="greet">Good Morning</p>
 
     <section class="ovals" aria-label="Choose a check-in">
       <a class="oval morning" href="{% url 'dailies:morningAffirmation' %}" aria-label="Morning">Morning</a>
       <a class="oval evening" href="/dailies/evening" aria-label="Evening">Evening</a>
-      <a class="oval history" href="{% url 'dailies:dailies-story' %}" aria-label="View past reflections">View My Week</a>
+      <a class="oval history" href="{% url 'dailies:dailies-story' %}" aria-label="View past reflections">My Weekly Overview</a>
       <img class="mascot" src="{% static 'images/dailies.png' %}" alt="">
     </section>
   </main>
@@ -230,11 +255,11 @@
   <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-content">
       <h3 id="modalTitle" style="margin-top:0;font-weight:600;">About Dailies</h3>
-      <p>Each morning, you’ll be invited to write a short affirmation - something that grounds or encourages you. 
+      <p>Each morning, you’ll be invited to write a short affirmation — something that grounds or encourages you. 
       It might be as simple as “I’m allowed to take my time” or “I can begin gently today.”</p>
 
       <p>Then, you can set one main goal for the day and list any tasks or checklists that help you move toward it. 
-      These don’t need to be big or complex - we care about the small wins too.</p>
+      These don’t need to be big or complex — we care about the small wins too.</p>
 
       <p>In the evening, Dailies will gently check in. You’ll have space to reflect: how did the day feel? 
       What supported you? What felt too much? This builds emotional awareness and helps prevent burnout 
@@ -253,7 +278,10 @@
     const isMorning = (h >= 4 && h < 14);
     const phase = isMorning ? "morning" : "evening";
     document.body.dataset.phase = phase;
-    document.getElementById('greet').textContent = phase === "morning" ? "Good Morning" : "You've reached the quiet end of the day. Would you like to reflect on how things went?";
+    document.getElementById('greet').textContent =
+      phase === "morning"
+        ? "Good Morning"
+        : "You've reached the quiet end of the day. Would you like to reflect on how things went?";
 
     // --- Gentle soft-guard
     const toast = document.getElementById('toast');

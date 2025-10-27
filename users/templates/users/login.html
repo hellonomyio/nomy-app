@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}NOMY • Create an account{% endblock %}
+{% block title %}NOMY • Login{% endblock %}
 
 {% block content %}
 <!doctype html>
@@ -89,8 +89,7 @@
   <div class="wrap">
     <div class="card" role="region" aria-labelledby="join-title">
       <header>
-        <h1 id="join-title">Create your account</h1>
-        <p class="lead">A few simple steps. Take your time.</p>
+        <h1 id="join-title">Login to Your Account</h1>
       </header>
 
       <form method="POST" novalidate aria-describedby="form-help">
@@ -105,14 +104,14 @@
         {{ form.as_p }}  {# or just {{ form }} — styles above cover both #}
 
         <div class="actions">
-          <button class="btn" type="submit">Sign up</button>
+          <button class="btn" type="submit">Log In</button>
           <div id="form-help" class="helptext" aria-live="polite">
             You can pause and come back anytime.
           </div>
         </div>
       </form>
 
-      <p class="subtle">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+      <p class="subtle">Need an account? <a href="{% url 'register' %}">Register</a></p>
     </div>
   </div>
 

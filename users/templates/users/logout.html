@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}NOMY • Logged out{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --bg: #eaeaf5;
+    --panel: #fff;
+    --panel-tint: #e1dcf9;
+    --ink: #2e2840;
+    --muted: #6b647d;
+    --radius: 18px;
+    --shadow: 0 16px 40px rgba(18, 14, 32, .08);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+
+  .wrap {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--panel-tint);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    max-width: 460px;
+    width: 100%;
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: .3px;
+  }
+
+  .muted {
+    color: var(--muted);
+    font-size: .95rem;
+  }
+
+  .muted a {
+    color: #3d2e7a;
+    font-weight: 500;
+    text-decoration: none;
+    text-underline-offset: 3px;
+  }
+
+  .muted a:hover {
+    text-decoration: underline;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="card" role="region" aria-labelledby="logout-title">
+    <h2 id="logout-title">You have been logged out</h2>
+    <div style="border-top: 1px solid var(--panel-tint); padding-top: 16px; margin-top: 16px;">
+      <p class="muted">
+        <a href="{% url 'login' %}">Log in again</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

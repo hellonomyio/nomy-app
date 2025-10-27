@@ -14,30 +14,60 @@
   <link rel="icon" type="image/png" sizes="64x64" href="{% static 'images/nomy_favicon_64x64.png' %}">
 
   <style>
-  :root{
+  :root {
+    /* Light mode defaults */
     --bg:#ffffff;
+    --bg-alt:#f7f6fb;
     --text:#22163c;
     --muted:#5e4f79;
     --divider:#ece8f7;
     --shadow:0 8px 30px rgba(17,12,40,.10);
     --radius:20px;
     --hover:#f4f1ff;
+    --navbar-bg:rgba(255,255,255,.95);
   }
 
-  html, body { height: 100% }
-  body{
-    margin:0;
-    font-family:'DM Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    color:var(--text);
-    background:var(--bg);
+  [data-theme="dark"] {
+    --bg:#1c1728;
+    --bg-alt:#28213b;
+    --text:#ece8f7;           /* soft lavender text */
+    --muted:#bcb6d7;          /* dimmed text */
+    --divider:#3c3553;
+    --shadow:0 8px 30px rgba(0,0,0,.45);
+    --hover:#2b2440;
+    --navbar-bg:rgba(28,23,40,.9);
   }
 
-  /* ============== NAVBAR ============== */
-  .site-navbar{
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    transition: background .4s ease, color .4s ease;
+  }
+
+  /* Fade overlay */
+  .theme-fade {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .5s ease;
+    z-index: 3000;
+  }
+  .theme-fade.active { opacity: 1; }
+
+  /* Navbar */
+  .site-navbar {
     position: fixed;
     top: 0; left: 0; right: 0;
-    width: 100%;
-    background: rgba(255,255,255,.95);
+    background: var(--navbar-bg);
     box-shadow: var(--shadow);
     display: flex;
     justify-content: space-between;
@@ -46,187 +76,224 @@
     z-index: 2000;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    transition: background .4s ease, box-shadow .3s ease;
   }
 
-  .site-navbar .logo{
-    font-weight:700;
-    font-size:20px;
-    color:var(--text);
-    text-decoration:none;
+  .logo {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+    text-decoration: none;
+    transition: color .3s ease;
   }
 
-  .site-navbar .links{
-    display:flex;
-    align-items:center;
+  .links {
+    display: flex;
+    align-items: center;
   }
 
-  .site-navbar .links a,
-  .site-navbar .dropbtn{
-    margin-left:28px;
-    text-decoration:none;
-    color:var(--muted);
-    font-weight:500;
-    transition: color .2s ease;
+  .links a,
+  .dropbtn {
+    margin-left: 28px;
+    text-decoration: none;
+    color: var(--muted);
+    font-weight: 500;
+    transition: color .25s ease;
   }
-  .site-navbar .links a:hover,
-  .site-navbar .dropbtn:hover{ color:var(--text); }
+  .links a:hover,
+  .dropbtn:hover {
+    color: var(--text);
+  }
 
-  /* ============== DROPDOWN (HOVER MENU) ============== */
+  /* Dark mode navbar contrast */
+  [data-theme="dark"] .links a,
+  [data-theme="dark"] .dropbtn {
+    color: #dcd7ee;
+  }
+  [data-theme="dark"] .links a:hover,
+  [data-theme="dark"] .dropbtn:hover {
+    color: #ece8f7;
+  }
+  [data-theme="dark"] .logo,
+  [data-theme="dark"] .theme-toggle {
+    color: #ece8f7;
+  }
+
+  /* Dropdown */
   .dropdown {
     position: relative;
     display: inline-block;
-    }
-
-    .dropbtn {
+  }
+  .dropbtn {
     background: none;
     border: none;
     font: inherit;
     color: var(--muted);
-    text-decoration: none;
     cursor: pointer;
-    transition: color .2s ease;
-    }
-
-    .dropdown:hover .dropbtn {
-    color: var(--text);
-    }
-
-    .dropdown-content {
+  }
+  .dropdown-content {
     display: none;
     position: absolute;
     top: 28px;
     left: 0;
-    background: #fff;
+    background: var(--bg-alt);
     min-width: 210px;
-    box-shadow: 0 12px 30px rgba(0,0,0,.1);
+    box-shadow: var(--shadow);
     border-radius: 14px;
     padding: 10px 0;
     z-index: 2500;
-    }
-
-    .dropdown-content a {
+  }
+  .dropdown-content a {
     display: block;
     padding: 10px 18px;
     color: var(--text);
     text-decoration: none;
     font-weight: 500;
     transition: background .2s ease, color .2s ease;
-    }
-
-    .dropdown-content a:hover {
+  }
+  .dropdown-content a:hover {
     background: var(--hover);
     color: var(--text);
-    }
-
-    .dropdown:hover .dropdown-content {
-    display: block;
-    }
-
-
-  /* ============== HAMBURGER (MOBILE) ============== */
-  .hamburger{
-    display:none;
-    flex-direction:column;
-    justify-content:center;
-    gap:5px;
-    width:26px;
-    height:24px;
-    cursor:pointer;
-    background:none;
-    border:none;
-    padding:0;
   }
-  .hamburger span{
-    width:100%;
-    height:3px;
-    background:var(--text);
-    border-radius:2px;
-    transition:all .3s ease;
+  .dropdown:hover .dropdown-content { display: block; }
+
+  /* Theme toggle button */
+  .theme-toggle {
+    margin-left: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 18px;
+    transition: color .2s ease;
+  }
+  .theme-toggle:hover { color: var(--text); }
+
+  /* Sidebar */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    width: 26px;
+    height: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .hamburger span {
+    width: 100%;
+    height: 3px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all .3s ease;
   }
   .hamburger.active span:nth-child(1){ transform:translateY(8px) rotate(45deg); }
   .hamburger.active span:nth-child(2){ opacity:0; }
   .hamburger.active span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); }
 
-  /* ============== SIDEBAR (MOBILE MENU) ============== */
-  .site-sidebar{
-    position:fixed;
-    top:0; left:-260px;
-    width:240px; height:100%;
-    background:#fff;
-    box-shadow:4px 0 30px rgba(0,0,0,.08);
-    padding:80px 20px 20px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    transition:left .3s ease;
-    z-index:1999;
+  .site-sidebar {
+    position: fixed;
+    top: 0; left: -260px;
+    width: 240px;
+    height: 100%;
+    background: var(--bg);
+    box-shadow: 4px 0 30px rgba(0,0,0,.1);
+    padding: 80px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: left .3s ease, background .3s ease;
+    z-index: 1999;
   }
-  .site-sidebar.open{ left:0; }
-
-  .site-sidebar a{
-    text-decoration:none;
-    color:var(--text);
-    font-weight:500;
-    font-size:18px;
-    transition:color .2s ease;
+  .site-sidebar.open { left: 0; }
+  .site-sidebar a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 18px;
+    transition: color .2s ease;
   }
-  .site-sidebar a:hover{ color:var(--muted); }
-
-  .top-links,
-  .bottom-links{
-    display:flex;
-    flex-direction:column;
-    gap:20px;
+  .site-sidebar a:hover { color: var(--muted); }
+  .divider {
+    height: 1px;
+    background: var(--divider);
+    margin: 24px 0;
   }
-
-  .divider{
-    height:1px;
-    background:var(--divider);
-    margin:24px 0;
+  .submenu {
+    margin-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
   }
-
-  /* Nested submenu in sidebar */
-  .submenu{
-    margin-left:16px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    margin-top:4px;
-  }
-  .submenu a{
-    font-size:16px;
-    color:#5e4f79;
+  .submenu a {
+    font-size: 16px;
+    color: var(--muted);
   }
 
-  /* ============== RESPONSIVE ============== */
-  @media (max-width:720px){
-    .site-navbar .links{ display:none; }
-    .hamburger{ display:flex; }
-    .site-navbar .logo{ display:none; }
-    .site-navbar{
-      justify-content:flex-start;
-      gap:20px;
-      padding:12px 20px;
+  @media (max-width:720px) {
+    .links { display: none; }
+    .hamburger { display: flex; }
+    .logo { display: none; }
+    .site-navbar {
+      justify-content: flex-start;
+      gap: 20px;
+      padding: 12px 20px;
     }
   }
 
-  main{ padding-top:80px; }
-  .container{ max-width:1000px; margin:0 auto; padding:0 20px; }
+  main {
+    padding-top: 80px;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background .4s ease, color .4s ease;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    transition: color .4s ease;
+  }
+
+  .logout-link {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+    margin-left: 28px;
+    font-weight: 500;
+    transition: color .25s ease;
+  }
+  .logout-link:hover {
+    color: var(--text);
+  }
+  [data-theme="dark"] .logout-link {
+    color: #dcd7ee;
+  }
+  [data-theme="dark"] .logout-link:hover {
+    color: #ece8f7;
+  }
+
   </style>
 </head>
 
 <body>
-  <!-- NAVBAR -->
-  <nav class="site-navbar" role="navigation" aria-label="Primary">
+  <div id="themeFade" class="theme-fade"></div>
+
+  <nav class="site-navbar">
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
 
     <a href="{% url 'nomy-options' %}" class="logo">NOMY</a>
 
-    <div class="links" aria-label="Primary links">
+    <div class="links">
       <a href="{% url 'emotionfy:emotionize-home' %}">Emotionize</a>
-
+    
       <div class="dropdown">
         <a href="{% url 'dailies:dailies-home' %}" class="dropbtn">Dailies ▾</a>
         <div class="dropdown-content">
@@ -234,15 +301,27 @@
           <a href="{% url 'dailies:morningGoal' %}">Goals</a>
           <a href="{% url 'dailies:evening' %}">Reflections</a>
         </div>
-      </div>      
-
+      </div>
+    
       <a href="{% url 'express:express-home' %}">Express</a>
       <a href="{% url 'toolkit:toolkit-home' %}">Toolkit</a>
+    
+      <!-- Logout Form -->
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="logout-link">Log out</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Log in</a>
+      {% endif %}
+    
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
     </div>
+    
   </nav>
 
-  <!-- SIDEBAR (Mobile) -->
-  <aside class="site-sidebar" id="sidebar" aria-label="Mobile menu">
+  <aside class="site-sidebar" id="sidebar">
     <div class="top-links">
       <a href="{% url 'emotionfy:emotionize-home' %}">Emotionize</a>
       <a href="{% url 'dailies:dailies-home' %}">Dailies</a>
@@ -270,21 +349,48 @@
   </main>
 
   <script>
+  // Sidebar
   const burger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
-
   burger.addEventListener('click', () => {
     const open = sidebar.classList.toggle('open');
     burger.classList.toggle('active', open);
     burger.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-
   document.querySelectorAll('.site-sidebar a').forEach(link => {
     link.addEventListener('click', () => {
       sidebar.classList.remove('open');
       burger.classList.remove('active');
       burger.setAttribute('aria-expanded', 'false');
     });
+  });
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const fade = document.getElementById('themeFade');
+
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+    root.setAttribute('data-theme', 'dark');
+
+  function updateIcon() {
+    const current = root.getAttribute('data-theme');
+    themeToggle.textContent = current === 'dark' ? '☀️' : '🌙';
+  }
+  updateIcon();
+
+  themeToggle.addEventListener('click', () => {
+    fade.classList.add('active');
+    setTimeout(() => {
+      const current = root.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon();
+      fade.classList.remove('active');
+    }, 250);
   });
   </script>
 </body>
