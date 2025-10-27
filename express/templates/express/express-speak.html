@@ -1,0 +1,148 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOMY • Express</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pill:#e1dcf9;
+  --wave:#b3b0f8;
+  --text:#22163c;
+  --bg:#fff;
+}
+body{
+  margin:0;
+  padding:60px 20px;
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  min-height:100vh;
+}
+
+/* pill */
+.pill{
+  display:inline-grid;
+  place-items:center;
+  background:var(--pill);
+  color:var(--text);
+  border-radius:999px;
+  padding:18px 64px;
+  font-size:20px;
+  font-weight:500;
+  box-shadow:0 8px 24px rgba(17,12,40,.1);
+  margin-bottom:28px;
+}
+
+/* audio wave placeholder */
+.wave{
+  width:220px;
+  height:60px;
+  background:linear-gradient(to right,var(--wave),transparent);
+  mask:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40"><path fill="black" d="M0 20 Q5 10 10 20 T20 20 T30 20 T40 20 T50 20 T60 20 T70 20 T80 20 T90 20 T100 20 T110 20 T120 20 T130 20 T140 20 T150 20 T160 20 T170 20 T180 20 T190 20 T200 20"/></svg>') center/contain repeat-x;
+  mask-repeat:repeat-x;
+  animation:pulse 1.2s ease-in-out infinite;
+  margin:70px auto;
+}
+@keyframes pulse{
+  0%,100%{opacity:.6;transform:scaleY(0.9);}
+  50%{opacity:1;transform:scaleY(1.1);}
+}
+
+/* footer text */
+.footer{
+  margin-top:auto;
+  font-size:16px;
+  color:var(--text);
+}
+
+/* hidden state */
+.hidden{display:none;}
+
+button{
+  background:none;
+  border:none;
+  color:var(--text);
+  font-weight:600;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:40px;
+}
+button:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<!-- Screen 1 -->
+<section id="record-screen">
+  <div class="pill">Express</div>
+  <p>Speak at your own pace. You can pause or start over anytime.</p>
+
+  <div class="wave" id="wave"></div>
+
+  <p class="footer">Go at your own pace. You’re exploring how your voice feels when it’s yours.</p>
+
+  <button id="startBtn">Start Recording</button>
+</section>
+
+<!-- Screen 2 -->
+<section id="done-screen" class="hidden">
+  <div class="pill">Express / Voice</div>
+  <p>You did it! You expressed your truth in your own way. Take a moment to notice how that felt.</p>
+
+  <audio id="player" controls style="margin-top:40px;"></audio>
+
+  <button id="endBtn">End session</button>
+</section>
+
+<script>
+let mediaRecorder;
+let chunks=[];
+
+const recordScreen=document.getElementById('record-screen');
+const doneScreen=document.getElementById('done-screen');
+const player=document.getElementById('player');
+const startBtn=document.getElementById('startBtn');
+const endBtn=document.getElementById('endBtn');
+
+startBtn.onclick=async ()=>{
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  mediaRecorder=new MediaRecorder(stream);
+  chunks=[];
+  mediaRecorder.start();
+
+  // show wave animation
+  document.getElementById('wave').style.animationPlayState='running';
+  startBtn.textContent='Recording... click to stop';
+
+  startBtn.onclick=()=>{
+    mediaRecorder.stop();
+    stream.getTracks().forEach(t=>t.stop());
+  };
+
+  mediaRecorder.ondataavailable=e=>chunks.push(e.data);
+  mediaRecorder.onstop=()=>{
+    const blob=new Blob(chunks,{type:'audio/webm'});
+    const url=URL.createObjectURL(blob);
+    player.src=url;
+
+    recordScreen.classList.add('hidden');
+    doneScreen.classList.remove('hidden');
+  };
+};
+
+endBtn.onclick=()=>{
+  window.location.href="{% url 'express:express-home' %}";
+};
+</script>
+
+</body>
+</html>
