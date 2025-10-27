@@ -1,261 +1,253 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block title %}NOMY • Dailies{% endblock %}
-
 {% block content %}
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#ffffff;
+    --oval:#e9c3f1;
+    --text:#22163c;
+    --muted:#5e4f79;
+    --shadow:0 18px 40px rgba(17,12,40,.10);
+    --radius:26px;
+  }
 
-  <style>
-    :root{
-      --bg:#fff; 
-      --title:#2e2840;
-      --morning:#e1dcf9; 
-      --evening:#564d74;
-      --history:#ffffff;
-      --text-dark:#2e2840; 
-      --text-light:#fff;
-      --accent:#3a2c6b;
-      --muted:#5e4f79;
-      --shadow:0 18px 45px rgba(0,0,0,.12);
-    }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;padding:0}
+  body{
+    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+  }
 
-    body[data-phase="morning"]{ background:#ffffff; }
-    body[data-phase="evening"]{ background:#fbfaff; }
+  main.wrap{
+    max-width:1100px;
+    width:100%;
+    padding:clamp(72px,12vh,160px) 20px 80px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:28px;
+    position:relative;
+  }
 
-    *{box-sizing:border-box;}
-    html,body{height:100%;margin:0;}
-    body{
-      font-family:"DM Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      color:var(--text-dark);
-      display:flex;
-      justify-content:center;
-      transition:background .25s ease;
-    }
+  h2{
+    margin:0;
+    text-align:center;
+    font-weight:100;
+    font-size:clamp(16px,2.8vw,32px);
+    line-height:1;
+    letter-spacing:.2px;
+    position:relative;
+  }
 
-    .wrap{
-      width:min(980px,100%);
-      padding:72px 20px 120px;
-      text-align:center;
-      position:relative;
-    }
+  /* i button beside heading */
+  .info-btn{
+    position:absolute;
+    top:-4px;
+    right:-36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:rgba(36,22,63,0.08);
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+    cursor:pointer;
+    transition:background .2s ease;
+  }
+  .info-btn:hover,
+  .info-btn:focus{
+    background:rgba(36,22,63,0.15);
+    outline:none;
+  }
 
-    h1{
-      margin:0 0 10px;
-      color:var(--title);
-      font-weight:600;
-      letter-spacing:.2px;
-      font-size:clamp(26px,3.2vw,40px);
-      position:relative;
-      display:inline-block;
-    }
+  /* popup modal overlay */
+  .info-modal{
+    position:fixed;
+    top:0;left:0;width:100%;height:100%;
+    background:rgba(34,22,60,0.15);
+    backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:2000;
+  }
+  .info-modal.active{
+    opacity:1;
+    pointer-events:auto;
+  }
 
-    .info-btn{
-      position:absolute;
-      top:4px;
-      right:-34px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:22px;
-      height:22px;
-      border-radius:50%;
-      background:rgba(36,22,63,0.08);
-      font-size:13px;
-      font-weight:600;
-      color:var(--text-dark);
-      cursor:pointer;
-      transition:background .2s ease;
-    }
-    .info-btn:hover,
-    .info-btn:focus{
-      background:rgba(36,22,63,0.15);
-      outline:none;
-    }
+  /* modal box */
+  .modal-content{
+    background:#f1f1ff;
+    color:var(--text);
+    border-radius:20px;
+    box-shadow:0 18px 40px rgba(17,12,40,.1);
+    padding:36px 32px;
+    max-width:480px;
+    width:90%;
+    text-align:left;      /* left-aligned for readability */
+    line-height:1.7;
+    font-size:16px;
+  }
 
-    .sub{
-      margin:0 0 50px;
-      font-weight:500;
-      color:var(--muted);
-      font-size:clamp(15px,1.6vw,18px);
-    }
+  .modal-content h3{
+    text-align:left;       /* heading now left-aligned */
+    margin-top:0;
+    font-weight:600;
+    margin-bottom:18px;
+  }
 
-    .info-modal{
-      position:fixed;
-      top:0;left:0;width:100%;height:100%;
-      background:rgba(34,22,60,0.15);
-      backdrop-filter:blur(6px);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .25s ease;
-      z-index:2000;
-    }
-    .info-modal.active{
-      opacity:1;
-      pointer-events:auto;
-    }
+  .modal-content p{
+    margin-bottom:18px;
+  }
 
-    .modal-content{
-      background:#f1f1ff;
-      color:var(--text-dark);
-      border-radius:20px;
-      box-shadow:0 18px 40px rgba(17,12,40,.1);
-      padding:32px 28px;
-      max-width:460px;
-      width:90%;
-      text-align:left;
-      line-height:1.7;
-      font-size:16px;
-    }
+  .modal-content button{
+    margin-top:20px;
+    background:var(--oval);
+    border:none;
+    border-radius:999px;
+    padding:10px 22px;
+    font-family:'DM Sans',sans-serif;
+    font-size:15px;
+    color:var(--text);
+    cursor:pointer;
+    box-shadow:0 6px 22px rgba(19,7,63,.08);
+    transition:background .2s ease, transform .1s ease;
+  }
+  .modal-content button:hover{
+    background:#e1dcf9;
+    transform:translateY(-1px);
+  }
 
-    .modal-content button{
-      margin-top:24px;
-      background:#e9c3f1;
-      border:none;
-      border-radius:999px;
-      padding:10px 22px;
-      font-family:'DM Sans',sans-serif;
-      color:#22163c;
-      cursor:pointer;
-      box-shadow:0 6px 22px rgba(19,7,63,.08);
-      transition:background .2s ease;
-    }
-    .modal-content button:hover{ background:#e1dcf9; }
+  .sub{
+    margin:0;
+    text-align:center;
+    color:var(--muted);
+    font-size:clamp(14px,1.8vw,18px);
+  }
 
-    .ovals{
-      position:relative;
-      width:min(820px,92vw);
-      margin:0 auto;
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:center;
-      gap:28px;
-    }
+  /* emotion grid */
+  .grid{
+    position:relative;
+    margin-top:12px;
+    width:100%;
+    max-width:600px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    grid-template-rows:repeat(2,1fr);
+    gap:40px;
+    justify-items:center;
+    align-items:center;
+  }
 
-    .oval{
-      width:clamp(240px,30vw,320px);
-      height:clamp(110px,14vw,140px);
-      border-radius:50% / 58%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:var(--shadow);
-      font:500 clamp(18px,2.4vw,26px)/1 "DM Sans",sans-serif;
-      text-decoration:none;
-      user-select:none;
-      transition:transform .12s ease, box-shadow .25s ease;
-    }
-    .oval:hover{ transform:translateY(-2px); box-shadow:0 16px 40px rgba(0,0,0,.14); }
+  .oval{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:280px;
+    height:110px;
+    background:#e9c3f1;
+    text-decoration:none;
+    color:#22163c;
+    font-weight:400;
+    font-size:20px;
+    border-radius:26px;
+    box-shadow:0 18px 40px rgba(17,12,40,.10);
+    transition:transform .12s ease,box-shadow .25s ease,filter .25s ease;
+  }
+  .oval:hover{
+    transform:translateY(-2px);
+    box-shadow:0 22px 48px rgba(17,12,40,.14);
+    filter:saturate(1.05);
+  }
 
-    .oval.morning{ background:var(--morning); color:var(--title); }
-    .oval.evening{ background:var(--evening); color:var(--text-light); }
-    .oval.history{
-      background:var(--history);
-      border:2px dashed #d3cbf9;
-      color:var(--accent);
-      box-shadow:none;
-      font-weight:500;
-    }
-    .oval.history:hover{
-      background:#f4f1ff;
-      border-color:#b8aef5;
-    }
+  .oval.morning{background:#e1dcf9}
+  .oval.evening{background:#564d74; color:#ffff}
+  .oval.reflections{background:#f1f1ff}
+  .oval.overview{background:#f4f5f7}
 
-    /* floating mascot (desktop) */
-    .mascot {
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:clamp(64px,9vw,100px);
-      transform:translate(-50%,-46%);
-      filter:drop-shadow(0 8px 14px rgba(0,0,0,.15));
-      pointer-events:none;
-      z-index:1;
-    }
+  .art{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:120px;
+    height:auto;
+    pointer-events:none;
+    user-select:none;
+  }
 
-    /* mobile mascot above heading */
-    .mascot--mobile {
-      display:none;
-    }
+  .more{
+    margin-top:12px;
+    text-decoration:none;
+    font-weight:200;
+    color:#3a2c6b;
+    border:1px solid #e6e0f5;
+    border-radius:999px;
+    padding:10px 14px;
+    box-shadow:0 6px 22px rgba(19,7,63,.06);
+    transition:transform .1s ease,box-shadow .2s ease,background .2s ease;
+  }
+  .more:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 28px rgba(19,7,63,.10);
+    background:#faf7ff;
+  }
 
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:24px;
-      transform:translateX(-50%);
-      background:#2e2840;
-      color:#fff;
-      padding:10px 14px;
-      border-radius:999px;
-      font:600 14px "DM Sans",sans-serif;
-      box-shadow:0 12px 30px rgba(0,0,0,.18);
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .2s ease;
-    }
-    .toast.show{opacity:1;}
+  @media(max-width:640px){
+    .grid{grid-template-columns:1fr;gap:22px;}
+    .art{position:static;transform:none;margin:12px auto;}
+    .oval{width:min(80vw,320px);}
+    .info-btn{right:-28px;top:-2px;}
+    .modal-content{padding:28px 20px;font-size:15px;}
+  }
 
-    /* responsive adjustments */
-    @media(max-width:560px){
-      h1{margin-bottom:4px;}
-      .info-btn{right:-28px;top:0;}
-      .ovals{gap:22px;}
-      .oval{width:min(80vw,320px);height:120px;}
-      .modal-content{padding:28px 20px;font-size:15px;}
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none!important;}
+  }
+</style>
 
-      .mascot:not(.mascot--mobile){display:none;}
+<main class="wrap">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
 
-      .mascot--mobile{
-        display:block;
-        position:relative;
-        pointer-events:auto;
-        width:80px;
-        margin:0 auto 20px;
-        left:50%;
-        transform:translateX(-50%);
-        filter:drop-shadow(0 6px 10px rgba(0,0,0,.12));
-        z-index:10;
-      }
-    }
-  </style>
-</head>
+  <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+    <h2>Welcome to Your Dailies</h2>
+    <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
+  </div>
+  <p class="sub" id="greet">Good Morning</p>
 
-<body data-phase="morning">
-  <main class="wrap" role="main">
+  <section class="grid" aria-label="Emotion options">
+    <a class="oval morning" href="{% url 'dailies:morningAffirmation' %}">Morning</a>
+    <a class="oval evening" href="/dailies/evening">Evening</a>
+    <a class="oval reflections" href="{% url 'dailies:dailies-story' %}">My Reflections</a>
+    <a class="oval overview" href="{% url 'dailies:dailies-story' %}">My Weekly Overview</a>
+    <img class="art" src="{% static 'images/dailies.png' %}" alt="">
+  </section>
+  <a class="more" href="{% url 'emotionfy:all' %}">Explore More</a>
 
-    <!-- perfectly centered mascot above heading (mobile only) -->
-    <img class="mascot mascot--mobile" src="{% static 'images/dailies.png' %}" alt="">
+</main>
 
-    <div style="position:relative;display:inline-block;">
-      <h1>Welcome to Your Dailies</h1>
-      <button class="info-btn" id="openInfo" aria-label="About Dailies">i</button>
-    </div>
-
-    <p class="sub" id="greet">Good Morning</p>
-
-    <section class="ovals" aria-label="Choose a check-in">
-      <a class="oval morning" href="{% url 'dailies:morningAffirmation' %}" aria-label="Morning">Morning</a>
-      <a class="oval evening" href="/dailies/evening" aria-label="Evening">Evening</a>
-      <a class="oval history" href="{% url 'dailies:dailies-story' %}" aria-label="View past reflections">My Weekly Overview</a>
-      <img class="mascot" src="{% static 'images/dailies.png' %}" alt="">
-    </section>
-  </main>
-
-  <!-- modal -->
-  <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-content">
-      <h3 id="modalTitle" style="margin-top:0;font-weight:600;">About Dailies</h3>
-      <p>Each morning, you’ll be invited to write a short affirmation — something that grounds or encourages you. 
+<!-- soft modal popup -->
+<div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <h3 id="modalTitle" style="margin-top:0;font-weight:600;">About Dailies</h3>
+    <p>Each morning, you’ll be invited to write a short affirmation — something that grounds or encourages you. 
       It might be as simple as “I’m allowed to take my time” or “I can begin gently today.”</p>
 
       <p>Then, you can set one main goal for the day and list any tasks or checklists that help you move toward it. 
@@ -264,51 +256,46 @@
       <p>In the evening, Dailies will gently check in. You’ll have space to reflect: how did the day feel? 
       What supported you? What felt too much? This builds emotional awareness and helps prevent burnout 
       by making your needs visible in daily patterns.</p>
-
-      <button id="closeInfo" aria-label="Close info popup">Close</button>
-    </div>
+    <button id="closeInfo" aria-label="Close information popup">Close</button>
   </div>
+</div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+  // --- Time phase logic
+  const now = new Date();
+  const h = now.getHours();
+  const isMorning = (h >= 4 && h < 14);
+  const phase = isMorning ? "morning" : "evening";
+  document.body.dataset.phase = phase;
+  document.getElementById('greet').textContent =
+    phase === "morning"
+      ? "Good Morning"
+      : "You've reached the quiet end of the day. Would you like to reflect on how things went?";
 
-  <script>
-    // --- Time phase logic
-    const now = new Date();
-    const h = now.getHours();
-    const isMorning = (h >= 4 && h < 14);
-    const phase = isMorning ? "morning" : "evening";
-    document.body.dataset.phase = phase;
-    document.getElementById('greet').textContent =
-      phase === "morning"
-        ? "Good Morning"
-        : "You've reached the quiet end of the day. Would you like to reflect on how things went?";
+  // --- Gentle soft-guard
+  const toast = document.getElementById('toast');
+  let allowNextClickUntil = 0;
+  function nudge(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(()=> toast.classList.remove('show'),2200);
+  }
+  function softGuard(e,targetPhase){
+    if(targetPhase===phase)return;
+    const nowMs=Date.now();
+    if(nowMs<allowNextClickUntil)return;
+    e.preventDefault();
+    allowNextClickUntil=nowMs+2500;
+    nudge(`It's ${phase} now — tap again to open your ${targetPhase} reflection.`);
+  }
+  document.querySelector('.oval.morning')?.addEventListener('click',(e)=>softGuard(e,'morning'));
+  document.querySelector('.oval.evening')?.addEventListener('click',(e)=>softGuard(e,'evening'));
 
-    // --- Gentle soft-guard
-    const toast = document.getElementById('toast');
-    let allowNextClickUntil = 0;
-    function nudge(msg){
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(()=> toast.classList.remove('show'),2200);
-    }
-    function softGuard(e,targetPhase){
-      if(targetPhase===phase)return;
-      const nowMs=Date.now();
-      if(nowMs<allowNextClickUntil)return;
-      e.preventDefault();
-      allowNextClickUntil=nowMs+2500;
-      nudge(`It's ${phase} now — tap again to open your ${targetPhase} reflection.`);
-    }
-    document.querySelector('.oval.morning')?.addEventListener('click',(e)=>softGuard(e,'morning'));
-    document.querySelector('.oval.evening')?.addEventListener('click',(e)=>softGuard(e,'evening'));
-
-    // --- Modal logic
-    const modal = document.getElementById('infoModal');
-    document.getElementById('openInfo').addEventListener('click',()=> modal.classList.add('active'));
-    document.getElementById('closeInfo').addEventListener('click',()=> modal.classList.remove('active'));
-    modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('active'); });
-    document.addEventListener('keydown',e=>{ if(e.key==='Escape') modal.classList.remove('active'); });
-  </script>
-</body>
-</html>
+  // --- Modal logic
+  const modal = document.getElementById('infoModal');
+  document.getElementById('openInfo').addEventListener('click',()=> modal.classList.add('active'));
+  document.getElementById('closeInfo').addEventListener('click',()=> modal.classList.remove('active'));
+  modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('active'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') modal.classList.remove('active'); });
+</script>
 {% endblock %}
