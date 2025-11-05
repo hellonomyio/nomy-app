@@ -1,276 +1,138 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}NOMY • Emotionize{% endblock %}
+{% block title %}Emotionize{% endblock %}
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
     --bg:#ffffff;
-    --oval:#e9c3f1;
-    --text:#22163c;
-    --muted:#5e4f79;
+    --ink:#1f003d;
     --shadow:0 18px 40px rgba(17,12,40,.10);
     --radius:26px;
+    --navbar-height:60px;
   }
 
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;padding:0}
-  body{
-    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  * { box-sizing:border-box; margin:0; padding:0; }
+
+  body {
     background:var(--bg);
-    color:var(--text);
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-  }
-
-  main.wrap{
-    max-width:1100px;
-    width:100%;
-    padding:clamp(72px,12vh,160px) 20px 80px;
+    color:var(--ink);
+    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    min-height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:28px;
-    position:relative;
   }
 
-  h2{
-    margin:0;
-    text-align:center;
-    font-weight:100;
-    font-size:clamp(16px,2.8vw,32px);
-    line-height:1;
-    letter-spacing:.2px;
-    position:relative;
+  /* 💜 identical wrapper as main page */
+  .zoom-wrapper {
+    transform: scale(0.9);
+    transform-origin: top center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - var(--navbar-height));
+    justify-content: center;
   }
 
-  /* i button beside heading */
-  .info-btn{
-    position:absolute;
-    top:-4px;
-    right:-36px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:22px;
-    height:22px;
-    border-radius:50%;
-    background:rgba(36,22,63,0.08);
-    font-size:13px;
-    font-weight:600;
-    color:var(--text);
-    cursor:pointer;
-    transition:background .2s ease;
-  }
-  .info-btn:hover,
-  .info-btn:focus{
-    background:rgba(36,22,63,0.15);
-    outline:none;
+  main.wrap {
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 85px; /* same as main page */
+    text-align: center;
   }
 
-  /* popup modal overlay */
-  .info-modal{
-    position:fixed;
-    top:0;left:0;width:100%;height:100%;
-    background:rgba(34,22,60,0.15);
-    backdrop-filter:blur(6px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .25s ease;
-    z-index:2000;
-  }
-  .info-modal.active{
-    opacity:1;
-    pointer-events:auto;
+  h2 {
+    font-size: clamp(22px, 2.5vw, 32px);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--ink);
   }
 
-  /* modal box */
-  .modal-content{
-    background:#f1f1ff;
-    color:var(--text);
-    border-radius:20px;
-    box-shadow:0 18px 40px rgba(17,12,40,.1);
-    padding:36px 32px;
-    max-width:480px;
-    width:90%;
-    text-align:left;      /* left-aligned for readability */
-    line-height:1.7;
-    font-size:16px;
+  .sub {
+    color: #5e4f79;
+    font-size: clamp(14px, 1.8vw, 18px);
+    margin-top: 8px;
   }
 
-  .modal-content h3{
-    text-align:left;       /* heading now left-aligned */
-    margin-top:0;
-    font-weight:600;
-    margin-bottom:18px;
+  /* ✅ pills identical sizing */
+  .grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 360px));
+    gap: 60px 64px;
+    justify-content: center;
   }
 
-  .modal-content p{
-    margin-bottom:18px;
+  .oval {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    height: 110px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 400;
+    transition: transform .12s ease, box-shadow .25s ease, filter .25s ease;
   }
 
-  .modal-content button{
-    margin-top:20px;
-    background:var(--oval);
-    border:none;
-    border-radius:999px;
-    padding:10px 22px;
-    font-family:'DM Sans',sans-serif;
-    font-size:15px;
-    color:var(--text);
-    cursor:pointer;
-    box-shadow:0 6px 22px rgba(19,7,63,.08);
-    transition:background .2s ease, transform .1s ease;
-  }
-  .modal-content button:hover{
-    background:#e1dcf9;
-    transform:translateY(-1px);
+  .oval:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 48px rgba(17,12,40,.14);
+    filter: saturate(1.05);
   }
 
-  .sub{
-    margin:0;
-    text-align:center;
-    color:var(--muted);
-    font-size:clamp(14px,1.8vw,18px);
+  /* Emotion colors */
+  .oval.energised { background: #f4f8f3; }
+  .oval.pleasant { background: #fffaeb; }
+  .oval.low-energy { background: #e9f0fa; }
+  .oval.vulnerable { background: #f1eeff; }
+
+  /* avatar bottom-left */
+  .avatar {
+    position: fixed;
+    bottom: 22px;
+    left: 100px;
+    width: 150px;
+    height: auto;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 5;
+    background: none !important;
+    filter: drop-shadow(0 0 1px rgba(0,0,0,0.1));
   }
 
-  /* emotion grid */
-  .grid{
-    position:relative;
-    margin-top:12px;
-    width:100%;
-    max-width:600px;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    grid-template-rows:repeat(2,1fr);
-    gap:40px;
-    justify-items:center;
-    align-items:center;
+  @media(max-width:720px){
+    .zoom-wrapper { transform: scale(1); }
+    .grid { grid-template-columns: 1fr; gap: 22px; }
+    .avatar { width: 80px; left: 20px; bottom: 16px; }
+    main.wrap { gap: 50px; }
   }
 
-  .oval{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:280px;
-    height:110px;
-    background:#e9c3f1;
-    text-decoration:none;
-    color:#22163c;
-    font-weight:400;
-    font-size:20px;
-    border-radius:26px;
-    box-shadow:0 18px 40px rgba(17,12,40,.10);
-    transition:transform .12s ease,box-shadow .25s ease,filter .25s ease;
-  }
-  .oval:hover{
-    transform:translateY(-2px);
-    box-shadow:0 22px 48px rgba(17,12,40,.14);
-    filter:saturate(1.05);
-  }
-
-  .oval.energised{background:#f4f8f3}
-  .oval.pleasant{background:#fffaeb}
-  .oval.low-energy{background:#e9f0fa}
-  .oval.vulnerable{background:#f1eeff}
-
-  .art{
-    position:absolute;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    width:120px;
-    height:auto;
-    pointer-events:none;
-    user-select:none;
-  }
-
-  .more{
-    margin-top:12px;
-    text-decoration:none;
-    font-weight:200;
-    color:#3a2c6b;
-    border:1px solid #e6e0f5;
-    border-radius:999px;
-    padding:10px 14px;
-    box-shadow:0 6px 22px rgba(19,7,63,.06);
-    transition:transform .1s ease,box-shadow .2s ease,background .2s ease;
-  }
-  .more:hover{
-    transform:translateY(-2px);
-    box-shadow:0 12px 28px rgba(19,7,63,.10);
-    background:#faf7ff;
-  }
-
-  @media(max-width:640px){
-    .grid{grid-template-columns:1fr;gap:22px;}
-    .art{position:static;transform:none;margin:12px auto;}
-    .oval{width:min(80vw,320px);}
-    .info-btn{right:-28px;top:-2px;}
-    .modal-content{padding:28px 20px;font-size:15px;}
-  }
-
-  @media(prefers-reduced-motion:reduce){
-    *{transition:none!important;}
-  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
-<main class="wrap">
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
+<div class="zoom-wrapper">
+  <main class="wrap">
+    <div>
+      <h2>Which feeling would you like to (re)discover?</h2>
+      <p class="sub">Choose a category below that best matches how you feel today</p>
+    </div>
 
-  <div style="position:relative;display:flex;align-items:center;justify-content:center;">
-    <h2>Which feeling would you like to (re)discover? </h2>
-    <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
-  </div>
-
-  <section class="grid" aria-label="Emotion options">
-    <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=excitement">Excitement</a>
-    <a class="oval pleasant" href="{% url 'emotionfy:story' %}?emotion=relief">Relief</a>
-    <a class="oval low-energy" href="{% url 'emotionfy:story' %}?emotion=exhaustion">Exhaustion</a>
-    <a class="oval vulnerable" href="{% url 'emotionfy:story' %}?emotion=shame">Shame</a>
-    <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
-  </section>
-  <a class="more" href="{% url 'emotionfy:all' %}">Explore More</a>
-
-</main>
-
-<!-- soft modal popup -->
-<div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal-content">
-    <h3 id="modalTitle" style="margin-top:0;font-weight:600;">About Emotionize</h3>
-    <p>Being diagnosed as autistic in adulthood can feel like discovering a new language 
-      for your own mind and body. Many feelings that were once confusing or muted suddenly 
-      make sense in a new context. This feature is designed to help you reconnect with your 
-      emotions and understand them clearly. At the end of each section, there is an invitation to 
-      reflect or explore the toolkit.</p>
-    <button id="closeInfo" aria-label="Close information popup">Close</button>
-  </div>
+    <section class="grid" aria-label="Emotion options">
+      <a class="oval energised" href="{% url 'emotionfy:energised' %}">Energised</a>
+      <a class="oval pleasant" href="{% url 'emotionfy:pleasant' %}">Pleasant</a>
+      <a class="oval low-energy" href="{% url 'emotionfy:low-energy' %}">Low-Energy</a>
+      <a class="oval vulnerable" href="{% url 'emotionfy:vulnerable' %}">Vulnerable</a>
+    </section>
+  </main>
 </div>
 
-<script>
-  const modal = document.getElementById('infoModal');
-  const openBtn = document.getElementById('openInfo');
-  const closeBtn = document.getElementById('closeInfo');
-
-  openBtn.addEventListener('click', () => {
-    modal.classList.add('active');
-  });
-  closeBtn.addEventListener('click', () => {
-    modal.classList.remove('active');
-  });
-  modal.addEventListener('click', e => {
-    if (e.target === modal) modal.classList.remove('active');
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') modal.classList.remove('active');
-  });
-</script>
+<img src="{% static 'images/avatar.png' %}" alt="NOMY avatar" class="avatar" />
 {% endblock %}

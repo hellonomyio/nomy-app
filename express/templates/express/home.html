@@ -6,49 +6,94 @@
 
 <style>
   :root {
-    --bg: #ffffff;
-    --lav: #f6f4ff;
-    --pill: #d3cbf9;
-    --ink: #22163c;
-    --muted: #5e4f79;
-    --ring: rgba(211,203,249,.85);
-    --shadow: 0 18px 40px rgba(17,12,40,.10);
+    --bg:#ffffff;
+    --pill-bg:#e1dcf9;
+    --ink:#1f003d;
+    --muted:#5e4f79;
+    --shadow:0 18px 40px rgba(17,12,40,.10);
+    --radius:26px;
+    --navbar-height:60px;
   }
 
-  * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
-  body {
-    color: var(--ink);
-    font-family: "DM Sans", system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  /* consistent scaling like Emotionize */
+  .zoom-wrapper {
+    transform: scale(0.9);
+    transform-origin: top center;
+    width: 100%;
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - var(--navbar-height));
     justify-content: center;
-    padding: 0 20px 100px;
   }
 
   main.wrap {
     width: 100%;
-    max-width: 980px;
-    padding-top: clamp(72px, 12vh, 160px);
+    max-width: 900px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
-    position: relative;
+    gap: 40px;
+    text-align: center;
   }
 
-  /* title pill */
-  .pill {
-    display: inline-grid;
-    place-items: center;
-    background: var(--pill);
-    color: var(--ink);
+  /* back button */
+  .back-btn {
+    position: fixed;
+    top: 84px;
+    left: 28px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    color: #3a2c6b;
+    background: #fff;
+    border: 1px solid #e6e0f5;
     border-radius: 999px;
-    padding: 20px 64px;
-    font-size: clamp(20px, 2.4vw, 26px);
+    padding: 8px 16px;
+    box-shadow: 0 6px 22px rgba(19,7,63,.06);
+    transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+    z-index: 2000;
+  }
+  .back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(19,7,63,.10);
+    background: #faf7ff;
+  }
+
+  /* Express pill */
+  .pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;
+    min-width: 260px;
+    max-width: 340px;
+    border-radius: var(--radius);
+    background: var(--pill-bg);
+    color: var(--ink);
+    font-size: clamp(20px, 2.2vw, 24px);
     font-weight: 500;
     box-shadow: var(--shadow);
+    text-align: center;
     position: relative;
+    transition: transform .1s ease, box-shadow .2s ease;
+  }
+
+  .pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 48px rgba(17,12,40,.14);
   }
 
   /* info button */
@@ -69,22 +114,16 @@
     cursor: pointer;
     transition: background .2s ease;
   }
-  .info-btn:hover, .info-btn:focus {
-    background: rgba(36,22,63,0.15);
-    outline: none;
-  }
+  .info-btn:hover { background: rgba(36,22,63,0.15); }
 
-  /* intro */
   .intro {
     max-width: 820px;
     text-align: center;
     color: var(--muted);
     font-size: clamp(15px, 1.6vw, 18px);
     line-height: 1.7;
-    margin: 0;
   }
 
-  /* scroller */
   .scroller {
     width: 100%;
     max-width: 820px;
@@ -93,25 +132,18 @@
     margin-top: 10px;
     padding-right: 6px;
   }
-
-  .scroller::-webkit-scrollbar {
-    width: 8px;
-  }
+  .scroller::-webkit-scrollbar { width: 8px; }
   .scroller::-webkit-scrollbar-thumb {
     background: rgba(211,203,249,0.6);
     border-radius: 10px;
   }
-  .scroller::-webkit-scrollbar-track {
-    background: transparent;
-  }
 
-  /* scenario cards */
   .option {
     display: block;
     background: #f5f4fc;
     color: var(--ink);
     text-decoration: none;
-    padding: 20px 26px;
+    padding: 18px 24px;
     border-radius: 20px;
     font-weight: 500;
     font-size: clamp(17px, 2vw, 20px);
@@ -125,23 +157,8 @@
     box-shadow: 0 12px 28px rgba(17,12,40,.12);
     background: #ece9fb;
   }
-  .option:focus-visible {
-    outline: 4px solid var(--ring);
-    outline-offset: 6px;
-  }
 
-  /* art image */
-  .art {
-    position: absolute;
-    bottom: 12%;
-    right: -6%;
-    width: clamp(100px, 14vw, 140px);
-    pointer-events: none;
-    user-select: none;
-    opacity: 0.9;
-  }
-
-  /* modal overlay */
+  /* modal overlay + content */
   .info-modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -160,7 +177,6 @@
     pointer-events: auto;
   }
 
-  /* modal content */
   .modal-content {
     background: #f1f1ff;
     color: var(--ink);
@@ -174,18 +190,10 @@
     font-size: 16px;
   }
 
-  .modal-content h3 {
-    text-align: left;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 18px;
-  }
-
-  .modal-content p { margin-bottom: 16px; }
-
+  .modal-content h3 { margin-top: 0; margin-bottom: 18px; font-weight: 600; }
   .modal-content button {
     margin-top: 20px;
-    background: var(--pill);
+    background: var(--pill-bg);
     border: none;
     border-radius: 999px;
     padding: 10px 24px;
@@ -195,37 +203,40 @@
     box-shadow: 0 6px 22px rgba(19,7,63,.08);
     transition: background .2s ease;
   }
-  .modal-content button:hover { background: #e1dcf9; }
+  .modal-content button:hover { background: #e9e4fb; }
 
   @media(max-width:640px){
-    .info-btn{ right:-26px; top:-2px; }
-    .option{ font-size:16px; padding:16px 20px; }
-    .art{ display:none; } /* hide image if too cramped */
+    .zoom-wrapper { transform: scale(1); }
+    .info-btn { right:-26px; top:-2px; }
+    .option { font-size:16px; padding:16px 20px; }
+    .back-btn { top:76px; left:18px; font-size:14px; padding:6px 12px; }
   }
 </style>
 
-<main class="wrap">
-  <div style="position:relative; display:inline-block;">
-    <div class="pill">Express</div>
-    <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
-  </div>
+<a href="{% url 'nomy-options' %}" class="back-btn">← Back</a>
 
-  <p class="intro">
-    Choose a situation that fits how you feel or what you want to build confidence in today.
-  </p>
+<div class="zoom-wrapper">
+  <main class="wrap">
+    <div style="position:relative; display:inline-block;">
+      <div class="pill">Express</div>
+      <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
+    </div>
 
-  <div class="scroller" aria-label="Situations">
-    <a class="option" href="{% url 'express:express-scenario' %}?situation=social-event">Someone invites you to a social event you don’t want to attend</a>
-    <a class="option" href="{% url 'express:express-scenario' %}?situation=interrupted">Your colleague interrupts you during a meeting</a>
-    <a class="option" href="{% url 'express:express-scenario' %}?situation=unclear-instructions">You need clearer instructions at work</a>
-    <a class="option" href="#">You’re overstimulated in a public space</a>
-    <a class="option" href="#">A friend doesn’t understand why you need alone time</a>
-    <a class="option" href="#">You want to decline a call but feel guilty doing so</a>
-    <a class="option" href="#">You’re unsure how to explain sensory overload to someone</a>
-  </div>
+    <p class="intro">
+      Choose a situation that fits how you feel or what you want to build confidence in today.
+    </p>
 
-  <img class="art" src="{% static 'images/express.png' %}" alt="Express illustration">
-</main>
+    <div class="scroller" aria-label="Situations">
+      <a class="option" href="{% url 'express:express-scenario' %}?situation=social-event">Someone invites you to a social event you don’t want to attend</a>
+      <a class="option" href="{% url 'express:express-scenario' %}?situation=interrupted">Your colleague interrupts you during a meeting</a>
+      <a class="option" href="{% url 'express:express-scenario' %}?situation=unclear-instructions">You need clearer instructions at work</a>
+      <a class="option" href="#">You’re overstimulated in a public space</a>
+      <a class="option" href="#">A friend doesn’t understand why you need alone time</a>
+      <a class="option" href="#">You want to decline a call but feel guilty doing so</a>
+      <a class="option" href="#">You’re unsure how to explain sensory overload to someone</a>
+    </div>
+  </main>
+</div>
 
 <!-- info modal -->
 <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -243,10 +254,9 @@
   const modal = document.getElementById('infoModal');
   const openBtn = document.getElementById('openInfo');
   const closeBtn = document.getElementById('closeInfo');
-
-  openBtn.addEventListener('click', () => modal.classList.add('active'));
-  closeBtn.addEventListener('click', () => modal.classList.remove('active'));
-  modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('active'); });
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') modal.classList.remove('active'); });
+  openBtn.addEventListener('click',()=>modal.classList.add('active'));
+  closeBtn.addEventListener('click',()=>modal.classList.remove('active'));
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('active')});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('active')});
 </script>
 {% endblock %}

@@ -1,128 +1,102 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Emotionize • Explore more emotions{% endblock %}
+{% block title %}Emotionize • Energised{% endblock %}
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
 <style>
   :root {
     --bg:#ffffff;
-    --oval:#e9c3f1; 
-    --text:#22163c;
+    --ink:#1f003d;
     --muted:#5e4f79;
     --shadow:0 18px 40px rgba(17,12,40,.10);
     --radius:26px;
+    --navbar-height:60px;
   }
 
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0}
+  *{box-sizing:border-box;margin:0;padding:0}
+
   body{
-    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
     background:var(--bg);
-    color:var(--text);
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-  }
-
-  main.wrap{
-    max-width:1100px;
-    width:100%;
-    padding:clamp(72px,12vh,160px) 20px 80px;
+    color:var(--ink);
+    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    min-height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:28px;
-    position:relative;
   }
 
-  h2{
-    margin:0;
-    text-align:center;
-    font-weight:100;
-    font-size:clamp(16px,2.8vw,32px);
-    line-height:1;
-    letter-spacing:.2px;
+  /* consistent NOMY centering & scaling */
+  .zoom-wrapper {
+    transform: scale(0.9);
+    transform-origin: top center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - var(--navbar-height));
+    justify-content: center;
   }
 
-  .sub{
-    margin:0;
-    text-align:center;
-    color:var(--muted);
-    font-size:clamp(14px,1.8vw,18px);
+  main.wrap {
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 85px;
+    text-align: center;
   }
 
-  /* GRID */
-  .grid{
-    position:relative;
-    margin-top:12px;
-    width:100%;
-    max-width:600px;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:40px;
+  h2 {
+    font-size: clamp(22px, 2.5vw, 32px);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--ink);
   }
 
-  .oval{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:280px;
-    height:110px;
-    background:#e9c3f1;
-    text-decoration:none;
-    color:#22163c;
-    font-weight:400;
-    font-size:20px;
-    border-radius:26px;
-    box-shadow:0 18px 40px rgba(17,12,40,0.10);
-    transition:transform .12s ease,box-shadow .25s ease,filter .25s ease;
+  .sub {
+    color: var(--muted);
+    font-size: clamp(14px, 1.8vw, 18px);
+    margin-top: 8px;
   }
 
-  .oval:hover{
-    transform:translateY(-2px);
-    box-shadow:0 22px 48px rgba(17,12,40,0.14);
-    filter:saturate(1.05);
+  /* grid layout identical to pleasant page */
+  .grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 360px));
+    gap: 60px 64px;
+    justify-content: center;
   }
 
-  /* Category colours */
-  .oval.energised{background:#f4f8f3}
-  .oval.pleasant{background:#fffaeb}
-  .oval.low-energy{background:#e9f0fa}
-  .oval.vulnerable{background:#f1eeff}
-
-  .art{
-    position:absolute;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    width:120px;
-    height:auto;
-    pointer-events:none;
-    user-select:none;
+  /* pill styling identical */
+  .oval {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    height: 110px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 400;
+    transition: transform .12s ease, box-shadow .25s ease, filter .25s ease;
   }
 
-  .more{
-    margin-top:12px;
-    text-decoration:none;
-    font-weight:200;
-    color:#3a2c6b;
-    border:1px solid #e6e0f5;
-    border-radius:999px;
-    padding:10px 14px;
-    box-shadow:0 6px 22px rgba(19,7,63,.06);
-    transition:transform .1s ease,box-shadow .2s ease,background .2s ease;
+  .oval:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 48px rgba(17,12,40,.14);
+    filter: saturate(1.05);
   }
 
-  .more:hover{
-    transform:translateY(-2px);
-    box-shadow:0 12px 28px rgba(19,7,63,.10);
-    background:#faf7ff;
-  }
+  /* energised colour */
+  .oval.energised { background: #f4f8f3; }
 
+  /* back button */
   .back-btn {
     position: fixed;
-    top: 84px; /* just below navbar */
+    top: 84px;
     left: 28px;
     text-decoration: none;
     font-size: 15px;
@@ -145,38 +119,49 @@
     outline: none;
   }
 
-  @media (max-width: 640px) {
-    .back-btn {
-      top: 76px;
-      left: 18px;
-      font-size: 14px;
-      padding: 6px 12px;
-    }
+  /* avatar bottom-left */
+  .avatar {
+    position: fixed;
+    bottom: 22px;
+    left: 100px;
+    width: 150px;
+    height: auto;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 5;
+    background: none !important;
+    filter: drop-shadow(0 0 1px rgba(0,0,0,0.1));
+  }
+
+  @media(max-width:720px){
+    .zoom-wrapper{transform:scale(1);}
+    .grid{grid-template-columns:1fr;gap:22px;}
+    .back-btn{top:76px;left:18px;font-size:14px;padding:6px 12px;}
+    main.wrap{gap:50px;}
+    .avatar{width:80px;left:20px;bottom:16px;}
   }
 
   @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
-<body>
-  <!-- Back button floats ABOVE -->
-  <a href="{% url 'emotionfy:all' %}" class="back-btn">← Back</a>
+<a href="{% url 'emotionfy:emotionize-home' %}" class="back-btn">← Back</a>
 
+<div class="zoom-wrapper">
   <main class="wrap">
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
+    <div>
+      <h2>Choose a Feeling</h2>
+      <p class="sub">Pick a feeling that resonates most with you today</p>
+    </div>
 
-    <h2>Choose a Feeling</h2>
-
-    <section class="grid" aria-label="Emotion options">
+    <section class="grid" aria-label="Feeling options">
       <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=excitement">Excitement</a>
       <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=curiosity">Curiosity</a>
       <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=frustration">Frustration</a>
       <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=anxiety">Anxiety</a>
-      <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
     </section>
   </main>
-</body>
+</div>
+
+<!-- 🧍 avatar bottom-left -->
+<img src="{% static 'images/avatar.png' %}" alt="NOMY avatar" class="avatar" />
 {% endblock %}

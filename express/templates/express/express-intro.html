@@ -1,171 +1,169 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}NOMY • Express{% endblock %}
+{% block title %}Express • Response{% endblock %}
+
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
 <style>
   :root {
-    --bg: #ffffff;
-    --lav: #f6f4ff;
-    --pill: #d3cbf9;
-    --ink: #22163c;
-    --muted: #5e4f79;
-    --shadow: 0 18px 40px rgba(17,12,40,.10);
-    --quote-bg: #f5f4fc;
+    --bg:#ffffff;
+    --ink:#1f003d;
+    --muted:#5e4f79;
+    --shadow:0 18px 40px rgba(17,12,40,.10);
+    --radius:26px;
+    --navbar-height:60px;
   }
 
-  * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
+  *{box-sizing:border-box;margin:0;padding:0}
 
-  body {
-    color: var(--ink);
-    font-family: "DM Sans", system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  /* main wrapper centered, gently lowered */
+  .zoom-wrapper {
+    transform: scale(0.9);
+    transform-origin: top center;
+    width: 100%;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 0 20px 100px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* centers vertically */
+    min-height: calc(100vh - var(--navbar-height));
+    padding-top: 60px; /* nudges center slightly down */
   }
 
   main.wrap {
     width: 100%;
-    max-width: 980px;
-    padding-top: clamp(72px, 12vh, 160px);
+    max-width: 900px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
-    position: relative;
+    gap: 40px;
     text-align: center;
   }
 
-  /* title pill */
-  .pill {
-    display: inline-grid;
-    place-items: center;
-    background: var(--pill);
-    color: var(--ink);
+  /* back button */
+  .back-btn {
+    position: fixed;
+    top: 84px;
+    left: 28px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    color: #3a2c6b;
+    background: #fff;
+    border: 1px solid #e6e0f5;
     border-radius: 999px;
-    padding: 20px 64px;
-    font-size: clamp(20px, 2.4vw, 26px);
-    font-weight: 500;
-    box-shadow: var(--shadow);
-    position: relative;
+    padding: 8px 16px;
+    box-shadow: 0 6px 22px rgba(19,7,63,.06);
+    transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+    z-index: 2000;
   }
 
-  /* intro */
-  .intro {
-    max-width: 820px;
-    text-align: center;
-    color: var(--muted);
-    font-size: clamp(15px, 1.6vw, 18px);
-    line-height: 1.7;
-    margin: 0;
+  .back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(19,7,63,.10);
+    background: #faf7ff;
   }
 
-  /* quote card */
-  .suggested {
-    background: var(--quote-bg);
-    border-radius: 20px;
-    padding: 26px 32px;
-    margin-top: 20px;
-    max-width: 720px;
-    font-size: clamp(16px, 1.6vw, 20px);
-    font-weight: 500;
+  /* response text with quotes */
+  .response-text {
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 400;
+    line-height: 1.4;
     color: var(--ink);
-    box-shadow: 0 10px 28px rgba(17,12,40,.08);
+    max-width: 720px;
+    text-align: center;
+    position: relative;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    padding: 0 24px;
   }
 
-  .suggested::before {
+  .response-text::before {
     content: "“";
     font-size: 40px;
     color: var(--muted);
-    position: relative;
-    top: 8px;
+    position: absolute;
+    left: -4px;
+    top: -10px;
   }
-  .suggested::after {
+
+  .response-text::after {
     content: "”";
     font-size: 40px;
     color: var(--muted);
-    position: relative;
-    top: 8px;
+    position: absolute;
+    right: -4px;
+    bottom: -10px;
   }
 
-  /* option cards */
+  /* Express option pills */
   .option {
-    display: block;
-    background: #f5f4fc;
-    color: var(--ink);
-    text-decoration: none;
-    padding: 24px 30px;
-    border-radius: 24px;
-    font-weight: 500;
-    font-size: clamp(17px, 2vw, 20px);
-    box-shadow: 0 6px 18px rgba(17,12,40,.08);
-    transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
-    margin-bottom: 18px;
-    max-width: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;
     width: 100%;
+    max-width: 340px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: clamp(17px, 1.8vw, 20px);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    transition: transform .12s ease, box-shadow .25s ease, filter .25s ease;
   }
+
+  .option:first-of-type { background:#ffeac4; }
+  .option:nth-of-type(2) { background:#fffaeb; }
 
   .option:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(17,12,40,.12);
-    background: #ece9fb;
+    box-shadow: 0 22px 48px rgba(17,12,40,.14);
+    filter: saturate(1.05);
   }
 
-  .option strong {
-    display: block;
-    font-size: 18px;
-    margin-bottom: 4px;
+  @media(max-width:720px){
+    .zoom-wrapper{
+      transform:scale(1);
+      padding-top:40px; /* slightly less push on mobile */
+    }
+    .back-btn{top:76px;left:18px;font-size:14px;padding:6px 12px;}
+    .option{height:80px;font-size:16px;}
+    main.wrap{gap:30px;}
+    .response-text{-webkit-line-clamp:3;}
   }
 
-  .option span {
-    display: block;
-    font-size: 15px;
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  .art {
-    position: absolute;
-    bottom: 12%;
-    right: -6%;
-    width: clamp(100px, 14vw, 140px);
-    pointer-events: none;
-    user-select: none;
-    opacity: 0.9;
-  }
-
-  @media(max-width:640px){
-    .option { font-size:16px; padding:20px; }
-    .art{ display:none; }
-  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
-<main class="wrap">
-  <div style="position:relative; display:inline-block;">
-    <div class="pill">Express</div>
-  </div>
+<a href="javascript:history.back()" class="back-btn">← Back</a>
 
-  <p class="intro">
-    Try expressing this response in a way that feels right for you.
-  </p>
+<div class="zoom-wrapper">
+  <main class="wrap">
+    {% if response %}
+      <h2 class="response-text">{{ response }}</h2>
+    {% endif %}
 
-  {% if response %}
-    <div class="suggested">{{ response }}</div>
-  {% endif %}
+    <a class="option" href="#">
+      💬 Write your response
+    </a>
 
-  <a class="option" href="#">
-    <strong>💬 Text — write it out</strong>
-    <span>Type your words at your own pace.</span>
-  </a>
-
-  <a class="option" href="{% url 'express:express-speak' %}">
-    <strong>🎙️ Speak — say it out loud</strong>
-    <span>Record your voice when you’re ready.</span>
-  </a>
-
-  <img class="art" src="{% static 'images/express.png' %}" alt="Express illustration">
-</main>
+    <a class="option" href="{% url 'express:express-speak' %}?response={{ response|urlencode }}">
+      🎙️ Speak your response
+    </a>
+    
+  </main>
+</div>
 {% endblock %}

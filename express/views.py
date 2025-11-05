@@ -12,7 +12,8 @@ def expressIntro(request):
     return render(request, "express/express-intro.html")
 
 def expressSpeak(request):
-    return render(request, "express/express-speak.html")
+    response_text = request.GET.get("response", "")
+    return render(request, "express/express-speak.html", {"response": response_text})
 
 
 # -------------------------------
@@ -107,5 +108,4 @@ def expressResponse(request):
         "situation": situation,
     }
 
-    # 👇 Go to your new Express intro page instead
     return render(request, "express/express-intro.html", context)

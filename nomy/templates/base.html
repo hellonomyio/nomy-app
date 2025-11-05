@@ -11,14 +11,14 @@
 
   <style>
   :root {
-    --bg:#ffffff;
-    --bg-alt:#f7f6fb;
-    --text:#22163c;
-    --muted:#5e4f79;
-    --divider:#ece8f7;
-    --shadow:0 8px 30px rgba(17,12,40,.10);
-    --hover:#f4f1ff;
-    --navbar-bg:rgba(255,255,255,.95);
+    --bg: #ffffff;
+    --bg-alt: #f7f6fb;
+    --text: #22163c;
+    --muted: #5e4f79;
+    --divider: #ece8f7;
+    --shadow: 0 8px 30px rgba(17,12,40,.10);
+    --hover: #f4f1ff;
+    --navbar-bg: rgba(255,255,255,.95);
   }
   [data-theme="dark"] {
     --bg:#1c1728;
@@ -37,6 +37,9 @@
     color:var(--text);
     background:var(--bg);
     transition:background .4s ease,color .4s ease;
+  }
+  [data-theme="dark"] body {
+    background: radial-gradient(circle at 50% 40%, #f1eeff 0%, #e8e3fa 100%);
   }
 
   /* Navbar */

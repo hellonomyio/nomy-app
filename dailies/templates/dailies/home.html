@@ -5,13 +5,14 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
-  :root {
+  .dailies-page {
     --bg:#ffffff;
     --oval:#e9c3f1;
-    --text:#22163c;
+    --text:#1f003d; /* use your consistent NOMY deep purple */
     --muted:#5e4f79;
     --shadow:0 18px 40px rgba(17,12,40,.10);
     --radius:26px;
+    color:var(--text);
   }
 
   *{box-sizing:border-box}
@@ -111,31 +112,33 @@
   }
 
   /* modal box */
-  .modal-content{
+  .modal-content {
     background:#f1f1ff;
-    color:var(--text);
+    color:#1f003d; /* 💜 fixed: always readable, even in dark mode */
     border-radius:20px;
     box-shadow:0 18px 40px rgba(17,12,40,.1);
     padding:36px 32px;
     max-width:480px;
     width:90%;
-    text-align:left;      /* left-aligned for readability */
+    text-align:left;
     line-height:1.7;
     font-size:16px;
   }
 
-  .modal-content h3{
-    text-align:left;       /* heading now left-aligned */
+  .modal-content h3 {
+    text-align:left;
     margin-top:0;
     font-weight:600;
     margin-bottom:18px;
+    color:#1f003d; /* heading stays consistent too */
   }
 
-  .modal-content p{
+  .modal-content p {
     margin-bottom:18px;
+    color:#1f003d; /* all text inside modal is consistent */
   }
 
-  .modal-content button{
+  .modal-content button {
     margin-top:20px;
     background:var(--oval);
     border:none;
@@ -143,12 +146,12 @@
     padding:10px 22px;
     font-family:'DM Sans',sans-serif;
     font-size:15px;
-    color:var(--text);
+    color:#1f003d; /* 💜 ensures visible text */
     cursor:pointer;
     box-shadow:0 6px 22px rgba(19,7,63,.08);
     transition:background .2s ease, transform .1s ease;
   }
-  .modal-content button:hover{
+  .modal-content button:hover {
     background:#e1dcf9;
     transform:translateY(-1px);
   }
@@ -240,7 +243,7 @@
   }
 </style>
 
-<main class="wrap">
+<main class="wrap dailies-page">
   {% if messages %}
     {% for message in messages %}
       <div class="alert alert-{{ message.tags }}">{{ message }}</div>
@@ -258,12 +261,7 @@
     <a class="oval evening" href="/dailies/evening">Evening</a>
     <a class="oval reflections" href="{% url 'dailies:dailies-story' %}">My Reflections</a>
     <a class="oval overview" href="{% url 'dailies:dailies-story' %}">My Weekly Overview</a>
-    <img class="art" src="{% static 'images/dailies.png' %}" alt="">
   </section>
-  <a class="more" href="{% url 'emotionfy:all' %}">Explore More</a>
-  <!-- Toast / gentle banner -->
-  <div id="toast" class="toast"></div>
-
 </main>
 
 <!-- soft modal popup -->
