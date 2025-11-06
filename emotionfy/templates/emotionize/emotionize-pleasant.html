@@ -12,6 +12,7 @@
     --shadow:0 18px 40px rgba(17,12,40,.10);
     --radius:26px;
     --navbar-height:60px;
+    --pleasant-glow:#fffaeb;
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
@@ -26,7 +27,6 @@
     align-items:center;
   }
 
-  /* same scaling + centering structure as home/emotionize */
   .zoom-wrapper {
     transform: scale(0.9);
     transform-origin: top center;
@@ -60,7 +60,6 @@
     margin-top: 8px;
   }
 
-  /* grid layout consistent with main page */
   .grid {
     width: 100%;
     display: grid;
@@ -69,7 +68,6 @@
     justify-content: center;
   }
 
-  /* pills consistent */
   .oval {
     display: flex;
     align-items: center;
@@ -90,7 +88,6 @@
     filter: saturate(1.05);
   }
 
-  /* colours */
   .oval.pleasant { background: #fffaeb; }
 
   /* back button */
@@ -126,22 +123,47 @@
     left: 100px;
     width: 150px;
     height: auto;
-    opacity: 0.9;
+    opacity: 0.95;
     pointer-events: none;
     z-index: 5;
     background: none !important;
-    filter: drop-shadow(0 0 1px rgba(0,0,0,0.1));
+    transform-origin: bottom center;
+    animation: pleasant-bop 2.4s ease-in-out infinite;
+  }
+
+  /* 🟡 glowing aura */
+  .avatar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,230,138,0.7) 0%, rgba(255,230,138,0.0) 70%);
+    filter: blur(18px);
+    transform: scale(1.2);
+    animation: pleasant-glow 3s ease-in-out infinite;
+    z-index: -1; /* behind the avatar */
+  }
+
+  /* 🫧 pleasant joyful bopping motion */
+  @keyframes pleasant-bop {
+    0%, 100% { transform: translateY(0) scale(1); }
+    25% { transform: translateY(-8px) scale(1.03); }
+    50% { transform: translateY(0) scale(0.99); }
+    75% { transform: translateY(-5px) scale(1.02); }
+  }
+
+  /* ✨ pulsing aura brightness */
+  @keyframes pleasant-glow {
+    0%, 100% { opacity: 0.7; transform: scale(1.1); }
+    50% { opacity: 1; transform: scale(1.25); }
   }
 
   @media(max-width:720px){
-    .zoom-wrapper{transform:scale(1);}
-    .grid{grid-template-columns:1fr;gap:22px;}
-    .back-btn{top:76px;left:18px;font-size:14px;padding:6px 12px;}
-    main.wrap{gap:50px;}
     .avatar{width:80px;left:20px;bottom:16px;}
+    .avatar::before{filter:blur(12px);}
   }
 
-  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
 <a href="{% url 'emotionfy:emotionize-home' %}" class="back-btn">← Back</a>
@@ -162,6 +184,7 @@
   </main>
 </div>
 
-<!-- 🧍 avatar bottom-left -->
+<!-- 💛 glowing, upbeat avatar -->
 <img src="{% static 'images/avatar.png' %}" alt="NOMY avatar" class="avatar" />
+
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     if request.user.is_authenticated:
@@ -14,6 +15,7 @@ def options(request):
 def about(request):
     return render(request, "core/about.html")
 
+@login_required
 def settings(request):
     return render(request, "core/settings.html")
 

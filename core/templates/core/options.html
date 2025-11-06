@@ -154,6 +154,28 @@
     z-index: 5;
     background: none !important;
     filter: drop-shadow(0 0 1px rgba(0,0,0,0.1));
+    transform-origin: bottom center;
+  }
+
+  /* ✨ gentle breathing + sway animations ✨ */
+  @keyframes avatar-breathe {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-4px) scale(1.02); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  @keyframes avatar-sway {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(1.3deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  .avatar.breathe {
+    animation: avatar-breathe 4s ease-in-out infinite;
+  }
+
+  .avatar.sway {
+    animation: avatar-sway 6s ease-in-out infinite;
   }
 
   @media(max-width: 720px) {
@@ -197,7 +219,9 @@
   </main>
 </div>
 
-<!-- avatar bottom-left -->
-<img src="{% static 'images/avatar.png' %}" alt="NOMY avatar" class="avatar" />
+<!-- ✨ avatar bottom-left with calm breathing animation ✨ -->
+<img src="{% static 'images/avatar.png' %}" 
+     alt="NOMY avatar" 
+     class="avatar breathe sway" />
 
 {% endblock %}

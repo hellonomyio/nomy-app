@@ -1,210 +1,216 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Emotionize • Explore more emotions{% endblock %}
+{% block title %}NOMY • Toolkit{% endblock %}
 {% block content %}
-  <!-- DM Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
-  <style>
-    :root {
-      --bg:#ffffff;
-      --oval:#e9c3f1; 
-      --text:#22163c;
-      --muted:#5e4f79;
-      --shadow: 0 18px 40px rgba(17, 12, 40, .10);
-      --radius: 26px;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
-    body {
-      font-family:'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-    }
-
-    main.wrap {
-      max-width: 1100px;
-      width: 100%;
-      padding: clamp(72px, 12vh, 160px) 20px 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 28px;
-    }
-
-    h2 {
-      margin: 0;
-      text-align: center;
-      font-weight: 100;
-      font-size: clamp(16px, 2.8vw, 32px);
-      line-height: 1;
-      letter-spacing: .2px;
-    }
-
-    .sub {
-      margin: 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: clamp(14px, 1.8vw, 18px);
-    }
-
-    /* Grid layout for 2x2 ovals + centered icon */
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center; /* centers the last odd one */
-      gap: 40px;
-      position: relative;
-      margin-top: 12px;
-      max-width: 640px;
-      width: 100%;
-    }
-
-    .oval {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 280px;
-      height: 110px;                       /* same as home page tiles */
-      background: #e9c3f1;
-      text-decoration: none;
-      color: #22163c;
-      font-weight: 400;
-      font-size: 20px;
-      border-radius: 26px;                 /* identical to --radius:26px */
-      box-shadow: 0 18px 40px rgba(17, 12, 40, 0.10);  /* same soft depth */
-      transition: transform 0.12s ease, box-shadow 0.25s ease, filter 0.25s ease;
-    }
-
-    .oval:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 22px 48px rgba(17, 12, 40, 0.14);
-      filter: saturate(1.05);
-    }
-
-    /* Individual emotion category colours */
-    .oval.energised  { background: #f4f8f3; }  
-    .oval.pleasant    { background: #fffaeb; }  
-    .oval.low-energy   { background: #e9f0fa; }  
-    .oval.vulnerable     { background: #f1eeff; }  
-
-    .oval:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 16px 40px rgba(19, 7, 63, 0.14);
-        filter: saturate(1.06);
-    }
-
-    /* Center illustration over grid */
-    .art {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 120px;
-      height: auto;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .more {
-      margin-top: 12px;
-      text-decoration: none;
-      font-weight: 200;
-      color: #3a2c6b;
-      border: 1px solid #e6e0f5;
-      border-radius: 999px;
-      padding: 10px 14px;
-      box-shadow: 0 6px 22px rgba(19,7,63,.06);
-      transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
-    }
-
-    .more:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(19,7,63,.10);
-      background: #faf7ff;
-    }
-
-    @media (max-width: 640px) {
-      .grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        gap: 22px;
-      }
-      .art {
-        position: static;
-        transform: none;
-        margin: 12px auto;
-      }
-      .oval {
-        width: min(80vw, 320px);
-      }
-    }
-
-    .back-btn {
-    position: fixed;
-    top: 84px; /* just below navbar */
-    left: 28px;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 400;
-    color: #3a2c6b;
-    background: #fff;
-    border: 1px solid #e6e0f5;
-    border-radius: 999px;
-    padding: 8px 16px;
-    box-shadow: 0 6px 22px rgba(19,7,63,.06);
-    transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
-    z-index: 2000;
+<style>
+  :root {
+    --bg: #ffffff;
+    --lav: #f6f4ff;
+    --pill: #fff5e9;
+    --ink: #22163c;
+    --muted: #5e4f79;
+    --ring: rgba(211,203,249,.85);
+    --shadow: 0 18px 40px rgba(17,12,40,.10);
   }
 
-  .back-btn:hover,
-  .back-btn:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(19,7,63,.10);
-    background: #faf7ff;
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: white;
+    color: var(--ink);
+    font-family: "DM Sans", system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 20px 100px;
+  }
+
+  main.wrap {
+    width: 100%;
+    max-width: 980px;
+    padding-top: clamp(72px, 12vh, 160px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+  }
+
+  /* title pill */
+  .pill {
+    display: inline-grid;
+    place-items: center;
+    background: var(--pill);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 20px 64px;
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 500;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  /* info button */
+  .info-btn {
+    position: absolute;
+    top: -6px;
+    right: -34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(36,22,63,0.08);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .info-btn:hover, .info-btn:focus {
+    background: rgba(36,22,63,0.15);
     outline: none;
   }
 
-  @media (max-width: 640px) {
-    .back-btn {
-      top: 76px;
-      left: 18px;
-      font-size: 14px;
-      padding: 6px 12px;
-    }
+  /* subheading */
+  h3.subheading {
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 12px;
+    margin-bottom: 8px;
+    text-align: center;
   }
 
-  </style>
-</head>
-<body>
-  <!-- Back button floats ABOVE -->
-  <a href="{% url 'emotionfy:all' %}" class="back-btn">← Back</a>
-  <main class="wrap">
-    {% if messages %}
-      {% for message in messages %}
-        <div class ="alert alert- {{ message.tags }}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-    <h2>Choose a Feeling</h2>
+  /* intro paragraph */
+  .intro {
+    max-width: 800px;
+    text-align: center;
+    color: var(--muted);
+    font-size: clamp(15px, 1.6vw, 18px);
+    line-height: 1.7;
+    margin: 0;
+  }
 
-    <section class="grid" aria-label="Emotion options">
-      <a class="oval low-energy" href="{% url 'emotionfy:story' %}?emotion=exhaustion">Exhaustion</a>
-      <a class="oval low-energy" href="{% url 'emotionfy:story' %}?emotion=numbness">Numbness</a>
-    
-      <a class="oval low-energy" href="{% url 'emotionfy:story' %}?emotion=sadness">Sadness</a>
-      <a class="oval low-energy" href="{% url 'emotionfy:story' %}?emotion=overwhelm">Overwhelm</a>
-      <a class="oval low-energy" href="{% url 'emotionfy:story' %}?emotion=uncertainty">Uncertainty</a>
+  /* art image */
+  .art {
+    position: absolute;
+    bottom: 10%;
+    right: -6%;
+    width: clamp(100px, 14vw, 140px);
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.9;
+  }
 
-      <!-- centered illustration -->
-      <img class="art" src="{% static 'images/emotionize.png' %}" alt="">
-    </section>    
+  /* modal overlay */
+  .info-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(34,22,60,0.15);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    z-index: 2000;
+  }
+  .info-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
-  </main>
-</body>
+  /* modal content */
+  .modal-content {
+    background: #f1f1ff;
+    color: var(--ink);
+    border-radius: 20px;
+    box-shadow: 0 18px 40px rgba(17,12,40,.1);
+    padding: 36px 32px;
+    max-width: 480px;
+    width: 90%;
+    text-align: left;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  .modal-content h3 {
+    text-align: left;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 18px;
+  }
+
+  .modal-content p { margin-bottom: 16px; }
+
+  .modal-content button {
+    margin-top: 20px;
+    background: var(--pill);
+    border: none;
+    border-radius: 999px;
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 0 6px 22px rgba(19,7,63,.08);
+    transition: background .2s ease;
+  }
+  .modal-content button:hover { background: #e1dcf9; }
+
+  @media(max-width:640px){
+    .info-btn{ right:-26px; top:-2px; }
+    .art{ display:none; }
+  }
+</style>
+
+<main class="wrap">
+  <div style="position:relative; display:inline-block;">
+    <div class="pill">Toolkit</div>
+    <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
+  </div>
+
+  <h3 class="subheading">Your Space to Regulate and Reconnect</h3>
+
+  <p class="intro">
+    This is your space to pause, breathe and come back to yourself.
+  </p>
+
+  <p class="intro">
+    The Toolkit will help you understand what your body and mind need in the moment and offer gentle ways to meet those needs.
+  </p>
+
+  <p class="intro">
+    Everyone’s sensory and emotional needs are different and this space honours that diversity. Some tools focus on the body, others the senses or the mind.
+  </p>
+
+</main>
+
+<!-- info modal -->
+<div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <h3 id="modalTitle">About Toolkit</h3>
+    <p>Here, you’ll find small, guided experiences that help you ground when the world feels too loud or reconnect when you feel distant from yourself.
+      <br><br>
+      You can use them anytime whether it’s after a long day, during sensory overload or just when things feel a bit too much.
+      
+      <br><br>There’s no right or wrong way to use this. Try what feels helpful today. Come back when you need to. This space is always here for you.</p>
+    <button id="closeInfo">Close</button>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('infoModal');
+  const openBtn = document.getElementById('openInfo');
+  const closeBtn = document.getElementById('closeInfo');
+
+  openBtn.addEventListener('click', () => modal.classList.add('active'));
+  closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+  modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('active'); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') modal.classList.remove('active'); });
+</script>
 {% endblock %}

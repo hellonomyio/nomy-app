@@ -1,217 +1,254 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}NOMY • Toolkit{% endblock %}
+{% block title %}Toolkit{% endblock %}
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --bg: #ffffff;
-    --lav: #f6f4ff;
-    --pill: #fff5e9;
-    --ink: #22163c;
-    --muted: #5e4f79;
-    --ring: rgba(211,203,249,.85);
-    --shadow: 0 18px 40px rgba(17,12,40,.10);
-  }
+:root {
+  --ink:#1f003d;
+  --muted:#5e4f79;
+  --shadow:0 18px 40px rgba(17,12,40,.10);
+  --radius:26px;
+  --navbar-height:60px;
+  --glow:#ffe68a;
 
-  * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
-  body {
-    background: white;
-    color: var(--ink);
-    font-family: "DM Sans", system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 0 20px 100px;
-  }
+  /* background tint variants */
+  --neutral-bg: radial-gradient(circle at 50% 35%, #f9fbff 0%, #ffffff 90%);
+  --mental-bg: radial-gradient(circle at 50% 35%, #e9f0fa 0%, #ffffff 90%);
+  --creative-bg: radial-gradient(circle at 50% 35%, #fff3d9 0%, #ffffff 90%);
+  --physical-bg: radial-gradient(circle at 50% 35%, #ffeac4 0%, #ffffff 90%);
+  --sensory-bg: radial-gradient(circle at 50% 35%, #edf7ee 0%, #ffffff 90%);
+}
 
-  main.wrap {
-    width: 100%;
-    max-width: 980px;
-    padding-top: clamp(72px, 12vh, 160px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
-    position: relative;
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background: var(--neutral-bg);
+  transition: background 1.4s ease-in-out;
+  color:var(--ink);
+  font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.zoom-wrapper{
+  transform:scale(0.92);
+  transform-origin:top center;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:calc(100vh - var(--navbar-height));
+  justify-content:center;
+}
+main.wrap{
+  max-width:900px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:70px;
+  text-align:center;
+}
 
-  /* title pill */
-  .pill {
-    display: inline-grid;
-    place-items: center;
-    background: var(--pill);
-    color: var(--ink);
-    border-radius: 999px;
-    padding: 20px 64px;
-    font-size: clamp(20px, 2.4vw, 26px);
-    font-weight: 500;
-    box-shadow: var(--shadow);
-    position: relative;
-  }
+h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
+.sub{color:var(--muted);font-size:clamp(15px,1.6vw,18px);margin-top:8px;max-width:600px;line-height:1.7;}
 
-  /* info button */
-  .info-btn {
-    position: absolute;
-    top: -6px;
-    right: -34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: rgba(36,22,63,0.08);
-    color: var(--ink);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .2s ease;
-  }
-  .info-btn:hover, .info-btn:focus {
-    background: rgba(36,22,63,0.15);
-    outline: none;
-  }
+.grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(260px,360px));
+  gap:60px 64px;
+  justify-content:center;
+}
 
-  /* subheading */
-  h3.subheading {
-    font-size: clamp(18px, 2vw, 22px);
-    font-weight: 600;
-    color: var(--ink);
-    margin-top: 12px;
-    margin-bottom: 8px;
-    text-align: center;
-  }
+/* --- reveal cards --- */
+.card-reveal {
+  position: relative;
+  height: 110px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.6s ease;
+  overflow: hidden;
+}
+.card-reveal.open {
+  height: 180px;
+  background: #f9f9ff;
+  box-shadow: 0 20px 50px rgba(17,12,40,0.08);
+}
+.card-reveal .front-text { opacity: 1; transition: opacity 0.4s ease; }
+.card-reveal.open .front-text { opacity: 0; }
+.card-reveal .back-content {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -40%) scale(0.96);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.8s ease;
+}
+.card-reveal.open .back-content {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.card-reveal .back-content a {
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--ink);
+  box-shadow: 0 4px 14px rgba(17,12,40,.08);
+  font-size: 18px;
+  font-weight: 500;
+  transition: transform .15s ease, background .2s ease;
+}
+.card-reveal .back-content a:hover {
+  transform: translateY(-2px);
+  background: #f5f5ff;
+}
 
-  /* intro paragraph */
-  .intro {
-    max-width: 800px;
-    text-align: center;
-    color: var(--muted);
-    font-size: clamp(15px, 1.6vw, 18px);
-    line-height: 1.7;
-    margin: 0;
-  }
+/* --- colours --- */
+.card-reveal.mental { background: #e9f0fa; }
+.card-reveal.creative { background: #fff8e7; }
+.card-reveal.physical { background: #ffeccf; }
+.card-reveal.sensory { background: #f4f8f3; }
 
-  /* art image */
-  .art {
-    position: absolute;
-    bottom: 10%;
-    right: -6%;
-    width: clamp(100px, 14vw, 140px);
-    pointer-events: none;
-    user-select: none;
-    opacity: 0.9;
-  }
+/* --- avatar --- */
+.avatar {
+  position: fixed;
+  bottom: 22px;
+  left: 100px;
+  width: 150px;
+  height: auto;
+  opacity: 0.95;
+  pointer-events: none;
+  z-index: 5;
+  transform-origin: bottom center;
+  animation: avatarSway 5s ease-in-out infinite;
+  transition: transform 0.8s ease;
+}
+@keyframes avatarSway {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(1deg); }
+}
+.avatar.tilt { transform: rotate(5deg) translateY(-2px); }
 
-  /* modal overlay */
-  .info-modal {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(34,22,60,0.15);
-    backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .25s ease;
-    z-index: 2000;
-  }
-  .info-modal.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
+/* --- glow --- */
+.avatar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,215,90,0.5) 0%, rgba(255,215,90,0.0) 70%);
+  filter: blur(16px);
+  transform: scale(1.3);
+  animation: pleasantGlow 4s ease-in-out infinite;
+  z-index: -1;
+}
+@keyframes pleasantGlow {
+  0%,100% { opacity: 0.6; transform: scale(1.25); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
 
-  /* modal content */
-  .modal-content {
-    background: #f1f1ff;
-    color: var(--ink);
-    border-radius: 20px;
-    box-shadow: 0 18px 40px rgba(17,12,40,.1);
-    padding: 36px 32px;
-    max-width: 480px;
-    width: 90%;
-    text-align: left;
-    line-height: 1.7;
-    font-size: 16px;
-  }
+/* --- breathing dot --- */
+.breath-icon {
+  width:16px;height:16px;background:#d3cbf9;border-radius:50%;
+  margin:0 auto 14px auto;animation:inhale 3s ease-in-out infinite;
+}
+@keyframes inhale {
+  0%,100% { transform:scale(1);opacity:0.7; }
+  50% { transform:scale(1.2);opacity:1; }
+}
 
-  .modal-content h3 {
-    text-align: left;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 18px;
-  }
-
-  .modal-content p { margin-bottom: 16px; }
-
-  .modal-content button {
-    margin-top: 20px;
-    background: var(--pill);
-    border: none;
-    border-radius: 999px;
-    padding: 10px 24px;
-    font-family: 'DM Sans', sans-serif;
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 0 6px 22px rgba(19,7,63,.08);
-    transition: background .2s ease;
-  }
-  .modal-content button:hover { background: #e1dcf9; }
-
-  @media(max-width:640px){
-    .info-btn{ right:-26px; top:-2px; }
-    .art{ display:none; }
-  }
+@media(max-width:720px){
+  .zoom-wrapper{transform:scale(1);}
+  .grid{grid-template-columns:1fr;gap:22px;}
+  .avatar{width:80px;left:20px;bottom:16px;}
+}
 </style>
 
-<main class="wrap">
-  <div style="position:relative; display:inline-block;">
-    <div class="pill">Toolkit</div>
-    <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
-  </div>
+<div class="zoom-wrapper">
+  <main class="wrap">
+    <div>
+      <div class="breath-icon"></div>
+      <h2>Explore your tools</h2>
+      <p class="sub">Find what helps you feel grounded, creative, or calm — in your own way.</p>
+    </div>
 
-  <h3 class="subheading">Your Space to Regulate and Reconnect</h3>
+    <section class="grid" aria-label="Toolkit categories">
+      <div class="card-reveal mental" data-card="mental">
+        <div class="front-text">Mental</div>
+        <div class="back-content">
+          <a href="{% url 'toolkit:toolkit-breathing' %}">Guided Breathing</a>
+          <a href="{% url 'toolkit:toolkit-puzzles' %}">Puzzles</a>
+        </div>
+      </div>
 
-  <p class="intro">
-    This is your space to pause, breathe and come back to yourself.
-  </p>
+      <div class="card-reveal creative" data-card="creative">
+        <div class="front-text">Creative</div>
+        <div class="back-content">
+          <a href="#">Colour</a>
+          <a href="#">Doodle</a>
+        </div>
+      </div>
 
-  <p class="intro">
-    The Toolkit will help you understand what your body and mind need in the moment and offer gentle ways to meet those needs.
-  </p>
+      <div class="card-reveal physical" data-card="physical">
+        <div class="front-text">Physical</div>
+        <div class="back-content">
+          <a href="#">Body Check In</a>
+          <a href="#">Untense</a>
+        </div>
+      </div>
 
-  <p class="intro">
-    Everyone’s sensory and emotional needs are different and this space honours that diversity. Some tools focus on the body, others the senses or the mind.
-  </p>
-
-  <img class="art" src="{% static 'images/toolkit.png' %}" alt="Toolkit illustration">
-</main>
-
-<!-- info modal -->
-<div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal-content">
-    <h3 id="modalTitle">About Toolkit</h3>
-    <p>Here, you’ll find small, guided experiences that help you ground when the world feels too loud or reconnect when you feel distant from yourself.
-      <br><br>
-      You can use them anytime whether it’s after a long day, during sensory overload or just when things feel a bit too much.
-      
-      <br><br>There’s no right or wrong way to use this. Try what feels helpful today. Come back when you need to. This space is always here for you.</p>
-    <button id="closeInfo">Close</button>
-  </div>
+      <div class="card-reveal sensory" data-card="sensory">
+        <div class="front-text">Sensory</div>
+        <div class="back-content">
+          <a href="#">Sounds Tool</a>
+          <a href="#">Grounding</a>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
 
-<script>
-  const modal = document.getElementById('infoModal');
-  const openBtn = document.getElementById('openInfo');
-  const closeBtn = document.getElementById('closeInfo');
+<img src="{% static 'images/avatar.png' %}" alt="NOMY avatar" class="avatar" id="avatar"/>
 
-  openBtn.addEventListener('click', () => modal.classList.add('active'));
-  closeBtn.addEventListener('click', () => modal.classList.remove('active'));
-  modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('active'); });
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') modal.classList.remove('active'); });
+<script>
+const avatar = document.getElementById('avatar');
+const body = document.body;
+
+document.querySelectorAll('.card-reveal').forEach(card => {
+  card.addEventListener('click', () => {
+    const isOpen = card.classList.contains('open');
+    
+    // close all others
+    document.querySelectorAll('.card-reveal.open').forEach(c => c.classList.remove('open'));
+    
+    if (!isOpen) {
+      card.classList.add('open');
+      avatar.classList.add('tilt');
+      setTimeout(()=>avatar.classList.remove('tilt'),1000);
+
+      // tint background softly
+      const type = card.dataset.card;
+      const root = getComputedStyle(document.documentElement);
+      const newBg = root.getPropertyValue(`--${type}-bg`);
+      body.style.background = newBg;
+    } else {
+      const neutral = getComputedStyle(document.documentElement).getPropertyValue(`--neutral-bg`);
+      body.style.background = neutral;
+    }
+  });
+});
 </script>
 {% endblock %}

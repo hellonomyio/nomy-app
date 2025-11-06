@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}NOMY • Settings{% endblock %}
+{% block content %}
+
+<style>
+  :root {
+    --panel:#fff;
+    --border:#e1dcf9;
+    --shadow:0 12px 28px rgba(17,12,40,.08);
+    --accent:#d3cbf9;
+    --accent-text:#1e1635;
+    --danger-bg:#f8e6e6;
+    --danger-text:#3b1b1b;
+    --ink:#2e2840;
+    --muted:#6b647d;
+    --radius:18px;
+  }
+
+  .wrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px 60px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 26px;
+  }
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .lead {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: .96rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    padding: 13px 0;
+    border-radius: 14px;
+    font-family: 'DM Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    box-shadow: 0 6px 18px rgba(46,40,64,.08);
+    transition: transform .08s ease, box-shadow .15s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn:hover { transform: translateY(-1px); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .btn-danger {
+    background: var(--danger-bg);
+    color: var(--danger-text);
+  }
+
+  form { margin: 0; }
+</style>
+
+<div class="wrap">
+  <div class="card">
+    <h1>Account Settings</h1>
+    <p class="lead">Manage your NOMY account securely.</p>
+
+    <ul class="actions">
+      <li>
+        <a href="{% url 'password_change' %}" class="btn btn-primary">Change Password</a>
+      </li>
+      <li>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Log Out</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+{% endblock %}
