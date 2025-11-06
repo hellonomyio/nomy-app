@@ -77,31 +77,78 @@
   [data-theme="dark"] .links a:hover,[data-theme="dark"] .dropbtn:hover,[data-theme="dark"] .user-btn:hover{color:#ece8f7;}
 
   /* Dropdowns */
-  .dropdown,.user-dropdown{position:relative;}
-  .dropdown-content,.user-dropdown-content{
-    display:none;position:absolute;top:34px;right:0;
-    background:var(--bg-alt);min-width:200px;border-radius:14px;
-    box-shadow:var(--shadow);padding:10px 0;
-    opacity:0;visibility:hidden;transition:opacity .15s ease,visibility .15s ease;z-index:2500;
+  .dropdown,
+  .user-dropdown {
+    position: relative;
   }
-  .dropdown.open .dropdown-content,
-  .user-dropdown.open .user-dropdown-content{display:block;opacity:1;visibility:visible;}
 
-  .dropdown-content a,.dropdown-content button,
-  .user-dropdown-content a,.user-dropdown-content button{
-    display:block;width:100%;text-align:left;
-    padding:10px 18px;color:var(--text);
-    background:none;border:none;
-    font:inherit;cursor:pointer;text-decoration:none;
-    transition:background .2s ease,color .2s ease;
+  .dropdown-content,
+  .user-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%; /* sits directly below trigger */
+    left: 0;
+    background: var(--bg-alt);
+    min-width: 200px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 10px 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .15s ease, visibility .15s ease, transform .15s ease;
+    transform: translateY(4px);
+    z-index: 2500;
   }
-  .dropdown-content a:hover,.dropdown-content button:hover,
-  .user-dropdown-content a:hover,.user-dropdown-content button:hover{
-    background:var(--hover);color:var(--text);
-  }
-  .user-name{display:block;padding:8px 18px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--divider);margin-bottom:6px;}
 
-  .theme-toggle{margin-left:20px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;transition:color .2s ease;}
+  /* Hover open behaviour (no flicker) */
+  .dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .dropdown-content a,
+  .user-dropdown-content a,
+  .user-dropdown-content button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 18px;
+    color: var(--text);
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .2s ease, color .2s ease;
+  }
+
+  .dropdown-content a:hover,
+  .user-dropdown-content a:hover,
+  .user-dropdown-content button:hover {
+    background: var(--hover);
+    color: var(--text);
+  }
+
+  .user-name{
+    display:block;
+    padding:8px 18px;
+    font-weight:600;
+    color:var(--muted);
+    border-bottom:1px solid var(--divider);
+    margin-bottom:6px;
+  }
+
+  .theme-toggle{
+    margin-left:20px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:var(--muted);
+    font-size:18px;
+    transition:color .2s ease;
+  }
   .theme-toggle:hover{color:var(--text);}
 
   /* Sidebar */
@@ -129,8 +176,9 @@
     <div class="links">
       <a href="{% url 'emotionfy:emotionize-home' %}">Emotionize</a>
 
+      <!-- Updated Dailies Dropdown -->
       <div class="dropdown" id="dailiesDropdown">
-        <button class="dropbtn">Dailies ▾</button>
+        <a href="{% url 'dailies:dailies-home' %}" class="dropbtn">Dailies ▾</a>
         <div class="dropdown-content">
           <a href="{% url 'dailies:morningAffirmation' %}">Affirmations</a>
           <a href="{% url 'dailies:morningGoal' %}">Goals</a>
@@ -166,14 +214,13 @@
   <script>
   // Sidebar toggle (mobile)
   const burger=document.getElementById('hamburger');
-  const sidebar=document.getElementById('sidebar');
   if(burger){burger.addEventListener('click',()=>burger.classList.toggle('active'));}
 
-  // Dropdown JS (stable open/close)
+  // Dropdown JS – only needed for user dropdown (hover handled by CSS for Dailies)
   function setupDropdown(id){
     const el=document.getElementById(id);
     if(!el)return;
-    const btn=el.querySelector('button');
+    const btn=el.querySelector('.user-btn');
     let hideTimeout;
     btn.addEventListener('click',e=>{
       e.stopPropagation();
@@ -185,7 +232,6 @@
       if(!el.contains(e.target)) el.classList.remove('open');
     });
   }
-  setupDropdown('dailiesDropdown');
   setupDropdown('userDropdown');
 
   // Theme toggle
