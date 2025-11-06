@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Box Breathing{% endblock %}
+{% block title %}Triangle Breathing{% endblock %}
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -150,7 +150,7 @@ main.wrap{
 
 /* Avatar breathe sync */
 .avatar.breathe {
-  animation:avatarBreathing 16s ease-in-out infinite;
+  animation:avatarBreathing 12s ease-in-out infinite;
 }
 @keyframes avatarBreathing {
   0%,100% { transform:scale(1) translateY(0); }
@@ -170,11 +170,11 @@ main.wrap{
 
 <div class="zoom-wrapper">
   <main class="wrap">
-    <div class="oval">Box Breathing</div>
+    <div class="oval">Triangle Breathing</div>
 
     <p class="sub">
-      Follow the circle through each side of the box:<br>
-      Inhale – Hold – Exhale – Hold (4 seconds each)
+      Follow the circle as it expands and softens<br>
+      Inhale for 4 seconds, hold for 4, exhale for 4
     </p>
 
     <div class="breath-container">
@@ -202,7 +202,7 @@ const avatar = document.getElementById("avatar");
 
 let running = false;
 
-function boxCycle(round = 1) {
+function triangleCycle(round = 1) {
   if (round > 2) {
     startBtn.style.display = "none";
     restartBtn.style.display = "inline";
@@ -213,33 +213,32 @@ function boxCycle(round = 1) {
 
   avatar.classList.add("breathe");
 
-  // Inhale – shrink
+  // Inhale (4s) – contract
   setTimeout(() => {
     outer.style.transform = "scale(0.8)";
     inner.style.transform = "scale(0.7)";
   }, 0);
 
-  // Hold 1
+  // Hold (4s)
   setTimeout(() => {}, 4000);
 
-  // Exhale – expand
+  // Exhale (4s) – expand
   setTimeout(() => {
     outer.style.transform = "scale(1)";
     inner.style.transform = "scale(1)";
   }, 8000);
 
-  // Hold 2
-  setTimeout(() => {}, 12000);
-
-  // Next round
-  setTimeout(() => boxCycle(round + 1), 16000);
+  // Pause before next round
+  setTimeout(() => {
+    triangleCycle(round + 1);
+  }, 12000);
 }
 
 startBtn.addEventListener("click", () => {
   if (running) return;
   running = true;
   startBtn.style.display = "none";
-  boxCycle();
+  triangleCycle();
 });
 
 restartBtn.addEventListener("click", () => {

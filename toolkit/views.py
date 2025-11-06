@@ -10,8 +10,17 @@ def breathing(request):
 def boxBreathing(request):
     return render(request, 'toolkit/box-breathing.html')
 
+def triangleBreathing(request):
+    return render(request, 'toolkit/triangle-breathing.html')
+
+def extendedExhale(request):
+    return render(request, 'toolkit/extended-exhale.html')
+
 def puzzles(request):
     return render(request, 'toolkit/puzzles.html')
+
+def colourMatch(request):
+    return render(request, 'toolkit/colour-match.html')
 
 def options(request):
     return render(request, 'toolkit/options.html')
