@@ -36,6 +36,10 @@ CSRF_TRUSTED_ORIGINS = [
     "https://yourdomain.com"
 ]
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_SSL_REDIRECT = not DEBUG  # redirect to https if in production
 
 # ------------------------------------------------------
 # APPLICATIONS

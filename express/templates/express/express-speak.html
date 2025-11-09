@@ -26,14 +26,15 @@
   align-items: center;
   justify-content: flex-start;
   min-height: calc(100vh - 60px);
-  padding: 120px 20px 100px;
+  /* ↓ slightly reduced vertical padding to lift content */
+  padding: 90px 20px 80px;
   text-align: center;
 }
 
 /* back button */
 .express-speak-page .back-btn {
   position: fixed;
-  top: 84px;
+  top: 72px; /* slightly higher */
   left: 28px;
   text-decoration: none;
   font-size: 15px;
@@ -67,7 +68,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   padding: 0 24px;
-  margin-bottom: 60px;
+  margin-bottom: 50px; /* slightly tighter spacing */
 }
 .express-speak-page .response-text::before {
   content: "“";
@@ -94,7 +95,7 @@
   mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40"><path fill="black" d="M0 20 Q5 10 10 20 T20 20 T30 20 T40 20 T50 20 T60 20 T70 20 T80 20 T90 20 T100 20 T110 20 T120 20 T130 20 T140 20 T150 20 T160 20 T170 20 T180 20 T190 20 T200 20"/></svg>') center/contain repeat-x;
   mask-repeat: repeat-x;
   animation: pulse 1.2s ease-in-out infinite;
-  margin: 70px auto;
+  margin: 55px auto; /* reduced from 70px */
 }
 @keyframes pulse {
   0%, 100% { opacity: .6; transform: scaleY(0.9); }
@@ -115,14 +116,14 @@
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 40px;
+  margin-top: 36px;
 }
 .express-speak-page button:hover { text-decoration: underline; }
 
 @media(max-width:720px){
-  .express-speak-page { padding-top: 100px; }
+  .express-speak-page { padding-top: 80px; }
   .express-speak-page .back-btn {
-    top: 76px;
+    top: 68px;
     left: 18px;
     font-size: 14px;
     padding: 6px 12px;
@@ -131,7 +132,7 @@
 </style>
 
 <div class="express-speak-page">
-  <a href="javascript:history.back()" class="back-btn">← Back</a>
+  <a href="javascript:history.back()" class="back-btn">← Back to Response</a>
 
   {% if response %}
     <h2 class="response-text">{{ response }}</h2>
