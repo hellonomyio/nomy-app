@@ -10,7 +10,7 @@ urlpatterns = [
     path('about/', views.about, name='nomy-about'),
     path('help/', views.help, name='nomy-help'),
 
-    # Settings + password change (all templates live in core/)
+    # Settings + password change (templates live in core/)
     path('settings/', views.settings, name='nomy-settings'),
 
     path('settings/password/', auth_views.PasswordChangeView.as_view(

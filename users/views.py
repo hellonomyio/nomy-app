@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.models import User 
 from .forms import UserRegisterForm
-from django.http import HttpResponse
 
 # Create your views here.
 def register(request):
@@ -15,10 +13,3 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
-
-def create_admin(request):
-    if not User.objects.filter(username="nomysarah").exists():
-        User.objects.create_superuser("nomysarah", "sarah@nomy-app.com", "admin123")
-        return HttpResponse("✅ Superuser created: nomysarah / admin123")
-    else:
-        return HttpResponse("⚠️ Superuser already exists.")
