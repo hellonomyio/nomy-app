@@ -90,6 +90,60 @@
     filter: saturate(1.05);
   }
 
+  /* locked pill */
+  .locked {
+    cursor: default !important;
+    position: relative;
+    opacity: 0.7;
+  }
+  .locked:hover {
+    transform:none;
+    box-shadow: var(--shadow);
+    filter:none;
+  }
+
+  .padlock {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 22px;
+    opacity: 0.9;
+  }
+
+  /* modal */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(6px);
+    background: rgba(0,0,0,.35);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .modal-box {
+    background: white;
+    padding: 28px 30px;
+    border-radius: 22px;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.18);
+    max-width: 320px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  .modal-btn {
+    margin-top: 20px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: none;
+    background: #ece8ff;
+    color: var(--ink);
+    font-size: 15px;
+  }
+  
   .back-btn {
     position: fixed;
     top: 84px;
@@ -145,14 +199,52 @@
     <h2>Choose a Feeling</h2>
 
     <section class="grid" aria-label="Emotion options">
-      <a class="oval vulnerable" href="{% url 'emotionfy:story' %}?emotion=embarrassment">Embarrassment</a>
-      <a class="oval vulnerable" href="{% url 'emotionfy:story' %}?emotion=shame">Shame</a>
-      <a class="oval vulnerable" href="{% url 'emotionfy:story' %}?emotion=stupidity">Stupidity</a>
+      <!-- locked -->
+      <div class="oval energised locked" onclick="openModal()">
+        Embarrassment
+        <img class="padlock" src="{% static 'images/padlock.png' %}" alt="">
+      </div>
+
+      <!-- locked -->
+      <div class="oval energised locked" onclick="openModal()">
+        Shame
+        <img class="padlock" src="{% static 'images/padlock.png' %}" alt="">
+      </div>
+
+      <!-- locked -->
+      <div class="oval energised locked" onclick="openModal()">
+        Stupidity
+        <img class="padlock" src="{% static 'images/padlock.png' %}" alt="">
+      </div>
+   
+      <!-- unlocked -->
       <a class="oval vulnerable" href="{% url 'emotionfy:story' %}?emotion=loneliness">Loneliness</a>
-      <a class="oval vulnerable" href="{% url 'emotionfy:story' %}?emotion=confusion">Confusion</a>
+
+      <!-- locked -->
+      <div class="oval energised locked" onclick="openModal()">
+        Confusion
+        <img class="padlock" src="{% static 'images/padlock.png' %}" alt="">
+      </div>
     </section>
   </main>
 </div>
 
 <img src="{% static 'images/avatar.png' %}" alt="NOMY avatar" class="avatar" />
+<!-- modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    Subscribe to unlock this feeling and access all emotional stories.
+
+    <button class="modal-btn" onclick="closeModal()">Okay</button>
+  </div>
+</div>
+
+<script>
+  function openModal(){
+    document.getElementById('modal').style.display = 'flex';
+  }
+  function closeModal(){
+    document.getElementById('modal').style.display = 'none';
+  }
+</script>
 {% endblock %}

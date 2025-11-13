@@ -26,7 +26,6 @@
     align-items:center;
   }
 
-  /* consistent NOMY centering & scaling */
   .zoom-wrapper {
     transform: scale(0.9);
     transform-origin: top center;
@@ -60,7 +59,6 @@
     margin-top: 8px;
   }
 
-  /* grid layout identical to pleasant page */
   .grid {
     width: 100%;
     display: grid;
@@ -69,8 +67,8 @@
     justify-content: center;
   }
 
-  /* pill styling identical */
   .oval {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -90,8 +88,61 @@
     filter: saturate(1.05);
   }
 
-  /* energised colour */
   .oval.energised { background: #f4f8f3; }
+
+  /* locked pill */
+  .locked {
+    cursor: default !important;
+    position: relative;
+    opacity: 0.7;
+  }
+  .locked:hover {
+    transform:none;
+    box-shadow: var(--shadow);
+    filter:none;
+  }
+
+  .padlock {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 22px;
+    opacity: 0.9;
+  }
+
+  /* modal */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(6px);
+    background: rgba(0,0,0,.35);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .modal-box {
+    background: white;
+    padding: 28px 30px;
+    border-radius: 22px;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.18);
+    max-width: 320px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  .modal-btn {
+    margin-top: 20px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: none;
+    background: #ece8ff;
+    color: var(--ink);
+    font-size: 15px;
+  }
 
   /* back button */
   .back-btn {
@@ -119,17 +170,14 @@
     outline: none;
   }
 
-  /* avatar bottom-left */
   .avatar {
     position: fixed;
     bottom: 22px;
     left: 100px;
     width: 150px;
-    height: auto;
     opacity: 0.9;
-    pointer-events: none;
-    z-index: 5;
-    background: none !important;
+    pointer-events:none;
+    z-index:5;
     filter: drop-shadow(0 0 1px rgba(0,0,0,0.1));
   }
 
@@ -154,14 +202,53 @@
     </div>
 
     <section class="grid" aria-label="Feeling options">
-      <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=excitement">Excitement</a>
-      <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=curiosity">Curiosity</a>
-      <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=frustration">Frustration</a>
-      <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=anxiety">Anxiety</a>
+
+      <!-- locked -->
+      <div class="oval energised locked" onclick="openModal()">
+        Excitement
+        <img class="padlock" src="{% static 'images/padlock.png' %}" alt="">
+      </div>
+
+      <!-- unlocked -->
+      <a class="oval energised" href="{% url 'emotionfy:story' %}?emotion=frustration">
+        Frustration
+      </a>
+
+      <!-- locked -->
+      <div class="oval energised locked" onclick="openModal()">
+        Curiosity
+        <img class="padlock" src="{% static 'images/padlock.png' %}" alt="">
+      </div>
+
+      <!-- locked -->
+      <div class="oval energised locked" onclick="openModal()">
+        Anxiety
+        <img class="padlock" src="{% static 'images/padlock.png' %}" alt="">
+      </div>
+
     </section>
   </main>
 </div>
 
-<!-- 🧍 avatar bottom-left -->
+<!-- avatar -->
 <img src="{% static 'images/avatar.png' %}" alt="NOMY avatar" class="avatar" />
+
+<!-- modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    Subscribe to unlock this feeling and access all emotional stories.
+
+    <button class="modal-btn" onclick="closeModal()">Okay</button>
+  </div>
+</div>
+
+<script>
+function openModal(){
+  document.getElementById('modal').style.display = 'flex';
+}
+function closeModal(){
+  document.getElementById('modal').style.display = 'none';
+}
+</script>
+
 {% endblock %}

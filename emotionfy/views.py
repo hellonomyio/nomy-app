@@ -247,11 +247,16 @@ SLIDES = {
 
     "frustration": [
         {
-            "sub": "Frustration hits hard when you can see what you mean but can’t get it across. It’s feeling stuck and the pain of being misunderstood. For autistic adults, this is a common emotional flashpoint because communication gaps or executive function barriers can make even simple interactions feel like mazes."
+            "sub": "Frustration is the feeling that happens when something gets in the way of what’s needed or wanted. It’s that sense of being blocked or stuck. Everyone feels it, but for autistic people, it can be stronger and more intense because of how the brain and nervous system process information and emotion. Frustration is the body and brain’s way of saying, “Something isn’t working right now, and support is needed.”",
+            "note": "How it shows up"
         },
         {
-            "sub": "When frustration builds, your words may trip, your tone may sharpen or your body might need to move, pacing, clenching, flapping. It can feel like aggression but it’s more that energy trying to escape. The key is to catch the block before it explodes: pause and label it “I’m frustrated because my words aren’t working right now.” Naming the block can loosen its grip.",
-            "note": "Reflect"
+            "sub": "Frustration can show up in many ways: <br><br><b>The body might feel tight, hot or restless.<br> The mind may feel foggy, fast or overwhelmed.<br> Words might stumble, or come out louder or sharper than intended.<br> Movement might increase, pacing, clenching fists, rocking, or flapping.</b><br><br> These are all ways the nervous system tries to release built-up energy.",
+            "note": "Common Triggers"
+        },
+        {
+            "sub": "Frustration often builds when there are barriers that make daily life harder to manage, such as:<br><br> <b>Communication difficulties</b> – knowing what to say but not being able to express it.<br><b>Executive function challenges</b> – trouble starting, organisng, or finishing tasks.<br><b>Sensory overload</b> – too much noise, light, movement, or touch.<br><b>Changes in routine</b> – unexpected shifts or uncertainty.<br><b>Social misunderstandings</b> – being misread, interrupted, or dismissed.<br><b>Feeling unsupported</b> – not being given the time, space, or understanding needed.<br><br>These experiences can pile up and when they do, frustration can quickly turn into overwhelm.",
+            "note": "It Affects"
         }
     ]
 }
