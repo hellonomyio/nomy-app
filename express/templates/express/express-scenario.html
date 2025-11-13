@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Express • Scenario{% endblock %}
-
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
@@ -48,7 +47,6 @@
     text-align: center;
   }
 
-  /* back button (same as Express homepage) */
   .back-btn {
     position: fixed;
     top: 84px;
@@ -65,13 +63,7 @@
     transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
     z-index: 2000;
   }
-  .back-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(19,7,63,.10);
-    background: #faf7ff;
-  }
 
-  /* Prompt title */
   .prompt-title {
     font-size: clamp(22px, 2.4vw, 28px);
     font-weight: 400;
@@ -79,55 +71,107 @@
   }
 
   p.prompt {
-    font-weight: 400;
     margin-top: 6px;
     font-size: clamp(16px, 1.8vw, 19px);
-    color: var(--ink);
   }
 
-  /* Express-style pills for options */
+  .tone-card {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+  }
+  .direct-option {
+    background: #ffeac4; 
+  }
+
+  .relational-option {
+    background: #fffaeb; 
+  }
+
   .option {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 90px;
     width: 100%;
-    max-width: 340px;
     border-radius: var(--radius);
     text-decoration: none;
+    font-size: 20px;
     font-weight: 400;
-    font-size: clamp(17px, 1.8vw, 20px);
     color: var(--ink);
     box-shadow: var(--shadow);
-    transition: transform .12s ease, box-shadow .25s ease, filter .25s ease;
+    transition: transform .12s ease, box-shadow .25s ease;
   }
-
-  /* colors for first two */
-  .option:first-of-type { background: #ffeac4; }
-  .option:nth-of-type(2) { background: #fffaeb; }
-  /* default fallback for others */
-  .option:nth-of-type(n+3) { background: #f6f4ff; }
 
   .option:hover {
     transform: translateY(-2px);
     box-shadow: 0 22px 48px rgba(17,12,40,.14);
-    filter: saturate(1.05);
+  }
+
+  /* info icon — copied from NOMY homepage */
+  .info-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(36,22,63,0.08);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: help;
+    z-index: 3;
+    transition: background .2s ease;
+  }
+
+  .info-btn:hover,
+  .info-btn:focus {
+    background: rgba(36,22,63,0.15);
+    outline: none;
+  }
+
+  /* tooltip — copied style from NOMY homepage */
+  .tooltip {
+    position: absolute;
+    top: 42px;
+    right: 10px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.4;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(17,12,40,.1);
+    padding: 10px 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    width: max-content;
+    max-width: 240px;
+    text-align: left;
+    z-index: 5;
+  }
+
+  .info-btn:hover + .tooltip,
+  .info-btn:focus + .tooltip {
+    opacity: 1;
   }
 
   .note {
-    margin-top: 50px;
+    margin-top: 20px;
     color: var(--muted);
     font-size: 15px;
+    max-width: 700px;
   }
 
   @media(max-width:720px){
     .zoom-wrapper{transform:scale(1);}
     .back-btn{top:76px;left:18px;font-size:14px;padding:6px 12px;}
     .option{height:80px;font-size:16px;}
-    main.wrap{gap:30px;}
   }
-
-  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <a href="{% url 'express:express-home' %}" class="back-btn">← Back</a>
@@ -137,17 +181,37 @@
     <h2 class="prompt-title">{{ prompt }}</h2>
     <p class="prompt">How would you like to respond?</p>
 
-    {% for o in options %}
-      <a href="{% url 'express:express-response' %}?situation={{ slug }}&tone={{ o.type }}"
-         class="option">
-         {{ o.label }}
-      </a>
-    {% endfor %}
+    <!-- DIRECT OPTION -->
+    <div class="tone-card">
+      <a href="{% url 'express:express-response' %}?situation={{ slug }}&tone=direct"
+         class="option direct-option">Direct</a>
+
+      <span class="info-btn" tabindex="0">i</span>
+      <span class="tooltip">
+        Choose Direct if you want to:<br><br>
+        • State your needs or boundaries clearly and simply.<br>
+        • Focus on your feelings without needing to explain or soften them.<br>
+        • Practice being straightforward and self-affirming.
+      </span>
+    </div>
+
+    <!-- RELATIONAL OPTION -->
+    <div class="tone-card">
+      <a href="{% url 'express:express-response' %}?situation={{ slug }}&tone=relational"
+         class="option relational-option">Relational</a>
+
+      <span class="info-btn" tabindex="0">i</span>
+      <span class="tooltip">
+        Choose Relational if you want to:<br><br>
+        • Express your needs while considering the other person’s perspective.<br>
+        • Keep connection and understanding part of the conversation.
+      </span>
+    </div>
 
     <p class="note">
-      You can use one of these, mix them, or write your own.
-      There’s no right way, only your way.
+      You can use one of these, mix them, or write your own. There’s no right way, only your way.
     </p>
   </main>
 </div>
+
 {% endblock %}

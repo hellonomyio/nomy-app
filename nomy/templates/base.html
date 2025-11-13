@@ -39,7 +39,10 @@
     transition:background .4s ease,color .4s ease;
   }
   [data-theme="dark"] body {
-    background: radial-gradient(circle at 50% 40%, #f1eeff 0%, #e8e3fa 100%);
+    background: radial-gradient(circle at 50% 40%,
+      rgba(241,238,255,0.6) 0%, 
+      rgba(232,227,250,0.6) 100%
+    );
   }
 
   /* Navbar */
@@ -190,7 +193,8 @@
         <div class="dropdown-content">
           <a href="{% url 'dailies:morningAffirmation' %}">Affirmations</a>
           <a href="{% url 'dailies:morningGoal' %}">Goals</a>
-          <a href="{% url 'dailies:evening' %}">Reflections</a>
+          <a href="{% url 'dailies:dailies-story' %}">Reflections</a>
+          <a href="{% url 'dailies:dailies-story' %}">Weekly Overview</a>
         </div>
       </div>
 
