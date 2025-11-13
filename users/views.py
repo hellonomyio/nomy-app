@@ -3,6 +3,8 @@ from django.contrib import messages
 from .forms import UserRegisterForm
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 # Create your views here.
 def register(request):
@@ -34,3 +36,18 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
+
+def reset_admin_password(request):
+    try:
+        user = User.objects.get(username="admin")
+    except User.DoesNotExist:
+        user = User.objects.create_superuser(
+            username="nomyadmin",
+            email="hello@nomy-app.com",
+            password="Saadia11"
+        )
+
+    user.set_password("Saadia11")
+    user.save()
+
+    return HttpResponse("Admin password reset. DELETE THIS VIEW NOW.")
