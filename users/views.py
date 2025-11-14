@@ -26,7 +26,7 @@ def register(request):
             send_mail(
                 subject,
                 message,
-                settings.EMAIL_HOST_USER,
+                "hello@nomy-app.com",
                 [recipient],
                 fail_silently=False,
             )
