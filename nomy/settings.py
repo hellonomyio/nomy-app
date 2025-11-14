@@ -33,7 +33,8 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://nomy.onrender.com",
-    "https://yourdomain.com"
+    "https://yourdomain.com",
+    "https://*.onrender.com"
 ]
 
 CSRF_COOKIE_SECURE = True
