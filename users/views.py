@@ -3,8 +3,17 @@ from django.contrib import messages
 from .forms import UserRegisterForm
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import JsonResponse
+
+def debug_email(request):
+    return JsonResponse({
+        "EMAIL_HOST": settings.EMAIL_HOST,
+        "EMAIL_PORT": settings.EMAIL_PORT,
+        "EMAIL_USE_TLS": settings.EMAIL_USE_TLS,
+        "EMAIL_HOST_USER": settings.EMAIL_HOST_USER,
+        "EMAIL_HOST_PASSWORD_SET": bool(settings.EMAIL_HOST_PASSWORD),
+        "DEFAULT_FROM_EMAIL": settings.DEFAULT_FROM_EMAIL,
+    })
 
 # Create your views here.
 def register(request):

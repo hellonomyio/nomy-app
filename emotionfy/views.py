@@ -257,6 +257,10 @@ SLIDES = {
         {
             "sub": "Frustration often builds when there are barriers that make daily life harder to manage, such as:<br><br> <b>Communication difficulties</b> – knowing what to say but not being able to express it.<br><b>Executive function challenges</b> – trouble starting, organisng, or finishing tasks.<br><b>Sensory overload</b> – too much noise, light, movement, or touch.<br><b>Changes in routine</b> – unexpected shifts or uncertainty.<br><b>Social misunderstandings</b> – being misread, interrupted, or dismissed.<br><b>Feeling unsupported</b> – not being given the time, space, or understanding needed.<br><br>These experiences can pile up and when they do, frustration can quickly turn into overwhelm.",
             "note": "It Affects"
+        },
+        {
+            "sub": "For autistic people, frustration is an emotion and a physical state. The nervous system moves into stress mode to prepare to protect itself. This can make it hard to think clearly, use words, or stay calm. When this stress keeps building, it can lead to: Meltdowns, where the body releases energy through crying, yelling, or movement. Shutdowns, where the body and mind pull inward to recover. Both are natural responses to overload and neither failures nor overreactions. They are signs that the body and mind have reached their limit and need care.",
+            "note": "Reflect"
         }
     ]
 }
