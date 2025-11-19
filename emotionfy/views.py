@@ -129,12 +129,21 @@ SLIDES = {
 
     "exhaustion": [
         {
-            "sub": "Exhaustion in the autistic body feels like a depletion that seeps into thought, movement and even language. It’s waking up already spent because simply existing, processing light, sound, expectations and unspoken social rules takes more from you than most people realise. This exhaustion often builds silently. Masking drains energy, but so does translating trying to make yourself understood, trying to read a room, trying to be easy to be around. Over time, your body begins to run on borrowed energy and when it runs out, you crash. The brain and body have been in constant overdrive, filtering input and emotion without rest."
+            "sub": "Exhaustion in the autistic body is a deep, full-body depletion that affects thinking, movement and even words. It’s waking up already spent, because simply existing, processing light, sound, expectations and unspoken social rules, takes more from you than most people realise.<br><br>For many autistic adults, this exhaustion builds quietly over time. Masking, trying to make yourself understood, reading social cues, or being “easy to be around” drains energy. Eventually, the body runs on borrowed energy. When it runs out, you crash. Words may vanish. Simple decisions feel impossible. This is autistic burnout—a full-body shutdown after long-term overwhelm.",
+            "note": "How it Shows Up"
         },
         {
-            "sub": "When you reach that point, you might feel foggy, detached or unable to do even simple things. Words might vanish. Small decisions feel like cliffs. That’s autistic burnout, a full-body shutdown born from long-term overwhelm (Raymaker et al., 2020). “Pushing through” as a way of recovery is ineffective. Give yourself permission to rest, to reduce demands and to let silence and sameness heal you. The way you may need to rest can sometimes feel like indulgence but remind yourself that it’s a necessary to recharge. And when you give yourself that, your system begins to trust that it doesn’t always have to fight.",
-            "note": "Reflect"
+            "sub": "Exhaustion can show up in many ways:<br><br>Feeling mentally foggy, detached, or slowed down.<br>Physical fatigue that doesn’t improve with ordinary rest.<br>Difficulty speaking or finding words.<br>Even small decisions feel like huge effort.<br>Loss of motivation or pleasure in things that usually feel good.",
+            "note": "Common Sources"
         },
+        {
+            "sub": "Exhaustion often comes from ongoing energy depletion, including:<br><br><b>Masking</b> – hiding autistic traits or adapting constantly to social expectations.<br><b>Sensory overload</b> – processing lights, sounds, textures, and movement nonstop.<br><b>Social navigation</b> – interpreting unspoken rules and expectations.<br><b>Emotional labor</b> – regulating your own and others’ emotions simultaneously.<br><b>Sustained demands</b> – work, routines, and responsibilities that require constant attention.<br><br><br>Over time, all of this adds up until the system can no longer maintain balance.",
+            "note": "Common Sources"
+        },
+        {
+            "sub": "Exhaustion changes how the body operates. Muscles can feel tense or unresponsive. Breathing may become shallow or irregular. Sensory input can feel sharper or harder to filter. The nervous system stays in overdrive, making it harder to regulate energy, focus, and emotions.<br><br>For autistic adults, these bodily effects show that rest, calm environments, and reduced demands are essential. Recovery helps the body rebuild trust that it doesn’t always have to be in overdrive and that safety, stillness, and balance are possible.",
+            "note": "Reflect"
+        }
     ],
 
     "shame": [
@@ -172,13 +181,15 @@ SLIDES = {
     ],
     "loneliness": [
         {
-            "sub": "Loneliness in the autistic experience is more about the feeling of being surrounded by people yet unseen and less about being physically alone. It’s the ache of existing in a world that speaks a language just a bit different from yours. You might crave connection deeply but find that most social spaces feel like they cost too much to enter. For many autistic adults, loneliness begins early when your way of communicating, or your sensory needs didn’t match the people around you. Over time, you might have learned to keep parts of yourself hidden to stay safe, only to realise that the safety came with silence. That silence is heavy; it’s a loneliness of self."
+            "sub": "Loneliness in the autistic experience is often less about being physically alone and more about the ache of being unseen. It’s the feeling of existing in a world that speaks a language slightly different from yours. You might crave connection deeply, yet most social spaces can feel exhausting or inaccessible.<br><br>For many autistic adults, loneliness begins early. Your ways of communicating or your sensory needs may not have matched the people around you. Over time, you may have learned to hide parts of yourself to stay safe. That safety often comes with silence and silence can feel heavy. It’s a loneliness of self.<br><br>And yet, autistic loneliness is rarely total. There are moments of belonging, with another neurodivergent person, a trusted friend, or even a comforting routine that reflects you back to yourself. Connection often happens best for you through shared focus rather than forced conversation: parallel play, mutual interests, or simply being side by side without pressure.",
+            "note": "How it Feels"
         },
         {
-            "sub": "And yet, autistic loneliness is rarely total. There are moments of belonging with another neurodivergent person, a trusted friend or even a comforting routine that reflects you back to yourself. Many autistic people find that connection happens best through shared focus rather than forced conversation. Through parallel play, mutual interests or simply being side by side without pressure. Research on autistic well-being (Botha & Frost, 2020) highlights how belonging and validation, being accepted as is, are what actually dissolve loneliness. It’s less about having more people and more about being allowed to exist without translation."
+            "sub": "Loneliness often arises from experiences like:<br><br><b>Communication differences</b> – ways of expressing yourself that aren’t understood by others.<br><b>Social mismatch</b> – being in spaces that feel exhausting or inaccessible.<br><b>Masking or hiding</b> – concealing parts of yourself to stay safe.<br><b>Unmet desire for connection</b> – wanting relationships that feel authentic but feeling unable to access them.",
+            "note": "Affects"
         },
         {
-            "sub": "You are not alone in your aloneness. The loneliness itself is proof of your capacity for connection. You feel it because you want to belong. And that desire is something profoundly human, profoundly whole.",
+            "sub": "Loneliness can affect the body in ways similar to chronic stress. The nervous system may become tense or alert. You might notice tightness, shallow breathing, or a low energy state. Mental focus can waver, and fatigue or restlessness can appear.<br><br>For autistic adults, this physical impact is a reminder that connection or the lack of it, affects both mind and body. Recognising this can help you respond with care and create environments that allow for authentic belonging.",
             "note": "Reflect"
         },
     ],
@@ -210,16 +221,6 @@ SLIDES = {
         },
         {
             "sub": "Other people might not recognise it. They might see you go quiet and think you’re distant or detached. But inside, sadness can be thick and consuming. It’s not that you don’t feel, it’s that your feelings sometimes move through pathways that don’t translate neatly into visible emotion. It’s okay to let sadness exist without explaining it immediately. Sometimes it helps just to name it later, once you notice: “That was sadness.” Over time, you’ll start to spot its footprints and the moments when your body slows down, or when you want to curl inward.",
-            "note": "Reflect"
-        },
-    ],
-
-    "exhaustion": [
-        {
-            "sub": "Exhaustion in the autistic body feels like a depletion that seeps into thought, movement and even language. It’s waking up already spent because simply existing, processing light, sound, expectations and unspoken social rules takes more from you than most people realise. This exhaustion often builds silently. Masking drains energy, but so does translating trying to make yourself understood, trying to read a room, trying to be easy to be around. Over time, your body begins to run on borrowed energy and when it runs out, you crash. The brain and body have been in constant overdrive, filtering input and emotion without rest."
-        },
-        {
-            "sub": "When you reach that point, you might feel foggy, detached or unable to do even simple things. Words might vanish. Small decisions feel like cliffs. That’s autistic burnout, a full-body shutdown born from long-term overwhelm (Raymaker et al., 2020). “Pushing through” as a way of recovery is ineffective. Give yourself permission to rest, to reduce demands and to let silence and sameness heal you. The way you may need to rest can sometimes feel like indulgence but remind yourself that it’s a necessary to recharge. And when you give yourself that, your system begins to trust that it doesn’t always have to fight.",
             "note": "Reflect"
         },
     ],
