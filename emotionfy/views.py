@@ -82,12 +82,21 @@ SLIDES = {
 
     "happiness": [
         {
-            "sub": "If you’ve spent years masking, you may have learned to question whether you even feel happiness at all or to downplay it because it didn’t match what others expected. But your version of happiness has always been there, subtle, steady and deeply personal. It doesn’t have to be shared to be real. You might stim gently, hum or let yourself sit in calm focus. That’s joy too. Many autistic adults describe this kind of happiness as “alignment”, which is the rare and wonderful moment when your body and the world agree."
+            "sub": "When masking has been part of life for a long time, it’s easy to wonder if happiness is something you really feel or to minimise it because it doesn’t look the way the world tells you it should. But your version of happiness has always been there. It’s steady, subtle, and deeply personal. It doesn’t have to be loud or shared to be real.",
+            "note": "How it Shows Up"
         },
         {
-            "sub": "Happiness for many autistic adults doesn’t always look like the typical smiling, laughing or social excitement you’ve been told it should. It often lives in moments of quiet rightness when the sensory world finally fits, when a rhythm clicks, when you’re immersed in something that fascinates you. For you, happiness might feel like breathing evenly for the first time all day or noticing a steady warmth in your chest. Maybe it’s when you’re alone but deeply content, doing something that brings focus and peace rather than noise and energy.",
+            "sub": "For many autistic adults, happiness doesn’t show up as big smiles or bursts of energy. It’s often quiet. It lives in those small, grounding moments when the body feels calm, the mind feels clear and the world finally feels safe to exist in. It’s when everything inside says, this feels right. <br>Sometimes happiness looks like gentle stimming, humming softly, or being deeply focused on something that feels good. Many autistic people describe it as a sense of alignment—when body, mind and environment are working together instead of against each other.",
             "note": "Reflect"
         },
+        {
+            "sub": "Happiness often comes from experiences that create comfort, safety, or meaning:<br><br><b>Special interests</b> that bring deep focus and satisfaction.<br><b>Predictable routines</b> that offer stability and peace.<br><b>Sensory comfort</b> from sound, light, touch, or movement.<br><b>Quiet time alone</b> to recharge and feel grounded.<br><b>Authentic connection</b> with people who accept and understand you.<br><b>Self-expression</b> through movement, creativity, or work that feels purposeful.",
+            "note": "It Affects"
+        },
+        {
+            "sub": "When happiness is present, the nervous system begins to settle. Breathing slows. Muscles release. The body shifts from protection into calm.<br><br>This is regulation for autistic people. These moments allow the body to recover from masking, stress and sensory overload. Even brief moments of happiness like listening to a comforting sound, engaging in a favourite routine, or sitting in a space that feels right, can be deeply restorative.",
+            "note": "Reflect"
+        }
     ],
     "contentment": [
         {
