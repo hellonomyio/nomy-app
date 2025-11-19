@@ -1,99 +1,205 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Express • Response{% endblock %}
+{% block title %}Express • Write{% endblock %}
+
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
 <style>
-  :root {
-    --bg: #ffffff;
-    --lav: #f6f4ff;
-    --pill: #d3cbf9;
-    --ink: #22163c;
-    --muted: #5e4f79;
-    --direct: #fff5e9;
-    --relational: #fffaeb;
-    --shadow: 0 18px 40px rgba(17,12,40,.10);
-  }
+:root {
+  --bg:#ffffff;
+  --ink:#1f003d;
+  --muted:#5e4f79;
+  --bubble:#e8e5ff;
+  --panel:#f3f2ff;
+  --button:#f1efff;
+}
 
-  * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
+/* ---- PAGE ---- */
+.express-text-page {
+  background: var(--bg);
+  font-family: "DM Sans", sans-serif;
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
 
-  body {
-    color: var(--ink);
-    font-family: "DM Sans", system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 0 20px 100px;
-  }
+/* ---- SCALE WRAPPER ---- */
+.scale-wrap {
+  transform: scale(0.82);
+  transform-origin: top center;
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
 
-  main.wrap {
-    width: 100%;
-    max-width: 980px;
-    padding-top: clamp(72px, 12vh, 160px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
-    position: relative;
-    text-align: center;
-  }
+/* ---- QUOTE BUBBLE ---- */
+.quote-bubble {
+  background: var(--bubble);
+  padding: 26px 40px;
+  border-radius: 34px;
+  max-width: 500px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
 
-  /* pill style */
-  .pill {
-    display: inline-grid;
-    place-items: center;
-    background: var(--pill);
-    color: var(--ink);
-    border-radius: 999px;
-    padding: 20px 64px;
-    font-size: clamp(20px, 2.4vw, 26px);
-    font-weight: 500;
-    box-shadow: var(--shadow);
-  }
+/* ---- INSTRUCTIONS ---- */
+.instructions {
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
 
-  /* response text */
-  .response {
-    font-size: clamp(18px, 1.8vw, 22px);
-    line-height: 1.7;
-    max-width: 720px;
-    margin: 20px auto 60px;
-    color: var(--ink);
-  }
+/* ---- TEXTAREA ---- */
+textarea {
+  width: 100%;
+  max-width: 900px;
+  min-height: 340px;
+  background: var(--panel);
+  border-radius: 42px;
+  padding: 34px 40px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  line-height: 1.6;
+  resize: vertical;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
 
-  /* navigation links */
-  .links {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    font-weight: 600;
-  }
+/* ---- BUTTON ---- */
+.primary-btn {
+  background: var(--button);
+  padding: 18px 48px;
+  border-radius: 40px;
+  font-size: 18px;
+  color: var(--ink);
+  border: none;
+  cursor: pointer;
+  margin-top: 25px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.05);
+  font-weight: 500;
+  transition: transform .1s ease;
+}
+.primary-btn:hover {
+  transform: translateY(-2px);
+}
 
-  .links a {
-    text-decoration: none;
-    color: var(--ink);
-    transition: opacity .2s ease;
-  }
+/* ---------------------------------------------------------------- */
+/* ---------------------------- MODAL ----------------------------- */
+/* ---------------------------------------------------------------- */
 
-  .links a:hover {
-    opacity: .7;
-  }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+}
 
-  @media(max-width:640px){
-    .response { font-size:16px; margin: 30px auto; }
-    .links { flex-direction: column; gap: 16px; }
-  }
+.modal-box {
+  background: var(--bubble);
+  padding: 40px 48px;
+  border-radius: 34px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+}
+
+.modal-box h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.modal-box p {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.modal-btn {
+  width: 100%;
+  padding: 14px 22px;
+  border-radius: 40px;
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: transform .1s ease;
+}
+.modal-btn:hover { transform: translateY(-2px); }
+
+.modal-save { background: #dcd7ff; color: var(--ink); }
+.modal-discard { background: #f6f5ff; color: var(--ink); }
 </style>
 
-<main class="wrap {{ tone }}">
-  <div class="pill">{{ tone|title }}</div>
+<div class="express-text-page">
+  <div class="scale-wrap">
 
-  <p class="response">{{ response }}</p>
+    {% if response %}
+      <div class="quote-bubble">“{{ response }}”</div>
+    {% endif %}
 
-  <div class="links">
-    <a href="javascript:history.back()">← Back</a>
-    <a href="{% url 'express:intro' %}">Express</a>
+    <!-- WRITE SCREEN -->
+    <section id="write-screen" style="width:100%;display:flex;flex-direction:column;align-items:center;">
+      <p class="instructions">
+        Write your version here. Take your time. This space is just for you.
+      </p>
+
+      <textarea id="userText"></textarea>
+
+      <button class="primary-btn" id="finishBtn">I’m done writing</button>
+    </section>
+
   </div>
-</main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h2>You did it</h2>
+    <p>Would you like to keep what you wrote — or gently let it go?  
+       There’s no right choice. Choose what feels kindest to you.</p>
+
+    <button class="modal-btn modal-save" id="saveBtn">Save to Reflections</button>
+    <button class="modal-btn modal-discard" id="discardBtn">Let it go</button>
+  </div>
+</div>
+
+<script>
+const finishBtn = document.getElementById("finishBtn");
+const modalOverlay = document.getElementById("modalOverlay");
+const saveBtn = document.getElementById("saveBtn");
+const discardBtn = document.getElementById("discardBtn");
+
+finishBtn.onclick = () => {
+  modalOverlay.style.display = "flex";
+};
+
+saveBtn.onclick = () => {
+  alert("Saved! (Connect this later)");
+  modalOverlay.style.display = "none";
+};
+
+discardBtn.onclick = () => {
+  window.location.href = "{% url 'express:express-home' %}";
+};
+</script>
+
 {% endblock %}

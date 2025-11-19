@@ -4,118 +4,126 @@
 {% block title %}NOMY • Evening Dailies{% endblock %}
 
 {% block content %}
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NOMY • Evening</title>
 
-  <!-- DM Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* -------------------------------------------------------------------------- */
+/* PAGE-SCOPED STYLES ONLY — DOES NOT AFFECT NAVBAR OR OTHER PAGES            */
+/* -------------------------------------------------------------------------- */
 
-  <style>
-    :root{
-      --bg:#564d74;     
-      --ink:#ffffff;    /* primary text on dark bg */
-        /* softer white for hints */
-      --panel:#eaeaf5;  /* card/textarea */
-      --shadow:0 28px 70px rgba(0,0,0,.25);
-      --radius:26px;
-    }
+.evening-page {
+  --bg:#564d74;
+  --ink:#ffffff;
+  --panel:#eaeaf5;
+  --muted:#e9e3f5;
+  --shadow:0 28px 70px rgba(0,0,0,.25);
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      
-      margin:0; background:var(--bg); color:var(--ink);
-      font-family:"DM Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      display:flex; justify-content:center;
-    }
+  background: var(--bg);
+  width: 100%;
+  min-height: calc(100vh - 60px);
 
-    main{
-      width:min(760px,92vw);
-      padding:56px 16px 80px;
-      text-align:center;
-    }
+  /* ⭐ The missing piece — adds space under navbar */
+  padding: 120px 16px 80px;
 
-    p {
-      --muted:#e9e3f5;
-    }
-    h1{
-      color: #fff;
-      margin:0 0 28px;
-      font-weight:700;
-      letter-spacing:.2px;
-      font-size:clamp(20px,3.2vw,32px);
-    }
+  display: flex;
+  justify-content: center;
+  font-family: "DM Sans", sans-serif;
+  color: var(--ink);
+}
 
-    .card{
-      background:var(--panel);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      padding:0; /* textarea has its own padding */
-    }
+/* CONTENT WRAPPER */
+.evening-page main {
+  width: min(760px, 92vw);
+  text-align: center;
+}
 
-    textarea{
-      width:100%;
-      height: clamp(220px, 40vh, 320px);
-      padding:22px 20px;
-      border:none;
-      background:transparent;
-      border-radius:24px;
-      color:#2e2840;
-      font:500 16px/1.5 "DM Sans",sans-serif;
-      outline:none;
-      resize:vertical;
-    }
+/* TITLE */
+.evening-page h1 {
+  margin: 20px 0 24px; /* small top spacing */
+  color: #fff;
+  font-weight: 700;
+  font-size: clamp(20px, 3.2vw, 32px);
+}
 
-    .hint{
-      margin:12px 0 48px;
-      color:var(--muted);
-      font-size:clamp(13px,1.6vw,16px);
-    }
+/* CARD (textarea container) */
+.evening-page .card {
+  background: var(--panel);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
 
-    .actions{ margin-top:24px; }
+/* TEXTAREA */
+.evening-page textarea {
+  width: 100%;
+  height: clamp(220px, 40vh, 320px);
+  padding: 22px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 24px;
+  color: #2e2840;
+  font: 500 16px/1.5 "DM Sans", sans-serif;
+  outline: none;
+  resize: vertical;
+}
 
-    button{
-      appearance:none; border:0; cursor:pointer;
-      padding:14px 22px;
-      border-radius:999px;
-      background:transparent;
-      color:var(--ink);
-      font:700 16px "DM Sans",sans-serif;
-      box-shadow:0 0 0 2px rgba(255,255,255,.25);
-      transition:transform .12s ease, box-shadow .25s ease, background .2s ease;
-    }
-    button:hover{
-      transform:translateY(-2px);
-      background:rgba(255,255,255,.06);
-      box-shadow:0 16px 40px rgba(0,0,0,.25);
-    }
-    button:active{ transform:none }
+/* SUBTEXT */
+.evening-page .hint {
+  margin: 12px 0 40px;
+  color: var(--muted);
+  font-size: clamp(13px, 1.6vw, 16px);
+}
 
-    @media (max-width:520px){
-      main{ padding-top:40px }
-      h1{ margin-bottom:22px }
-    }
-  </style>
-</head>
-<body>
+/* BUTTON WRAPPER */
+.evening-page .actions {
+  margin-top: 16px;
+}
+
+/* BUTTON */
+.evening-page button {
+  appearance:none;
+  border:0;
+  cursor:pointer;
+  padding:14px 22px;
+  border-radius:999px;
+  background:transparent;
+  color:var(--ink);
+  font:700 16px "DM Sans",sans-serif;
+  box-shadow:0 0 0 2px rgba(255,255,255,.25);
+  transition:transform .12s ease, background .2s ease, box-shadow .25s ease;
+}
+
+.evening-page button:hover {
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.06);
+  box-shadow:0 16px 40px rgba(0,0,0,.25);
+}
+main {
+  padding-top: 0 !important;
+}
+
+</style>
+
+<div class="evening-page">
   <main>
     <h1>Let’s check in, how did today go?</h1>
 
     <form action="#" method="post" novalidate>
       <div class="card">
-        <textarea id="evening_reflection" name="reflection" placeholder="Write about your day…"></textarea>
+        <textarea
+          id="evening_reflection"
+          name="reflection"
+          placeholder="Write about your day…"
+        ></textarea>
       </div>
-      <p class="hint">what did …</p>
+
+      <p class="hint">
+        What moments stood out? What felt grounding, surprising, supportive, or difficult today?
+      </p>
 
       <div class="actions">
         <button type="submit">save to my dailies</button>
       </div>
     </form>
   </main>
-</body>
-</html>
+</div>
+
 {% endblock %}

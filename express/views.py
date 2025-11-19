@@ -15,6 +15,9 @@ def expressSpeak(request):
     response_text = request.GET.get("response", "")
     return render(request, "express/express-speak.html", {"response": response_text})
 
+def expressText(request):
+    response_text = request.GET.get("response", "")
+    return render(request, "express/express-text.html", {"response": response_text})
 
 # -------------------------------
 # Scenario data

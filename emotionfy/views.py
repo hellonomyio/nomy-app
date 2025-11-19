@@ -224,7 +224,6 @@ SLIDES = {
             "note": "Reflect"
         },
     ],
-
     "numbness": [
         {
             "sub": "Numbness can feel like nothing and that’s what makes it so hard to recognise. For autistic adults, numbness often follows sensory or emotional overload, when the system shuts down to protect itself. It’s the mind going offline so the body can recover. You might describe it as emptiness, flatness, or just not caring but beneath that blankness is exhaustion, not absence."

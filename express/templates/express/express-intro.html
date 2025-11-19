@@ -156,9 +156,9 @@
       <h2 class="response-text">{{ response }}</h2>
     {% endif %}
 
-    <a class="option" href="#">
+    <a class="option" href="{% url 'express:express-text' %}?response={{ response|urlencode }}">
       💬 Write your response
-    </a>
+    </a>    
 
     <a class="option" href="{% url 'express:express-speak' %}?response={{ response|urlencode }}">
       🎙️ Speak your response
