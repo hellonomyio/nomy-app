@@ -8,7 +8,7 @@
   .dailies-page {
     --bg:#ffffff;
     --oval:#e9c3f1;
-    --text:#1f003d; /* use your consistent NOMY deep purple */
+    --text:#1f003d;
     --muted:#5e4f79;
     --shadow:0 18px 40px rgba(17,12,40,.10);
     --radius:26px;
@@ -46,7 +46,7 @@
     letter-spacing:.2px;
     position:relative;
   }
-  /* gentle banner toast */
+
   .toast {
     position: fixed;
     bottom: 24px;
@@ -68,7 +68,6 @@
     transform: translateX(-50%) translateY(-4px);
   }
 
-  /* i button beside heading */
   .info-btn{
     position:absolute;
     top:-4px;
@@ -92,7 +91,6 @@
     outline:none;
   }
 
-  /* popup modal overlay */
   .info-modal{
     position:fixed;
     top:0;left:0;width:100%;height:100%;
@@ -111,10 +109,9 @@
     pointer-events:auto;
   }
 
-  /* modal box */
   .modal-content {
     background:#f1f1ff;
-    color:#1f003d; /* 💜 fixed: always readable, even in dark mode */
+    color:#1f003d;
     border-radius:20px;
     box-shadow:0 18px 40px rgba(17,12,40,.1);
     padding:36px 32px;
@@ -130,12 +127,12 @@
     margin-top:0;
     font-weight:600;
     margin-bottom:18px;
-    color:#1f003d; /* heading stays consistent too */
+    color:#1f003d;
   }
 
   .modal-content p {
     margin-bottom:18px;
-    color:#1f003d; /* all text inside modal is consistent */
+    color:#1f003d;
   }
 
   .modal-content button {
@@ -146,7 +143,7 @@
     padding:10px 22px;
     font-family:'DM Sans',sans-serif;
     font-size:15px;
-    color:#1f003d; /* 💜 ensures visible text */
+    color:#1f003d;
     cursor:pointer;
     box-shadow:0 6px 22px rgba(19,7,63,.08);
     transition:background .2s ease, transform .1s ease;
@@ -163,17 +160,16 @@
     font-size:clamp(14px,1.8vw,18px);
   }
 
-  /* emotion grid */
+  /* ✅ MATCH EMOTIONIZE PILL SIZES */
   .grid{
     position:relative;
     margin-top:12px;
     width:100%;
     max-width:600px;
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    grid-template-rows:repeat(2,1fr);
+    grid-template-columns:repeat(2, minmax(260px, 360px)); /* identical */
     gap:40px;
-    justify-items:center;
+    justify-content:center;
     align-items:center;
   }
 
@@ -181,17 +177,17 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    width:280px;
-    height:110px;
-    background:#e9c3f1;
+    height:110px;   /* identical */
+    width:100%;    /* identical responsive sizing */
     text-decoration:none;
     color:#22163c;
     font-weight:400;
-    font-size:20px;
-    border-radius:26px;
-    box-shadow:0 18px 40px rgba(17,12,40,.10);
+    font-size:20px;  /* identical */
+    border-radius:26px; /* identical */
+    box-shadow:0 18px 40px rgba(17,12,40,.10); /* identical */
     transition:transform .12s ease,box-shadow .25s ease,filter .25s ease;
   }
+
   .oval:hover{
     transform:translateY(-2px);
     box-shadow:0 22px 48px rgba(17,12,40,.14);
@@ -241,7 +237,31 @@
   @media(prefers-reduced-motion:reduce){
     *{transition:none!important;}
   }
+
+  .back-btn {
+    position: fixed;
+    top: 84px;
+    left: 28px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    color: #3a2c6b;
+    background: #fff;
+    border: 1px solid #e6e0f5;
+    border-radius: 999px;
+    padding: 8px 16px;
+    box-shadow: 0 6px 22px rgba(19,7,63,.06);
+    transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+    z-index: 2000;
+  }
+  .back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(19,7,63,.10);
+    background: #faf7ff;
+  }
 </style>
+
+<a href="{% url 'nomy-options' %}" class="back-btn">← Back</a>
 
 <main class="wrap dailies-page">
   {% if messages %}
@@ -254,6 +274,7 @@
     <h2>Welcome to Your Dailies</h2>
     <button class="info-btn" id="openInfo" aria-label="About this page">i</button>
   </div>
+
   <p class="sub" id="greet">Good Morning</p>
 
   <section class="grid" aria-label="Emotion options">
@@ -264,25 +285,17 @@
   </section>
 </main>
 
-<!-- soft modal popup -->
 <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-content">
-    <h3 id="modalTitle" style="margin-top:0;font-weight:600;">About Dailies</h3>
-    <p>Each morning, you’ll be invited to write a short affirmation — something that grounds or encourages you. 
-      It might be as simple as “I’m allowed to take my time” or “I can begin gently today.”</p>
-
-      <p>Then, you can set one main goal for the day and list any tasks or checklists that help you move toward it. 
-      These don’t need to be big or complex — we care about the small wins too.</p>
-
-      <p>In the evening, Dailies will gently check in. You’ll have space to reflect: how did the day feel? 
-      What supported you? What felt too much? This builds emotional awareness and helps prevent burnout 
-      by making your needs visible in daily patterns.</p>
-    <button id="closeInfo" aria-label="Close information popup">Close</button>
+    <h3 id="modalTitle">About Dailies</h3>
+    <p>Each morning, you’ll be invited to write a short affirmation — something that grounds or encourages you.</p>
+    <p>Then, you can set one main goal for the day and list any tasks or checklists that help you move toward it.</p>
+    <p>In the evening, Dailies will gently check in to help you reflect on how the day felt.</p>
+    <button id="closeInfo">Close</button>
   </div>
 </div>
 
 <script>
-  // --- Time phase logic
   const now = new Date();
   const h = now.getHours();
   const isMorning = (h >= 4 && h < 14);
@@ -293,30 +306,11 @@
       ? "Good Morning"
       : "You've reached the quiet end of the day. Would you like to reflect on how things went?";
 
-  // --- Gentle soft-guard
-  const toast = document.getElementById('toast');
-  let allowNextClickUntil = 0;
-  function nudge(msg){
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(()=> toast.classList.remove('show'),2200);
-  }
-  function softGuard(e,targetPhase){
-    if(targetPhase===phase)return;
-    const nowMs=Date.now();
-    if(nowMs<allowNextClickUntil)return;
-    e.preventDefault();
-    allowNextClickUntil=nowMs+2500;
-    nudge(`It's ${phase} now — tap again to open your ${targetPhase} reflection.`);
-  }
-  document.querySelector('.oval.morning')?.addEventListener('click',(e)=>softGuard(e,'morning'));
-  document.querySelector('.oval.evening')?.addEventListener('click',(e)=>softGuard(e,'evening'));
-
-  // --- Modal logic
   const modal = document.getElementById('infoModal');
   document.getElementById('openInfo').addEventListener('click',()=> modal.classList.add('active'));
   document.getElementById('closeInfo').addEventListener('click',()=> modal.classList.remove('active'));
   modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('active'); });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') modal.classList.remove('active'); });
 </script>
+
 {% endblock %}

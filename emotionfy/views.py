@@ -257,11 +257,11 @@ SLIDES = {
     "frustration": [
         {
             "sub": "Frustration is the feeling that happens when something gets in the way of what’s needed or wanted. It’s that sense of being blocked or stuck. Everyone feels it, but for autistic people, it can be stronger and more intense because of how the brain and nervous system process information and emotion. Frustration is the body and brain’s way of saying, “Something isn’t working right now, and support is needed.”",
-            "note": "How it shows up"
+            "note": "How it Shows Up"
         },
         {
             "sub": "Frustration can show up in many ways: <br><br><b>The body might feel tight, hot or restless.<br> The mind may feel foggy, fast or overwhelmed.<br> Words might stumble, or come out louder or sharper than intended.<br> Movement might increase, pacing, clenching fists, rocking, or flapping.</b><br><br> These are all ways the nervous system tries to release built-up energy.",
-            "note": "Common Triggers"
+            "note": "Common Sources"
         },
         {
             "sub": "Frustration often builds when there are barriers that make daily life harder to manage, such as:<br><br> <b>Communication difficulties</b> – knowing what to say but not being able to express it.<br><b>Executive function challenges</b> – trouble starting, organisng, or finishing tasks.<br><b>Sensory overload</b> – too much noise, light, movement, or touch.<br><b>Changes in routine</b> – unexpected shifts or uncertainty.<br><b>Social misunderstandings</b> – being misread, interrupted, or dismissed.<br><b>Feeling unsupported</b> – not being given the time, space, or understanding needed.<br><br>These experiences can pile up and when they do, frustration can quickly turn into overwhelm.",
@@ -273,7 +273,6 @@ SLIDES = {
         }
     ]
 }
-
 
 def emotionizeStory(request):
     slug = slugify(request.GET.get("emotion", "anxiety"))
@@ -289,6 +288,22 @@ def emotionizeStory(request):
         "title": slug.capitalize(),  # "Anxiety"
         "slides": slides,            # content
         "category": category,        # e.g. "low-energy"
-        "category_url_name": f"emotionfy:{category}",  # ✅ add this line
+        "category_url_name": f"emotionfy:{category}",  
     }
     return render(request, "emotionize/emotionize-story.html", ctx)
+
+def emotionizeReflection(request):
+    # Grab emotion from ?emotion=frustration
+    emotion = slugify(request.GET.get("emotion", ""))
+
+    # Determine category using your EMOTION_CATEGORIES dict
+    category = EMOTION_CATEGORIES.get(emotion, "low-energy")
+
+    # Display name for the page
+    display_emotion = emotion.replace("-", " ").capitalize() if emotion else ""
+
+    return render(request, "emotionize/emotionize-reflection.html", {
+        "emotion": display_emotion,
+        "category": category,   # ← Now defined!
+    })
+

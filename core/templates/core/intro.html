@@ -144,6 +144,28 @@
     .pill-2 { background:#e1dcf9; }
     .pill-3 { background:#f1f1ff; }
     .pill-4 { background:#fff5e9; }
+
+    /* Waitlist-style button */
+    .enter-btn {
+      width: 100%;
+      max-width: 260px;
+      padding: 15px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), #d6c2f3);
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform .15s ease, background .2s ease;
+      margin: 24px auto 0;
+      display: none; /* shown only on last slide */
+    }
+
+    .enter-btn:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(135deg, #a59bf5, #c9b4f0);
+    }
   </style>
 </head>
 
@@ -194,14 +216,6 @@
     </article>
 
     <!-- Slide 3 -->
-    <article class="slide">
-      <div class="card">
-        <p>As you explore, you’ll notice a quiet companion — your avatar — reflecting your state, growing calmer and more grounded as you do.</p>
-        <p>It’s not here to judge or track you. It’s here to mirror what care looks like when it’s given to yourself.</p>
-      </div>
-    </article>
-
-    <!-- Slide 4 -->
     <article class="slide">
       <div class="card">
         <p>Welcome home.</p>
@@ -272,6 +286,6 @@
       render(0);
     })();
   </script>
-
+  
 </body>
 </html>

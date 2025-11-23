@@ -13,7 +13,6 @@
   --navbar-height:60px;
   --glow:#ffe68a;
 
-  /* background tint variants */
   --neutral-bg: radial-gradient(circle at 50% 35%, #f9fbff 0%, #ffffff 90%);
   --mental-bg: radial-gradient(circle at 50% 35%, #e9f0fa 0%, #ffffff 90%);
   --creative-bg: radial-gradient(circle at 50% 35%, #fff3d9 0%, #ffffff 90%);
@@ -62,7 +61,7 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
   justify-content:center;
 }
 
-/* --- reveal cards --- */
+/* reveal cards */
 .card-reveal {
   position: relative;
   height: 110px;
@@ -79,11 +78,7 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
   transition: all 0.6s ease;
   overflow: hidden;
 }
-.card-reveal.open {
-  height: 180px;
-  background: #f9f9ff;
-  box-shadow: 0 20px 50px rgba(17,12,40,0.08);
-}
+.card-reveal.open { height: 180px; background: #f9f9ff; box-shadow: 0 20px 50px rgba(17,12,40,0.08); }
 .card-reveal .front-text { opacity: 1; transition: opacity 0.4s ease; }
 .card-reveal.open .front-text { opacity: 0; }
 .card-reveal .back-content {
@@ -97,10 +92,7 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
   gap: 10px;
   transition: all 0.8s ease;
 }
-.card-reveal.open .back-content {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-}
+.card-reveal.open .back-content { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 .card-reveal .back-content a {
   background: #fff;
   padding: 8px 14px;
@@ -112,18 +104,43 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
   font-weight: 500;
   transition: transform .15s ease, background .2s ease;
 }
-.card-reveal .back-content a:hover {
-  transform: translateY(-2px);
-  background: #f5f5ff;
-}
+.card-reveal .back-content a:hover { transform: translateY(-2px); background: #f5f5ff; }
 
-/* --- colours --- */
+/* colours */
 .card-reveal.mental { background: #e9f0fa; }
 .card-reveal.creative { background: #fff8e7; }
 .card-reveal.physical { background: #ffeccf; }
 .card-reveal.sensory { background: #f4f8f3; }
 
-/* --- avatar --- */
+/* 🔒 GREYED-OUT locked card styling (matches Emotionize) */
+.locked-card {
+  opacity: 0.65;
+  cursor: default;
+  filter: grayscale(0.35);
+}
+.locked-card:hover {
+  transform: none !important;
+  box-shadow: var(--shadow) !important;
+  filter: grayscale(0.35) !important;
+}
+
+/* disable links inside */
+.locked-card .back-content a {
+  pointer-events: none;
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+/* padlock */
+.locked-card .padlock {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 28px;
+  opacity: 0.9;
+}
+
+/* avatar */
 .avatar {
   position: fixed;
   bottom: 22px;
@@ -143,7 +160,6 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
 }
 .avatar.tilt { transform: rotate(5deg) translateY(-2px); }
 
-/* --- glow --- */
 .avatar::before {
   content: "";
   position: absolute;
@@ -155,12 +171,40 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
   animation: pleasantGlow 4s ease-in-out infinite;
   z-index: -1;
 }
-@keyframes pleasantGlow {
-  0%,100% { opacity: 0.6; transform: scale(1.25); }
-  50% { opacity: 1; transform: scale(1.4); }
+
+/* modal */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,.35);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.modal-box {
+  background: white;
+  padding: 28px 30px;
+  border-radius: 22px;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.18);
+  max-width: 320px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.modal-btn {
+  margin-top: 20px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: #ece8ff;
+  color: var(--ink);
+  font-size: 15px;
 }
 
-/* --- breathing dot --- */
+/* breathing dot */
 .breath-icon {
   width:16px;height:16px;background:#d3cbf9;border-radius:50%;
   margin:0 auto 14px auto;animation:inhale 3s ease-in-out infinite;
@@ -175,7 +219,30 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
   .grid{grid-template-columns:1fr;gap:22px;}
   .avatar{width:80px;left:20px;bottom:16px;}
 }
+  /* back button */
+  .back-btn {
+    position: fixed;
+    top: 84px;
+    left: 28px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    color: #3a2c6b;
+    background: #fff;
+    border: 1px solid #e6e0f5;
+    border-radius: 999px;
+    padding: 8px 16px;
+    box-shadow: 0 6px 22px rgba(19,7,63,.06);
+    transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+    z-index: 2000;
+  }
+  .back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(19,7,63,.10);
+    background: #faf7ff;
+  }
 </style>
+<a href="{% url 'nomy-options' %}" class="back-btn">← Back</a>
 
 <div class="zoom-wrapper">
   <main class="wrap">
@@ -185,6 +252,8 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
     </div>
 
     <section class="grid" aria-label="Toolkit categories">
+
+      <!-- MENTAL (unlocked) -->
       <div class="card-reveal mental" data-card="mental">
         <div class="front-text">Mental</div>
         <div class="back-content">
@@ -193,7 +262,9 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
         </div>
       </div>
 
-      <div class="card-reveal creative" data-card="creative">
+      <!-- CREATIVE (locked + greyed) -->
+      <div class="card-reveal creative locked-card" data-card="creative" onclick="openModal()">
+        <img src="{% static 'images/padlock.png' %}" class="padlock" alt="">
         <div class="front-text">Creative</div>
         <div class="back-content">
           <a href="#">Colour</a>
@@ -201,7 +272,9 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
         </div>
       </div>
 
-      <div class="card-reveal physical" data-card="physical">
+      <!-- PHYSICAL (locked + greyed) -->
+      <div class="card-reveal physical locked-card" data-card="physical" onclick="openModal()">
+        <img src="{% static 'images/padlock.png' %}" class="padlock" alt="">
         <div class="front-text">Physical</div>
         <div class="back-content">
           <a href="#">Body Check In</a>
@@ -209,45 +282,73 @@ h2{font-size:clamp(24px,2.5vw,34px);font-weight:500;color:var(--ink);}
         </div>
       </div>
 
-      <div class="card-reveal sensory" data-card="sensory">
+      <!-- SENSORY (locked + greyed) -->
+      <div class="card-reveal sensory locked-card" data-card="sensory" onclick="openModal()">
+        <img src="{% static 'images/padlock.png' %}" class="padlock" alt="">
         <div class="front-text">Sensory</div>
         <div class="back-content">
           <a href="#">Sounds Tool</a>
           <a href="#">Grounding</a>
         </div>
       </div>
+
     </section>
   </main>
 </div>
 
-<img src="{% static 'images/avatar.png' %}" alt="NOMY avatar" class="avatar" id="avatar"/>
+<!-- modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    Subscribe to unlock this tool
+    <button class="modal-btn" onclick="closeModal()">Okay</button>
+  </div>
+</div>
 
 <script>
 const avatar = document.getElementById('avatar');
 const body = document.body;
 
-document.querySelectorAll('.card-reveal').forEach(card => {
-  card.addEventListener('click', () => {
-    const isOpen = card.classList.contains('open');
-    
-    // close all others
-    document.querySelectorAll('.card-reveal.open').forEach(c => c.classList.remove('open'));
-    
-    if (!isOpen) {
-      card.classList.add('open');
-      avatar.classList.add('tilt');
-      setTimeout(()=>avatar.classList.remove('tilt'),1000);
+function openModal(){
+  document.getElementById('modal').style.display = 'flex';
+}
+function closeModal(){
+  document.getElementById('modal').style.display = 'none';
+}
 
-      // tint background softly
-      const type = card.dataset.card;
-      const root = getComputedStyle(document.documentElement);
-      const newBg = root.getPropertyValue(`--${type}-bg`);
-      body.style.background = newBg;
-    } else {
-      const neutral = getComputedStyle(document.documentElement).getPropertyValue(`--neutral-bg`);
+document.querySelectorAll('.card-reveal').forEach(card => {
+  card.addEventListener('click', (e) => {
+
+    const isLocked = card.classList.contains('locked-card');
+    const isOpen = card.classList.contains('open');
+
+    // CLOSE CARD
+    if (isOpen) {
+      card.classList.remove('open');
+
+      const neutral = getComputedStyle(document.documentElement)
+        .getPropertyValue(`--neutral-bg`);
       body.style.background = neutral;
+
+      return;
     }
+
+    // OPEN CARD
+    document.querySelectorAll('.card-reveal.open')
+      .forEach(c => c.classList.remove('open'));
+
+    card.classList.add('open');
+
+    avatar.classList.add('tilt');
+    setTimeout(()=>avatar.classList.remove('tilt'),800);
+
+    const bg = getComputedStyle(document.documentElement)
+      .getPropertyValue(`--${card.dataset.card}-bg`);
+    body.style.background = bg;
+
+    if (isLocked) openModal();
+
   });
 });
 </script>
+
 {% endblock %}

@@ -249,7 +249,7 @@
   const pillLabels = [
     "{{ title }}",
     "How it Shows Up",
-    "Common Triggers",
+    "Common Sources",
     "It Affects"
   ];
 
@@ -285,13 +285,16 @@
     if (isLast){
       fbtn.textContent = notes[i] || "Reflect";
       fbtn.classList.add("last-slide");
-      fbtn.onclick = () => {};
-    } else {
-      fbtn.textContent = pillLabels[i+1];
-      fbtn.classList.remove("last-slide");
-      fbtn.onclick = () => go(i+1);
+      fbtn.onclick = () => {
+        window.location.href = "/emotionize/reflection/?emotion={{ emotion }}&category={{ category }}";
+      };
     }
-  }
+    else {
+          fbtn.textContent = pillLabels[i+1];
+          fbtn.classList.remove("last-slide");
+          fbtn.onclick = () => go(i+1);
+        }
+      }
 
   function go(n){
     i = Math.max(0, Math.min(slides.length-1, n));

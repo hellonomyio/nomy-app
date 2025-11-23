@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Reflection{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<style>
+    :root {
+      /* Default values */
+      --bg:#ffffff;
+      --ink:#1f003d;
+      --muted:#5e4f79;
+      --bubble:#e8e5ff;
+      --panel:#f3f2ff;
+      --button:#f1efff;
+    
+      {% if category == "energised" %}
+        --bubble: #f4f8f3;
+        --panel:  #edf6e9;
+        --button: #e3f1de;
+        --ink:    #1a3a1f;
+      {% elif category == "pleasant" %}
+        --bubble: #fff8de;
+        --panel:  #fff3cc;
+        --button: #ffeeb8;
+        --ink:    #4a3600;
+      {% elif category == "low-energy" %}
+        --bubble: #e9f0fa;
+        --panel:  #e2ecf7;
+        --button: #d6e4f5;
+        --ink:    #002f5f;
+      {% elif category == "vulnerable" %}
+        --bubble: #f1eeff;
+        --panel:  #e9e4ff;
+        --button: #e1d9ff;
+        --ink:    #2a1455;
+      {% endif %}
+    }
+    
+
+/* ---- PAGE ---- */
+.reflection-page {
+  background: var(--bg);
+  font-family: "DM Sans", sans-serif;
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* ---- SCALE WRAPPER ---- */
+.scale-wrap {
+  transform: scale(0.82);
+  transform-origin: top center;
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* ---- EMOTION LABEL ---- */
+.emotion-label {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+/* ---- PROMPT BUBBLE ---- */
+.prompt-bubble {
+  background: var(--bubble);
+  padding: 26px 40px;
+  border-radius: 34px;
+  max-width: 700px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+/* ---- TEXTAREA ---- */
+textarea {
+  width: 100%;
+  max-width: 900px;
+  min-height: 340px;
+  background: var(--panel);
+  border-radius: 42px;
+  padding: 34px 40px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  line-height: 1.6;
+  resize: vertical;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* ---- PRIMARY BUTTON ---- */
+.primary-btn {
+  background: var(--button);
+  padding: 18px 48px;
+  border-radius: 40px;
+  font-size: 18px;
+  color: var(--ink);
+  border: none;
+  cursor: pointer;
+  margin-top: 25px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.05);
+  font-weight: 500;
+  transition: transform .1s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ---- MODAL ---- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+}
+
+.modal-box {
+  background: var(--bubble);
+  padding: 40px 48px;
+  border-radius: 34px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+}
+
+.modal-box h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.modal-box p {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+/* ---- MODAL BUTTONS ---- */
+.modal-btn {
+  width: 100%;
+  padding: 14px 22px;
+  border-radius: 40px;
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: transform .1s ease;
+}
+
+.modal-btn:hover { transform: translateY(-2px); }
+
+.modal-save { background: #dcd7ff; color: var(--ink); }
+.modal-discard { background: #f6f5ff; color: var(--ink); }
+
+  /* back button */
+  .back-btn {
+    position: fixed;
+    top: 84px;
+    left: 28px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    color: #3a2c6b;
+    background: #fff;
+    border: 1px solid #e6e0f5;
+    border-radius: 999px;
+    padding: 8px 16px;
+    box-shadow: 0 6px 22px rgba(19,7,63,.06);
+    transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+    z-index: 2000;
+  }
+  .back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(19,7,63,.10);
+    background: #faf7ff;
+  }
+</style>
+<a href="javascript:history.back()" class="back-btn">← Back</a>
+
+<div class="reflection-page">
+  <div class="scale-wrap">
+
+    {% if emotion %}
+      <div class="emotion-label">Reflecting on {{ emotion }}</div>
+    {% endif %}
+
+    <div class="prompt-bubble">
+      How do you usually notice when you're feeling this way?<br>
+      What situations or triggers most often bring this feeling up for you?<br>
+      What helps you calm your body and mind when this feeling arises?
+    </div>
+
+    <textarea id="reflectionText" placeholder="Write your reflection here..."></textarea>
+
+    <button class="primary-btn" id="finishBtn">I’m done reflecting</button>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h2>You did it</h2>
+    <p>Would you like to keep what you wrote — or gently let it go?<br>
+       There’s no right choice. Choose what feels kindest to you.</p>
+
+    <button class="modal-btn modal-save" id="saveBtn">Save to Reflections</button>
+    <button class="modal-btn modal-discard" id="discardBtn">Let it go</button>
+  </div>
+</div>
+
+<script>
+const finishBtn = document.getElementById("finishBtn");
+const modalOverlay = document.getElementById("modalOverlay");
+const saveBtn = document.getElementById("saveBtn");
+const discardBtn = document.getElementById("discardBtn");
+
+finishBtn.onclick = () => {
+  modalOverlay.style.display = "flex";
+};
+
+saveBtn.onclick = () => {
+  alert("Saved! (Connect backend later)");
+  modalOverlay.style.display = "none";
+};
+
+discardBtn.onclick = () => {
+  window.location.href = "{% url 'emotionfy:reflection' %}";
+};
+</script>
+
+{% endblock %}
