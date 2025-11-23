@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Reflection{% endblock %}
+{% block title %}Emotionize Reflection{% endblock %}
 
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -88,7 +88,7 @@
 textarea {
   width: 100%;
   max-width: 900px;
-  min-height: 340px;
+  min-height: 260px;
   background: var(--panel);
   border-radius: 42px;
   padding: 34px 40px;
@@ -246,8 +246,9 @@ saveBtn.onclick = () => {
 };
 
 discardBtn.onclick = () => {
-  window.location.href = "{% url 'emotionfy:reflection' %}";
+  location.reload();
 };
+
 </script>
 
 {% endblock %}
