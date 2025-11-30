@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}NOMY • Express Yourself{% endblock %}
+
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
@@ -127,7 +128,7 @@
     border-radius: 10px;
   }
 
-  /* left align items */
+  /* scenario option button */
   .option {
     display: block;
     text-align: left;
@@ -150,7 +151,7 @@
     background: #ece9fb;
   }
 
-  /* locked state */
+  /* locked option appearance */
   .option.locked {
     background: #efeff7;
     color: #a29bb8;
@@ -168,7 +169,7 @@
     opacity: 0.9;
   }
 
-  /* modal overlay + content */
+  /* modal */
   .info-modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -199,7 +200,6 @@
     line-height: 1.7;
     font-size: 16px;
   }
-
   .modal-content h3 { margin-top: 0; margin-bottom: 18px; font-weight: 600; }
   .modal-content button {
     margin-top: 20px;
@@ -237,7 +237,7 @@
 
     <div class="scroller" aria-label="Situations">
 
-      <!-- UNLOCKED -->
+      <!-- UNLOCKED SCENARIOS -->
       <a class="option" href="{% url 'express:express-scenario' %}?situation=social-event">
         Someone invites you to a social event you don’t want to attend
       </a>
@@ -254,7 +254,7 @@
         You’re in a group and can't get a word in
       </a>
 
-      <!-- LOCKED -->
+      <!-- LOCKED (PREMIUM) -->
       <a class="option locked" href="#">
         A friend doesn’t understand why you need alone time
         <img class="lock-icon" src="{% static 'images/padlock.png' %}" alt="">
@@ -274,11 +274,55 @@
         You’re unsure how to explain sensory overload to someone
         <img class="lock-icon" src="{% static 'images/padlock.png' %}" alt="">
       </a>
+
+      <!-- CUSTOM SCENARIO INPUT TILE -->
+      <div class="option" style="padding: 24px;">
+        <form action="{% url 'express:express-custom' %}" method="post" style="margin:0;">
+          {% csrf_token %}
+
+          <label for="userScenario" style="font-weight:500; display:block; margin-bottom:10px;">
+            Add your own situation
+          </label>
+
+          <textarea 
+            id="userScenario" 
+            name="scenario" 
+            placeholder="Describe the situation you want help finding words for…" 
+            rows="3"
+            style="
+              width:100%; 
+              border-radius:14px; 
+              padding:14px; 
+              border:none; 
+              resize:vertical;
+              font-family:'DM Sans';
+              box-shadow:0 4px 12px rgba(0,0,0,0.06);
+            "
+            required></textarea>
+
+          <button 
+            type="submit" 
+            style="
+              margin-top:12px;
+              padding:10px 20px;
+              background:#d8d2f8;
+              border:none;
+              border-radius:999px;
+              cursor:pointer;
+              font-family:'DM Sans';
+              font-weight:500;
+              box-shadow:0 6px 18px rgba(17,12,40,.10);
+            ">
+            Create response →
+          </button>
+        </form>
+      </div>
+
     </div>
   </main>
 </div>
 
-<!-- info modal -->
+<!-- INFO MODAL -->
 <div class="info-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-content">
     <h3 id="modalTitle">About Express</h3>
@@ -294,6 +338,7 @@
   const modal = document.getElementById('infoModal');
   const openBtn = document.getElementById('openInfo');
   const closeBtn = document.getElementById('closeInfo');
+
   openBtn.addEventListener('click',()=>modal.classList.add('active'));
   closeBtn.addEventListener('click',()=>modal.classList.remove('active'));
   modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('active')});

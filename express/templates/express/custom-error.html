@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width:600px; margin:80px auto; text-align:center;">
+    <h2 style="color:#a02020;">Something went wrong</h2>
+    <p>{{ error }}</p>
+
+    <a href="{% url 'express:create-scenario' %}"
+       style="
+           display:inline-block;
+           margin-top:20px;
+           text-decoration:none;
+           background:#d8d2f8;
+           padding:10px 22px;
+           border-radius:999px;">
+        Try again
+    </a>
+</div>
+{% endblock %}

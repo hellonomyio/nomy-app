@@ -1,5 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from openai import OpenAI
+client = OpenAI()
+
 from django.utils.text import slugify
+
 
 # -------------------------------
 # Base pages
@@ -26,6 +30,7 @@ def expressText(request):
 SCENARIOS = {
     "social-event": {
         "prompt": "Someone invites you to a social event you don’t want to attend",
+        "style": "boundary-setting",
         "options": [
             {"label": "Be honest with myself", "type": "direct"},
             {"label": "Be kind to others", "type": "relational"},
@@ -45,8 +50,36 @@ SCENARIOS = {
             {"label": "Ask collaboratively", "type": "relational"},
         ],
     },
+    "text-over-call": {
+        "prompt": "You're explaining why you prefer text over calls",
+        "options": [
+            {"label": "Be honest with myself", "type": "direct"},
+            {"label": "Reach out gently", "type": "relational"},
+        ],
+    },
+    "group-setting": {
+        "prompt": "You’re in a group and can’t get a word in",
+        "options": [
+            {"label": "Be honest with myself", "type": "direct"},
+            {"label": "Reach out gently", "type": "relational"},
+        ],
+    },
 }
 
+STYLE_INFO = {
+    "boundary-setting": {
+        "label": "Setting Boundaries",
+        "description": "Used when you need to protect your time, energy, or comfort.",
+    },
+    "assert-turn-taking": {
+        "label": "Holding Your Turn",
+        "description": "Used when someone interrupts or talks over you.",
+    },
+    "clarify-info": {
+        "label": "Requesting Clarity",
+        "description": "Used when instructions or expectations aren't clear.",
+    },
+}
 
 # -------------------------------
 # Response data
@@ -64,6 +97,14 @@ RESPONSES = {
     "unclear-instructions": {
         "direct": "Could you clarify what’s expected for this task?",
         "relational": "I just want to make sure I’ve understood your request correctly — could you clarify what’s needed?",
+    },
+    "text-over-call": {
+        "direct": "I find calls stressful. I prefer texting.",
+        "relational": "Texting helps me focus and express myself clearly. I appreciate when people are understanding of that.",
+    },
+    "group-setting": {
+        "direct": "I’d like to share something too.",
+        "relational": "I want to share something that connects with what you said. Can I go next?",
     },
 }
 
@@ -112,3 +153,49 @@ def expressResponse(request):
     }
 
     return render(request, "express/express-intro.html", context)
+
+def expressCustom(request):
+    if request.method != "POST":
+        return redirect("express:intro")
+
+    user_scenario = request.POST.get("scenario", "").strip()
+
+    if not user_scenario:
+        return render(request, "express/custom-error.html", {
+            "error": "Please enter a situation."
+        })
+
+    # --- GPT QUERY ---
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-4.1-mini",  # use GPT-5 later when available
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You help late-diagnosed autistic adults express themselves "
+                        "in difficult or unclear social moments. "
+                        "Give a response that is short (1–2 sentences), emotionally validating, "
+                        "and direct but gentle. Avoid shame, masking, or overly formal tone."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": f"Scenario: {user_scenario}\nProvide a gentle/directional response I could say."
+                }
+            ]
+        )
+
+        ai_response = completion.choices[0].message.content.strip()
+
+    except Exception as e:
+        return render(request, "express/custom-error.html", {"error": str(e)})
+
+    # --- RENDER THE RESPONSE PAGE ---
+    return render(request, "express/custom-response.html", {
+        "user_scenario": user_scenario,
+        "response": ai_response,
+    })
+
+def createScenarioPage(request):
+    return render(request, "express/create-scenario.html")

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width:700px; margin:100px auto; text-align:center;">
+  <h2>Here’s a way you could express that:</h2>
+
+  <p style="margin-top:20px; color:#6a5d8f">
+    <strong>Your scenario:</strong><br>
+    "{{ user_scenario }}"
+  </p>
+
+  <div style="
+    margin-top:30px;
+    background:#f5f4fc;
+    padding:24px;
+    border-radius:20px;
+    font-size:20px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  ">
+    {{ response }}
+  </div>
+
+  <a href="{% url 'express:create-scenario' %}" 
+     style="display:inline-block; margin-top:35px; background:#d8d2f8;
+            padding:10px 22px; border-radius:999px; text-decoration:none;">
+    Back
+  </a>
+</div>
+{% endblock %}

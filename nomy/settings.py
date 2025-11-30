@@ -6,6 +6,11 @@ Updated for deployment on Render / Railway (auto-deploy from GitHub)
 import os
 from pathlib import Path
 import dj_database_url
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
+OPENAI_API_KEY = env("OPENAI_API_KEY")
 
 # ------------------------------------------------------
 # BASE DIRECTORY
