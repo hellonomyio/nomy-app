@@ -9,6 +9,6 @@ urlpatterns = [
     path('breathing/triangle', views.triangleBreathing, name='toolkit-triangle-breathing'),
     path('breathing/extended-exhale', views.extendedExhale, name='toolkit-extended-exhale'),
     path('puzzles/', views.puzzles, name='toolkit-puzzles'),
-    path('puzzles/colour-match', views.colourMatch, name='toolkit-colour-match'),
+    path('puzzles/memory-pairing', views.memoryPairing, name='toolkit-memory-pairing'),
 
 ]

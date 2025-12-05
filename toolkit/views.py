@@ -19,8 +19,8 @@ def extendedExhale(request):
 def puzzles(request):
     return render(request, 'toolkit/puzzles.html')
 
-def colourMatch(request):
-    return render(request, 'toolkit/colour-match.html')
+def memoryPairing(request):
+    return render(request, 'toolkit/memory-pairing.html')
 
 def options(request):
     return render(request, 'toolkit/options.html')

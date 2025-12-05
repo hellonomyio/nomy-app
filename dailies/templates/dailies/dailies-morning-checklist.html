@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Today's Checklist{% endblock %}
+
+{% block content %}
+
+<style>
+  :root{
+    --ink:#2e2840;
+    --muted:#6b647d;
+    --panel:#f4f3ff;
+    --shadow:0 24px 60px rgba(0,0,0,.10);
+  }
+
+  #checklist-page,
+  #checklist-page * {
+    box-sizing:border-box;
+    font-family:"DM Sans",sans-serif;
+  }
+
+  #checklist-page{
+    width:min(760px,92vw);
+    margin:0 auto;
+    padding:55px 20px 60px;
+    text-align:center;
+    color:var(--ink);
+  }
+
+  #checklist-page h1{
+    margin:0 0 28px;
+    font-weight:600;
+    font-size:clamp(26px,3.5vw,34px);
+  }
+
+  .checklist-card{
+    margin:0 auto 12px;
+    max-width:520px;
+    background:#f4f3ff;
+    border-radius:32px;
+    box-shadow:var(--shadow);
+    padding:28px 34px;
+    text-align:left;
+  }
+
+  .task-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:10px 0;
+  }
+
+  .task-row input[type="checkbox"]{
+    width:18px;
+    height:18px;
+    border-radius:4px;
+    border:1px solid #c3bfdc;
+    appearance:none;
+    cursor:pointer;
+    position:relative;
+    background:#fff;
+  }
+
+  .task-row input[type="checkbox"]:checked::after{
+    content:"";
+    position:absolute;
+    inset:3px;
+    background:#2e2840;
+    border-radius:2px;
+  }
+
+  .task-row input[type="text"]{
+    flex:1;
+    font-size:16px;
+    padding:8px 10px;
+    border:none;
+    border-bottom:1px solid #d7d3e8;
+    background:transparent;
+    outline:none;
+    color:var(--ink);
+  }
+
+  .task-row input[type="text"]::placeholder{
+    color:#a7a1bd;
+  }
+
+  /* ✨ NEW – Enter hint, styled similar to “Tap to enter NOMY” */
+  .enter-hint {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b647d;
+    opacity: 0.8;
+    margin-top: 10px;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+
+  .checklist-actions{
+    margin-top:30px;
+    text-align:center;
+  }
+
+  .checklist-actions button{
+    appearance:none;
+    border:0;
+    cursor:pointer;
+    padding:12px 28px;
+    border-radius:999px;
+    background:#f4f1ff;
+    color:var(--ink);
+    font:700 15px "DM Sans",sans-serif;
+    box-shadow:0 10px 24px rgba(0,0,0,.08);
+    transition:transform .12s ease, box-shadow .25s ease, background .25s ease;
+  }
+
+  .checklist-actions button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 40px rgba(0,0,0,.14);
+    background:#efe9ff;
+  }
+
+  .add-task-btn{
+    margin-top:18px;
+    font-size:14px;
+    color:#6b647d;
+    cursor:pointer;
+    text-decoration:underline;
+    text-align:center;
+  }
+
+  /* modal */
+  .checklist-intro-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(15,10,40,.16);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
+  }
+
+  .checklist-intro-backdrop.hidden{
+    display:none;
+  }
+
+  .checklist-intro-panel{
+    max-width:380px;
+    width:90vw;
+    background:#ffffff;
+    border-radius:24px;
+    padding:22px 22px 20px;
+    box-shadow:0 20px 60px rgba(0,0,0,.18);
+    text-align:left;
+  }
+
+  .checklist-intro-panel p{
+    margin:0 0 16px;
+    font-size:15px;
+    color:var(--ink);
+  }
+
+  .checklist-intro-panel button{
+    appearance:none;
+    border:0;
+    border-radius:999px;
+    padding:8px 18px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    background:#f4f1ff;
+    color:var(--ink);
+  }
+
+  .checklist-intro-panel button:hover{
+    background:#efe9ff;
+  }
+
+  .back-btn{
+    position:fixed;
+    top:84px;
+    left:28px;
+    text-decoration:none;
+    font-size:15px;
+    color:#3a2c6b;
+    background:#fff;
+    border:1px solid #e6e0f5;
+    border-radius:999px;
+    padding:8px 16px;
+    box-shadow:0 6px 22px rgba(19,7,63,.06);
+    transition:.1s;
+    z-index:2000;
+  }
+
+  .back-btn:hover{
+    transform:translateY(-2px);
+    background:#faf7ff;
+  }
+</style>
+
+<a href="{% url 'dailies:morningGoal' %}" class="back-btn">← Back</a>
+
+<div id="checklist-page">
+
+  <h1>Today’s checklist</h1>
+
+  <div class="checklist-card" id="taskContainer"></div>
+
+  <!-- NEW ENTER HINT -->
+  <p class="enter-hint">Press Enter to add a new item</p>
+
+  <div class="add-task-btn" id="addTaskBtn">+ Add another task</div>
+
+  <div class="checklist-actions">
+    <button id="saveChecklist">Save</button>
+  </div>
+
+</div>
+
+<div id="checklistIntro" class="checklist-intro-backdrop hidden">
+  <div class="checklist-intro-panel">
+    <p>Use this checklist to create ease and focus. Do not feel pressured to fill every moment.</p>
+    <button type="button" id="introClose">Got it</button>
+  </div>
+</div>
+
+<script>
+  const taskContainer = document.getElementById("taskContainer");
+  const addTaskBtn = document.getElementById("addTaskBtn");
+  const saveBtn = document.getElementById("saveChecklist");
+
+  const intro = document.getElementById("checklistIntro");
+  const introCloseBtn = document.getElementById("introClose");
+
+  let introShown = false;
+
+  const today = new Date().toLocaleDateString("en-GB");
+  let all = JSON.parse(localStorage.getItem("nomy_dailies") || "[]");
+  let todayEntry = all.find(e => e.date === today);
+
+  if (!todayEntry) {
+    todayEntry = { date: today };
+    all.push(todayEntry);
+  }
+
+  // --- CREATE TASK ROW ---
+  function createTaskRow(text = "", checked = false) {
+    const row = document.createElement("div");
+    row.className = "task-row";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = checked;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = text;
+    input.placeholder = "Add a task…";
+
+    checkbox.addEventListener("click", showIntroOnce);
+    input.addEventListener("focus", showIntroOnce);
+
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        createTaskRow();
+        setTimeout(() => {
+          const newInput = taskContainer.querySelector(".task-row:last-child input[type='text']");
+          newInput.focus();
+        }, 60);
+      }
+    });
+
+    row.appendChild(checkbox);
+    row.appendChild(input);
+
+    taskContainer.appendChild(row);
+  }
+
+  function showIntroOnce() {
+    if (!introShown) {
+      intro.classList.remove("hidden");
+      introShown = true;
+    }
+  }
+
+  introCloseBtn.addEventListener("click", () => {
+    intro.classList.add("hidden");
+  });
+
+  if (todayEntry.checklist && Array.isArray(todayEntry.checklist)) {
+    todayEntry.checklist.forEach(item => {
+      createTaskRow(item.text, item.checked);
+    });
+  } else {
+    createTaskRow();
+  }
+
+  addTaskBtn.addEventListener("click", () => {
+    createTaskRow();
+  });
+
+  saveBtn.addEventListener("click", () => {
+    const rows = document.querySelectorAll(".task-row");
+    const checklist = [];
+
+    rows.forEach(row => {
+      const text = row.querySelector("input[type='text']").value.trim();
+      const checked = row.querySelector("input[type='checkbox']").checked;
+
+      if (text !== "") {
+        checklist.push({ text, checked });
+      }
+    });
+
+    todayEntry.checklist = checklist;
+    localStorage.setItem("nomy_dailies", JSON.stringify(all));
+
+    document.getElementById('checklist-page').innerHTML = `
+      <h1>Checklist saved 🌿</h1>
+      <p style="opacity:.85; max-width:420px; margin:0 auto 36px;">
+        Your checklist for today has been saved.
+      </p>
+      <div class="checklist-actions">
+        <button onclick="window.location.href='{% url 'dailies:dailies-home' %}'">
+          Back to Dailies
+        </button>
+      </div>
+    `;
+  });
+</script>
+
+{% endblock %}

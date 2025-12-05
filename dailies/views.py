@@ -10,6 +10,9 @@ def dailiesMorningAffirmation(request):
 def dailiesMorningGoal(request):
     return render(request, 'dailies/dailies-morning-goal.html')
 
+def dailiesMorningChecklist(request):
+    return render(request, 'dailies/dailies-morning-checklist.html')
+
 def dailiesEvening(request):
     return render(request, 'dailies/dailies-evening.html')
 

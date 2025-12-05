@@ -1,104 +1,182 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}NOMY • Dailies{% endblock %}
+{% block title %}Morning Affirmation{% endblock %}
 
 {% block content %}
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NOMY • Morning Affirmation</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  #affirm-page,
+  #affirm-page * {
+      box-sizing: border-box;
+      font-family: "DM Sans", sans-serif;
+  }
 
-  <style>
-    :root{
-      --bg:#ffffff;
-      --ink:#2e2840;
-      --muted:#6b647d;
-      --panel:#eaeaf5;
-      --shadow:0 24px 60px rgba(0,0,0,.10);
-      --radius:26px;
-      --lavender:#f4f1ff;
+  #affirm-page {
+      width: min(760px, 92vw);
+      margin: 0 auto;
+      padding: 55px 20px 60px; 
+      text-align: center;
+      color: #2e2840;
+  }
+
+  #affirm-page h1 {
+      margin: 0 0 20px;
+      font-weight: 600;
+      font-size: clamp(26px, 3.5vw, 38px);
+  }
+
+  #affirm-page p.sub {
+      margin: 0 0 32px;
+      color: #6b647d;
+      font-size: clamp(15px, 1.6vw, 18px);
+  }
+
+  #affirmation {
+      width: 100%;
+      height: clamp(220px, 36vh, 320px);
+      padding: 24px 20px;
+      border: none;
+      background: #eaeaf5;
+      border-radius: 26px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.10);
+      color: #2e2840;
+      font: 500 16px/1.5 "DM Sans", sans-serif;
+      resize: vertical;
+      outline: none;
+  }
+
+  #affirm-page .hint {
+      margin-top: 12px;
+      color: #6b647d;
+      font-size: clamp(13px, 1.4vw, 16px);
+      white-space: pre-line;
+  }
+
+  #affirm-page .actions { 
+      margin-top: 48px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+  }
+
+  #affirm-page button {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font: 700 15px "DM Sans", sans-serif;
+      transition: transform .12s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  }
+
+  .primary-btn {
+      background: #f4f1ff;
+      color: #2e2840;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  }
+
+  .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.14);
+      background: #efe9ff;
+  }
+
+  .skip-btn {
+      background: transparent;
+      color: #6b647d;
+      border: 1px solid #d6d0ec;
+      box-shadow: none;
+  }
+
+  .skip-btn:hover {
+      background: #f8f6ff;
+      border-color: #c3bddf;
+      transform: translateY(-1px);
+  }
+
+  .affirm-back-btn {
+      position: fixed;
+      top: 84px;
+      left: 28px;
+      font-size: 15px;
+      color: #3a2c6b;
+      background: #fff;
+      border: 1px solid #e6e0f5;
+      border-radius: 999px;
+      padding: 8px 16px;
+      box-shadow: 0 6px 22px rgba(19,7,63,.06);
+      z-index: 2000;
+      text-decoration: none;
+  }
+
+  .affirm-back-btn:hover {
+      transform: translateY(-2px);
+      background: #faf7ff;
+  }
+</style>
+
+<a href="{% url 'dailies:dailies-home' %}" class="affirm-back-btn">← Back to Dailies Menu</a>
+
+<div id="affirm-page">
+
+  <h1>Good Morning</h1>
+  <p class="sub">My Daily Affirmation</p>
+
+  <form id="affirmationForm">
+
+    <textarea id="affirmation" placeholder="Type your affirmation…"></textarea>
+
+    <p class="hint">
+I don’t have to mask to be worthy
+I can rest without guilt
+I move at my own pace
+    </p>
+
+    <div class="actions">
+      <button type="submit" class="primary-btn">Save & next step →</button>
+      <button type="button" id="skipBtn" class="skip-btn">Skip for now</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  const today = new Date().toLocaleDateString("en-GB");
+
+  // LOAD any existing dailies entry for today
+  let all = JSON.parse(localStorage.getItem("nomy_dailies") || "[]");
+  let todayEntry = all.find(e => e.date === today);
+
+  // Prefill if already exists
+  if (todayEntry && todayEntry.affirmation) {
+      document.getElementById("affirmation").value = todayEntry.affirmation;
+  }
+
+  document.getElementById('affirmationForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const affirmation = document.getElementById('affirmation').value.trim();
+    if(!affirmation) return alert("Please write your affirmation 🌿");
+
+    if (!todayEntry) {
+        // Create today’s entry
+        todayEntry = { date: today, affirmation: affirmation };
+        all.push(todayEntry);
+    } else {
+        // Update existing entry
+        todayEntry.affirmation = affirmation;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:var(--bg); color:var(--ink);
-      font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      display:flex; justify-content:center; align-items:flex-start;
-    }
+    localStorage.setItem('nomy_dailies', JSON.stringify(all));
 
-    main{width:min(760px,92vw);padding:80px 20px;text-align:center}
+    window.location.href = "{% url 'dailies:morningGoal' %}";
+  });
 
-    h1{margin:0 0 20px;font-weight:600;font-size:clamp(26px,3.5vw,38px)}
-    p.sub{margin:0 0 32px;color:var(--muted);font-size:clamp(15px,1.6vw,18px)}
-
-    textarea{
-      width:100%;
-      height:clamp(220px,36vh,320px);
-      padding:24px 20px;
-      border:none;
-      background:var(--panel);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      color:var(--ink);
-      font:500 16px/1.5 "DM Sans",sans-serif;
-      resize:vertical;
-      outline:none;
-    }
-
-    .hint{margin-top:12px;color:var(--muted);font-size:clamp(13px,1.4vw,16px)}
-    .actions{margin-top:48px}
-
-    button{
-      appearance:none;border:0;cursor:pointer;
-      padding:14px 28px;
-      border-radius:999px;
-      background:var(--lavender);
-      color:var(--ink);
-      font:700 16px "DM Sans",sans-serif;
-      box-shadow:0 10px 24px rgba(0,0,0,.08);
-      transition:transform .12s ease,box-shadow .25s ease,background .25s ease;
-    }
-    button:hover{
-      transform:translateY(-2px);
-      box-shadow:0 18px 40px rgba(0,0,0,.14);
-      background:#efe9ff;
-    }
-  </style>
-</head>
-
-<body>
-  <main>
-    <h1>Good Morning</h1>
-    <p class="sub">What do you want to remind yourself of today?</p>
-
-    <form id="affirmationForm">
-      <textarea id="affirmation" placeholder="Type your affirmation…"></textarea>
-      <p class="hint">Examples: I can move at my own pace · I am enough · Rest is productive</p>
-      <div class="actions">
-        <button type="submit">Next →</button>
-      </div>
-    </form>
-  </main>
-
-  <script>
-    document.getElementById('affirmationForm').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const affirmation = document.getElementById('affirmation').value.trim();
-      if(!affirmation) return alert("Please write your affirmation 🌿");
-      
-      // Save affirmation temporarily
-      localStorage.setItem('nomy_affirmation', affirmation);
-      
-      // Redirect to goal page
+  // Skip goes straight to goals without saving
+  document.getElementById("skipBtn").addEventListener("click", () => {
       window.location.href = "{% url 'dailies:morningGoal' %}";
-    });
-  </script>
-</body>
-</html>
+  });
+</script>
+
 {% endblock %}

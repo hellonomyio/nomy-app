@@ -1,41 +1,41 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}NOMY • Dailies{% endblock %}
+{% block title %}Morning Goal{% endblock %}
 
 {% block content %}
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NOMY • Morning Goal</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
+<style>
     :root{
-      --bg:#ffffff;
-      --ink:#2e2840;
-      --muted:#6b647d;
-      --panel:#eaeaf5;
-      --shadow:0 24px 60px rgba(0,0,0,.10);
-      --radius:26px;
-      --lavender:#f4f1ff;
+      --goal-bg:#ffffff;
+      --goal-ink:#2e2840;
+      --goal-muted:#6b647d;
+      --goal-panel:#eaeaf5;
+      --goal-shadow:0 24px 60px rgba(0,0,0,.10);
+      --goal-radius:26px;
+      --goal-lavender:#f4f1ff;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:var(--bg); color:var(--ink);
-      font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      display:flex; justify-content:center; align-items:flex-start;
+    #goal-page {
+      width:min(760px,92vw);
+      margin:0 auto;
+      padding:55px 20px 60px;
+      text-align:center;
+      font-family:"DM Sans",sans-serif;
     }
 
-    main{width:min(760px,92vw);padding:80px 20px;text-align:center}
+    #goal-page h1 {
+      margin:0 0 12px;
+      font-weight:600;
+      font-size:clamp(26px,3.5vw,38px);
+      color:var(--goal-ink);
+    }
 
-    h1{margin:0 0 12px;font-weight:600;font-size:clamp(26px,3.5vw,38px)}
-    p.sub{margin:0 0 32px;color:var(--muted);font-size:clamp(15px,1.6vw,18px)}
+    #goal-page p.sub {
+      margin:0 0 32px;
+      color:var(--goal-muted);
+      font-size:clamp(15px,1.6vw,18px);
+    }
 
     .affirmation-summary{
       background:#faf7ff;
@@ -45,46 +45,99 @@
       margin:0 auto 36px;
       max-width:520px;
       font-size:clamp(15px,1.4vw,18px);
-      color:var(--ink);
+      color:var(--goal-ink);
     }
 
-    textarea{
+    #goal {
       width:100%;
       height:clamp(220px,36vh,320px);
       padding:24px 20px;
       border:none;
-      background:var(--panel);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      color:var(--ink);
+      background:var(--goal-panel);
+      border-radius:var(--goal-radius);
+      box-shadow:var(--goal-shadow);
+      color:var(--goal-ink);
       font:500 16px/1.5 "DM Sans",sans-serif;
       resize:vertical;
       outline:none;
     }
 
-    .hint{margin-top:12px;color:var(--muted);font-size:clamp(13px,1.4vw,16px)}
-    .actions{margin-top:48px}
+    .hint {
+      margin-top:12px;
+      color:var(--goal-muted);
+      font-size:clamp(13px,1.4vw,16px);
+    }
 
-    button{
-      appearance:none;border:0;cursor:pointer;
+    .actions { 
+      margin-top:48px; 
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    #goal-page button {
+      appearance:none;
+      border:0;
+      cursor:pointer;
       padding:14px 28px;
       border-radius:999px;
-      background:var(--lavender);
-      color:var(--ink);
       font:700 16px "DM Sans",sans-serif;
-      box-shadow:0 10px 24px rgba(0,0,0,.08);
-      transition:transform .12s ease,box-shadow .25s ease,background .25s ease;
+      transition:transform .12s ease, box-shadow .25s ease, background .25s ease;
     }
-    button:hover{
+
+    .primary-btn {
+      background:var(--goal-lavender);
+      color:var(--goal-ink);
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
+    }
+
+    .primary-btn:hover {
       transform:translateY(-2px);
       box-shadow:0 18px 40px rgba(0,0,0,.14);
       background:#efe9ff;
     }
-  </style>
-</head>
 
-<body>
-  <main id="page">
+    .skip-btn {
+      background:transparent;
+      color:var(--goal-muted);
+      border:1px solid #d6d0ec;
+      box-shadow:none;
+    }
+
+    .skip-btn:hover {
+      background:#f8f6ff;
+      border-color:#c3bddf;
+      transform:translateY(-1px);
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 84px;
+      left: 28px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 400;
+      color: #3a2c6b;
+      background: #fff;
+      border: 1px solid #e6e0f5;
+      border-radius: 999px;
+      padding: 8px 16px;
+      box-shadow: 0 6px 22px rgba(19,7,63,.06);
+      transition: .1s;
+      z-index: 2000;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(19,7,63,.10);
+      background: #faf7ff;
+    }
+</style>
+
+<a href="{% url 'dailies:morningAffirmation' %}" class="back-btn">← Back to Morning Affirmation</a>
+
+<main id="goal-page">
     <h1>Let’s set your focus</h1>
     <p class="sub">What’s one gentle thing you’d like to achieve today?</p>
 
@@ -93,46 +146,56 @@
     <form id="goalForm">
       <textarea id="goal" placeholder="Write your goal for today…"></textarea>
       <p class="hint">Remember, no goal is too big or too small.</p>
-      <div class="actions"><button type="submit">Save 🌿</button></div>
+
+      <div class="actions">
+        <button type="submit" class="primary-btn">Save & next step →</button>
+        <button type="button" id="skipBtn" class="skip-btn">Skip for now</button>
+      </div>
+
     </form>
-  </main>
+</main>
 
-  <script>
-    const summaryBox = document.getElementById("affirmationSummary");
-    const affirmation = localStorage.getItem("nomy_affirmation");
+<script>
+  const today = new Date().toLocaleDateString("en-GB");
+  const summaryBox = document.getElementById("affirmationSummary");
 
-    if(affirmation){
-      summaryBox.innerHTML = `You said earlier: <em>“${affirmation}”</em>`;
-    } else {
+  let all = JSON.parse(localStorage.getItem("nomy_dailies") || "[]");
+  let todayEntry = all.find(e => e.date === today);
+
+  // Show today's affirmation if exists
+  if (todayEntry && todayEntry.affirmation) {
+      summaryBox.innerHTML = `You said earlier: <em>“${todayEntry.affirmation}”</em>`;
+  } else {
       summaryBox.innerHTML = `<em>No affirmation found</em>`;
+  }
+
+  // Prefill goal if exists
+  if (todayEntry && todayEntry.goal) {
+      document.getElementById("goal").value = todayEntry.goal;
+  }
+
+  // SAVE & NEXT STEP
+  document.getElementById('goalForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const goal = document.getElementById('goal').value.trim();
+    if(!goal) return alert("Please write your goal 🌱");
+
+    if (!todayEntry) {
+      todayEntry = { date: today, goal: goal };
+      all.push(todayEntry);
+    } else {
+      todayEntry.goal = goal;
     }
 
-    document.getElementById('goalForm').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const goal = document.getElementById('goal').value.trim();
-      if(!goal) return alert("Please write your goal 🌱");
+    localStorage.setItem('nomy_dailies', JSON.stringify(all));
 
-      const entry = {
-        date: new Date().toLocaleDateString(),
-        affirmation: affirmation || "",
-        goal: goal
-      };
+    window.location.href = "{% url 'dailies:morningChecklist' %}";
+  });
 
-      const all = JSON.parse(localStorage.getItem('nomy_dailies') || "[]");
-      all.push(entry);
-      localStorage.setItem('nomy_dailies', JSON.stringify(all));
+  // SKIP BUTTON
+  document.getElementById("skipBtn").addEventListener("click", () => {
+      window.location.href = "{% url 'dailies:morningChecklist' %}";
+  });
+</script>
 
-      localStorage.removeItem('nomy_affirmation');
-
-      document.getElementById('page').innerHTML = `
-        <h1>Saved 🌤</h1>
-        <p style="opacity:.8;">Your reflection has been added to your Dailies.<br>You can view it anytime from the menu.</p>
-        <div class="actions">
-          <button onclick="window.location.href='{% url 'dailies:morningAffirmation' %}'">Start again</button>
-        </div>
-      `;
-    });
-  </script>
-</body>
-</html>
 {% endblock %}

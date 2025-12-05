@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Colour Match{% endblock %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --ink:#1f003d;
+  --muted:#5e4f79;
+  --shadow:0 18px 40px rgba(17,12,40,.08);
+  --radius:26px;
+  --pill:#e9f0fa;
+  --tile:#564d74; /* face-down colour */
+}
+
+/* Reset & base */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background: radial-gradient(circle at 50% 35%, #f9fbff 0%, #ffffff 90%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
+  overflow:hidden;
+}
+
+.back-btn {
+  position: fixed;
+  top: 84px;
+  left: 28px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #3a2c6b;
+  background: #fff;
+  border: 1px solid #e6e0f5;
+  border-radius: 999px;
+  padding: 8px 16px;
+  box-shadow: 0 6px 22px rgba(19,7,63,.06);
+  transition: transform .1s ease;
+  z-index: 2000;
+}
+.back-btn:hover { transform: translateY(-2px); }
+
+.zoom-wrapper{
+  transform:scale(0.85);
+  transform-origin:top center;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:30px;
+}
+
+.oval{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--pill);
+  color:var(--ink);
+  border-radius:var(--radius);
+  height:70px;
+  width:240px;
+  font-size:19px;
+  font-weight:500;
+  box-shadow:var(--shadow);
+}
+
+.sub{
+  font-size:17px;
+  color:var(--muted);
+  max-width:560px;
+  line-height:1.6;
+}
+
+/* Countdown */
+#countdown {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: -10px;
+  color: #1f003d;
+}
+
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,80px);
+  grid-gap:20px;
+  justify-content:center;
+}
+.tile{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  background:var(--tile);
+  cursor:pointer;
+  transition:background .4s ease, transform .2s ease;
+}
+.tile.revealed{transform:scale(1.05);}
+
+button{
+  background:none;
+  border:none;
+  color:var(--ink);
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  transition:opacity .2s ease;
+}
+button:hover{opacity:.7;}
+
+@media(max-width:720px){
+  .zoom-wrapper{transform:scale(1);}
+}
+</style>
+
+<a href="{% url 'toolkit:toolkit-puzzles' %}" class="back-btn">← Back to Puzzles</a>
+
+<div class="zoom-wrapper">
+  <div class="oval">Memory Pairing</div>
+  <p id="instructions" class="sub">Here’s your pattern. Take a moment to notice the colours and where they sit.</p>
+  <p id="countdown"></p>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+  /* The 8 colours — pairs will be created dynamically */
+  const baseColours = [
+    "#5ce1e6", "#e2a9f1", "#bf7e74", "#f38c7f",
+    "#ffde59", "#ff66c4", "#ffbd59", "#38b6ff"
+  ];
+  
+  let tileset = [];
+  const grid = document.getElementById("grid");
+  const instr = document.getElementById("instructions");
+  const countdownEl = document.getElementById("countdown");
+  
+  let first = null, second = null, locked = false;
+  
+  /* 🔁 Generate new shuffled board */
+  function createShuffledTiles() {
+    const doubled = [...baseColours, ...baseColours];
+    tileset = doubled.sort(() => Math.random() - 0.5);
+  }
+  
+  /* 🎨 Build grid */
+  function createTiles() {
+    grid.innerHTML = "";
+    tileset.forEach((c, i) => {
+      const tile = document.createElement("div");
+      tile.className = "tile";
+      tile.dataset.color = c;
+      tile.dataset.index = i;
+      grid.appendChild(tile);
+    });
+  }
+  
+  /* ⏳ Start 3-second preview */
+  function startPreview() {
+    const tiles = document.querySelectorAll(".tile");
+  
+    // Show pattern
+    tiles.forEach(t => t.style.background = t.dataset.color);
+    instr.textContent = "Here’s your pattern. Take a moment to notice the colours and where they sit.";
+  
+    let count = 3;
+    countdownEl.textContent = "3";
+  
+    const timer = setInterval(() => {
+      count--;
+      if (count > 0) {
+        countdownEl.textContent = count;
+      } else {
+        clearInterval(timer);
+        countdownEl.textContent = "";
+  
+        // Flip them all
+        tiles.forEach(t => {
+          t.style.background = "var(--tile)";
+          t.classList.remove("revealed");
+        });
+  
+        instr.textContent =
+          "Now, try to match the colours from memory. Flip two tiles to see their colours. If they match, they’ll stay face up.";
+  
+        enablePlay();
+      }
+    }, 1000);
+  }
+  
+  /* 🎮 Enable gameplay */
+  function enablePlay() {
+    const tiles = document.querySelectorAll(".tile");
+    tiles.forEach(t => {
+      t.onclick = () => {
+        if (locked || t.classList.contains("matched") || t === first) return;
+  
+        t.style.background = t.dataset.color;
+        t.classList.add("revealed");
+  
+        if (!first) {
+          first = t;
+        } else {
+          second = t;
+          checkMatch();
+        }
+      };
+    });
+  }
+  
+  /* 🧠 Match check */
+  function checkMatch() {
+    locked = true;
+  
+    if (first.dataset.color === second.dataset.color) {
+      first.classList.add("matched");
+      second.classList.add("matched");
+  
+      resetSelections();
+      checkIfFinished();
+    } else {
+      setTimeout(() => {
+        first.style.background = "var(--tile)";
+        second.style.background = "var(--tile)";
+        first.classList.remove("revealed");
+        second.classList.remove("revealed");
+        resetSelections();
+      }, 900);
+    }
+  }
+  
+  function resetSelections() {
+    [first, second, locked] = [null, null, false];
+  }
+  
+  /* 🎉 When all tiles matched */
+  function checkIfFinished() {
+    const tiles = document.querySelectorAll(".tile");
+    const allMatched = [...tiles].every(t => t.classList.contains("matched"));
+  
+    if (allMatched) {
+      instr.textContent =
+        "Well done. You moved through that at your own pace, and that’s exactly enough.";
+  
+      // Hide grid
+      grid.style.opacity = "0";
+      grid.style.pointerEvents = "none";
+  
+      // Add Restart button
+      const restartBtn = document.createElement("button");
+      restartBtn.textContent = "Restart";
+      restartBtn.style.marginTop = "20px";
+      restartBtn.style.fontSize = "18px";
+      restartBtn.style.fontWeight = "600";
+  
+      restartBtn.onclick = () => {
+        restartBtn.remove();
+        grid.style.opacity = "1";
+        grid.style.pointerEvents = "auto";
+        startGame();
+      };
+  
+      instr.insertAdjacentElement("afterend", restartBtn);
+    }
+  }
+  
+  /* 🔄 Full game reset */
+  function startGame() {
+    // Remove any lingering matches
+    first = second = null;
+    locked = false;
+  
+    createShuffledTiles();
+    createTiles();
+    startPreview();
+  }
+  
+  /* 🚀 Launch on load */
+  window.onload = startGame;
+  </script>
+  
+
+{% endblock %}

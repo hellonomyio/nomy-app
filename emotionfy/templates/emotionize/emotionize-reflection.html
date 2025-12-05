@@ -231,24 +231,47 @@ textarea {
 </div>
 
 <script>
-const finishBtn = document.getElementById("finishBtn");
-const modalOverlay = document.getElementById("modalOverlay");
-const saveBtn = document.getElementById("saveBtn");
-const discardBtn = document.getElementById("discardBtn");
-
-finishBtn.onclick = () => {
-  modalOverlay.style.display = "flex";
-};
-
-saveBtn.onclick = () => {
-  alert("Saved! (Connect backend later)");
-  modalOverlay.style.display = "none";
-};
-
-discardBtn.onclick = () => {
-  location.reload();
-};
-
+    const finishBtn = document.getElementById("finishBtn");
+    const modalOverlay = document.getElementById("modalOverlay");
+    const saveBtn = document.getElementById("saveBtn");
+    const discardBtn = document.getElementById("discardBtn");
+    
+    function getTodayUKDate() {
+      const d = new Date();
+      return d.toLocaleDateString("en-GB"); // e.g. 30/11/2025
+    }
+    
+    finishBtn.onclick = () => {
+      modalOverlay.style.display = "flex";
+    };
+    
+    saveBtn.onclick = () => {
+      const text = document.getElementById("reflectionText").value.trim();
+      if (!text) {
+        alert("Please write something before saving.");
+        return;
+      }
+    
+      const entry = {
+        date: getTodayUKDate(),
+        emotion: "{{ emotion|lower }}",
+        reflection: text
+      };
+    
+      // Get all past emotion reflections
+      const all = JSON.parse(localStorage.getItem("nomy_emotion_reflections") || "[]");
+      all.push(entry);
+    
+      localStorage.setItem("nomy_emotion_reflections", JSON.stringify(all));
+    
+      modalOverlay.style.display = "none";
+    
+      alert("Saved to your reflections 🌿");
+      window.location.href = "{% url 'dailies:dailies-story' %}";
+    };
+    
+    discardBtn.onclick = () => {
+      location.reload();
+    };
 </script>
-
 {% endblock %}
