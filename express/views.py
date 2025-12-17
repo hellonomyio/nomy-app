@@ -12,9 +12,6 @@ from django.utils.text import slugify
 def home(request):
     return render(request, "express/home.html")
 
-def expressIntro(request):
-    return render(request, "express/express-intro.html")
-
 def expressSpeak(request):
     response_text = request.GET.get("response", "")
     return render(request, "express/express-speak.html", {"response": response_text})
@@ -133,26 +130,25 @@ def expressScenario(request):
     return render(request, "express/express-scenario.html", context)
 
 def expressResponse(request):
-    """Display the selected response (direct / relational)."""
     situation = request.GET.get("situation")
     tone = request.GET.get("tone")  # direct or relational
 
-    print("DEBUG expressResponse:", situation, tone)
+    scenario = SCENARIOS.get(situation)
+    if not scenario:
+        return redirect("express:express-home")
 
-    # Get matching response text
-    data = RESPONSES.get(situation, {})
-    response_text = data.get(tone)
-
+    response_text = RESPONSES.get(situation, {}).get(tone)
     if not response_text:
-        response_text = "No response available for this combination."
+        response_text = "No response available."
 
     context = {
-        "tone": tone,
+        "prompt": scenario["prompt"],          # ✅ readable scenario
         "response": response_text,
-        "situation": situation,
+        "tone": tone,
+        "tone_label": tone.title(),             # "Direct" / "Relational"
     }
 
-    return render(request, "express/express-intro.html", context)
+    return render(request, "express/express-response.html", context)
 
 def expressCustom(request):
     if request.method != "POST":

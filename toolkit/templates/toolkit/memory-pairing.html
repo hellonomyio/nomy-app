@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Colour Match{% endblock %}
+{% block title %}Memory Pairing{% endblock %}
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
@@ -11,10 +11,9 @@
   --shadow:0 18px 40px rgba(17,12,40,.08);
   --radius:26px;
   --pill:#e9f0fa;
-  --tile:#564d74; /* face-down colour */
+  --tile:#564d74;
 }
 
-/* Reset & base */
 *{box-sizing:border-box;margin:0;padding:0;}
 body{
   font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
@@ -77,21 +76,19 @@ body{
   line-height:1.6;
 }
 
-/* Countdown */
 #countdown {
   font-size: 22px;
   font-weight: 700;
   margin-top: -10px;
-  color: #1f003d;
 }
 
-/* Grid */
 .grid{
   display:grid;
   grid-template-columns:repeat(4,80px);
   grid-gap:20px;
   justify-content:center;
 }
+
 .tile{
   width:80px;
   height:80px;
@@ -100,18 +97,16 @@ body{
   cursor:pointer;
   transition:background .4s ease, transform .2s ease;
 }
-.tile.revealed{transform:scale(1.05);}
+
+.tile.revealed{ transform:scale(1.05); }
 
 button{
   background:none;
   border:none;
-  color:var(--ink);
   font-size:17px;
   font-weight:600;
   cursor:pointer;
-  transition:opacity .2s ease;
 }
-button:hover{opacity:.7;}
 
 @media(max-width:720px){
   .zoom-wrapper{transform:scale(1);}
@@ -122,166 +117,127 @@ button:hover{opacity:.7;}
 
 <div class="zoom-wrapper">
   <div class="oval">Memory Pairing</div>
-  <p id="instructions" class="sub">Here’s your pattern. Take a moment to notice the colours and where they sit.</p>
+  <p id="instructions" class="sub">When you’re ready, tap “Reveal pattern”.</p>
   <p id="countdown"></p>
+
   <div class="grid" id="grid"></div>
+
+  <button id="revealBtn">Reveal pattern</button>
 </div>
 
 <script>
-  /* The 8 colours — pairs will be created dynamically */
-  const baseColours = [
-    "#5ce1e6", "#e2a9f1", "#bf7e74", "#f38c7f",
-    "#ffde59", "#ff66c4", "#ffbd59", "#38b6ff"
-  ];
-  
-  let tileset = [];
-  const grid = document.getElementById("grid");
-  const instr = document.getElementById("instructions");
-  const countdownEl = document.getElementById("countdown");
-  
-  let first = null, second = null, locked = false;
-  
-  /* 🔁 Generate new shuffled board */
-  function createShuffledTiles() {
-    const doubled = [...baseColours, ...baseColours];
-    tileset = doubled.sort(() => Math.random() - 0.5);
-  }
-  
-  /* 🎨 Build grid */
-  function createTiles() {
-    grid.innerHTML = "";
-    tileset.forEach((c, i) => {
-      const tile = document.createElement("div");
-      tile.className = "tile";
-      tile.dataset.color = c;
-      tile.dataset.index = i;
-      grid.appendChild(tile);
-    });
-  }
-  
-  /* ⏳ Start 3-second preview */
-  function startPreview() {
-    const tiles = document.querySelectorAll(".tile");
-  
-    // Show pattern
-    tiles.forEach(t => t.style.background = t.dataset.color);
-    instr.textContent = "Here’s your pattern. Take a moment to notice the colours and where they sit.";
-  
-    let count = 3;
-    countdownEl.textContent = "3";
-  
-    const timer = setInterval(() => {
-      count--;
-      if (count > 0) {
-        countdownEl.textContent = count;
-      } else {
-        clearInterval(timer);
-        countdownEl.textContent = "";
-  
-        // Flip them all
-        tiles.forEach(t => {
-          t.style.background = "var(--tile)";
-          t.classList.remove("revealed");
-        });
-  
-        instr.textContent =
-          "Now, try to match the colours from memory. Flip two tiles to see their colours. If they match, they’ll stay face up.";
-  
-        enablePlay();
-      }
-    }, 1000);
-  }
-  
-  /* 🎮 Enable gameplay */
-  function enablePlay() {
-    const tiles = document.querySelectorAll(".tile");
-    tiles.forEach(t => {
-      t.onclick = () => {
-        if (locked || t.classList.contains("matched") || t === first) return;
-  
-        t.style.background = t.dataset.color;
-        t.classList.add("revealed");
-  
-        if (!first) {
-          first = t;
-        } else {
-          second = t;
-          checkMatch();
-        }
-      };
-    });
-  }
-  
-  /* 🧠 Match check */
-  function checkMatch() {
-    locked = true;
-  
-    if (first.dataset.color === second.dataset.color) {
-      first.classList.add("matched");
-      second.classList.add("matched");
-  
-      resetSelections();
-      checkIfFinished();
+const baseColours = [
+  "#5ce1e6", "#e2a9f1", "#bf7e74", "#f38c7f",
+  "#ffde59", "#ff66c4", "#ffbd59", "#38b6ff"
+];
+
+let tileset = [];
+let first = null, second = null, locked = false, previewing = false;
+
+const grid = document.getElementById("grid");
+const instr = document.getElementById("instructions");
+const countdownEl = document.getElementById("countdown");
+const revealBtn = document.getElementById("revealBtn");
+
+function createShuffledTiles(){
+  tileset = [...baseColours, ...baseColours].sort(()=>Math.random()-0.5);
+}
+
+function createTiles(){
+  grid.innerHTML = "";
+  tileset.forEach(c=>{
+    const t = document.createElement("div");
+    t.className = "tile";
+    t.dataset.color = c;
+    grid.appendChild(t);
+  });
+}
+
+function startPreview(){
+  previewing = true;
+  locked = true;
+  const tiles = document.querySelectorAll(".tile");
+
+  tiles.forEach(t=>t.style.background=t.dataset.color);
+  instr.textContent = "Here’s your pattern. Take a moment to notice the colours and where they sit.";
+
+  let count = 3;
+  countdownEl.textContent = "3";
+
+  const timer = setInterval(()=>{
+    count--;
+    if(count>0){
+      countdownEl.textContent = count;
     } else {
-      setTimeout(() => {
-        first.style.background = "var(--tile)";
-        second.style.background = "var(--tile)";
-        first.classList.remove("revealed");
-        second.classList.remove("revealed");
-        resetSelections();
-      }, 900);
+      clearInterval(timer);
+      countdownEl.textContent = "";
+      tiles.forEach(t=>t.style.background="var(--tile)");
+      instr.textContent = "Now, try to match the colours from memory.";
+      locked = false;
+      previewing = false;
+      enablePlay();
     }
+  },1000);
+}
+
+function enablePlay(){
+  document.querySelectorAll(".tile").forEach(t=>{
+    t.onclick = ()=>{
+      if(locked || previewing || t.classList.contains("matched") || t===first) return;
+      t.style.background=t.dataset.color;
+      t.classList.add("revealed");
+      if(!first){ first=t; }
+      else { second=t; checkMatch(); }
+    };
+  });
+}
+
+function checkMatch(){
+  locked=true;
+  if(first.dataset.color===second.dataset.color){
+    first.classList.add("matched");
+    second.classList.add("matched");
+    resetPick();
+    checkFinished();
+  } else {
+    setTimeout(()=>{
+      first.style.background="var(--tile)";
+      second.style.background="var(--tile)";
+      first.classList.remove("revealed");
+      second.classList.remove("revealed");
+      resetPick();
+    },900);
   }
-  
-  function resetSelections() {
-    [first, second, locked] = [null, null, false];
+}
+
+function resetPick(){
+  [first,second,locked]=[null,null,false];
+}
+
+function checkFinished(){
+  const allMatched=[...document.querySelectorAll(".tile")]
+    .every(t=>t.classList.contains("matched"));
+
+  if(allMatched){
+    instr.textContent="Well done. You moved through that at your own pace.";
+    revealBtn.textContent="Restart";
+    revealBtn.style.display="inline";
+    revealBtn.onclick=startGame;
   }
-  
-  /* 🎉 When all tiles matched */
-  function checkIfFinished() {
-    const tiles = document.querySelectorAll(".tile");
-    const allMatched = [...tiles].every(t => t.classList.contains("matched"));
-  
-    if (allMatched) {
-      instr.textContent =
-        "Well done. You moved through that at your own pace, and that’s exactly enough.";
-  
-      // Hide grid
-      grid.style.opacity = "0";
-      grid.style.pointerEvents = "none";
-  
-      // Add Restart button
-      const restartBtn = document.createElement("button");
-      restartBtn.textContent = "Restart";
-      restartBtn.style.marginTop = "20px";
-      restartBtn.style.fontSize = "18px";
-      restartBtn.style.fontWeight = "600";
-  
-      restartBtn.onclick = () => {
-        restartBtn.remove();
-        grid.style.opacity = "1";
-        grid.style.pointerEvents = "auto";
-        startGame();
-      };
-  
-      instr.insertAdjacentElement("afterend", restartBtn);
-    }
-  }
-  
-  /* 🔄 Full game reset */
-  function startGame() {
-    // Remove any lingering matches
-    first = second = null;
-    locked = false;
-  
-    createShuffledTiles();
-    createTiles();
-    startPreview();
-  }
-  
-  /* 🚀 Launch on load */
-  window.onload = startGame;
-  </script>
-  
+}
+
+function startGame(){
+  first=second=null;
+  locked=previewing=false;
+  instr.textContent="When you’re ready, tap “Reveal pattern”.";
+  countdownEl.textContent="";
+  createShuffledTiles();
+  createTiles();
+  revealBtn.textContent="Reveal pattern";
+  revealBtn.onclick=()=>{ revealBtn.style.display="none"; startPreview(); };
+}
+
+window.onload=startGame;
+</script>
 
 {% endblock %}

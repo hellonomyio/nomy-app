@@ -124,7 +124,6 @@
     font-size: 13px;
     font-weight: 500;
     color: #1f003d;
-    margin-bottom: 6px;
   }
 
   /* Emotionize Reflections pill */
@@ -133,9 +132,7 @@
     font-size: 15px;
     padding: 8px 16px;
     font-weight: 700;
-    display: block;
-    width: fit-content;
-    margin-bottom: 16px; /* space before first emotion */
+    display: inline-flex;
   }
 
   .week-section-body {
@@ -147,16 +144,17 @@
 
   .week-section-body.checklist-body {
     white-space: normal;
-    margin-top: 4x;      /* space above checklist items */
-    margin-bottom: 6px;   /* space under checklist items */
+    margin-top: 4x;
+    margin-bottom: 6px;
   }
-
 
   /* Checklist spacing */
   .checklist-item {
     display: flex;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
+    user-select: none;
   }
 
   .checkmark {
@@ -172,6 +170,60 @@
     transform: translateX(-50%);
     font-size: 13px;
     color: #6b647d;
+  }
+
+  /* Keep your tap overlay for layout, but don't let it steal taps */
+  .week-tap { pointer-events: none; }
+
+  /* ---- ACCORDION (layout only) ---- */
+  .acc {
+    border: 1px solid rgba(34,22,60,.08);
+    border-radius: 18px;
+    background: rgba(255,255,255,.5);
+    overflow: hidden;
+    margin-top: 12px;
+  }
+
+  .acc-head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .acc-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34,22,60,.08);
+    color: #22163c;
+    font-weight: 800;
+    flex: 0 0 auto;
+  }
+
+  .acc-body {
+    display: none;
+    padding: 0 14px 14px;
+  }
+
+  .acc.is-open .acc-body { display: block; }
+
+  .acc.is-open .acc-icon::before { content: "−"; }
+  .acc:not(.is-open) .acc-icon::before { content: "+"; }
+
+  .acc-chiprow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 </style>
 
@@ -242,60 +294,73 @@
     return `<div class="emotion-chip chip-${cat}">${cap}</div>`;
   }
 
+  function accBlock(titleChipHtml, bodyHtml, open=false) {
+    return `
+      <div class="acc${open ? " is-open" : ""}">
+        <button type="button" class="acc-head">
+          <span class="acc-chiprow">${titleChipHtml}</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-body">${bodyHtml}</div>
+      </div>
+    `;
+  }
+
   sorted.forEach((date, idx)=>{
     const e = grouped[date];
     const pretty = formatDate(date);
 
-    /* Build grouped Emotionize Reflections section */
-    let emotionBlocks = "";
-    if (e.emotions.length) {
-      emotionBlocks += `
-        <div class="week-section">
-          <div class="week-chip emotionize">Emotionize Reflections</div>
-      `;
-      e.emotions.forEach((em, index)=>{
-        emotionBlocks += `
-          ${makeChip(em)}
-          <div class="week-section-body">${e.reflections[index] || ""}</div>
-        `;
-      });
-      emotionBlocks += `</div>`;
-    }
-
     const affBlock = e.affirm.length
-      ? `<div class="week-section">
-           <div class="week-chip">Affirmations</div>
-           <div class="week-section-body">${e.affirm.join("<br><br>")}</div>
-         </div>` : "";
+      ? accBlock(
+          `<div class="week-chip">Affirmations</div>`,
+          `<div class="week-section-body">${e.affirm.join("<br><br>")}</div>`
+        )
+      : "";
 
     const goalBlock = e.goals.length
-      ? `<div class="week-section">
-           <div class="week-chip">Goals</div>
-           <div class="week-section-body">${e.goals.join("<br><br>")}</div>
-         </div>` : "";
+      ? accBlock(
+          `<div class="week-chip">Goals</div>`,
+          `<div class="week-section-body">${e.goals.join("<br><br>")}</div>`
+        )
+      : "";
 
     const checklistBlock = e.checklist && e.checklist.length
-      ? `<div class="week-section">
-           <div class="week-chip">Checklist</div>
-           <div class="week-section-body checklist-body">
-             ${e.checklist.map(item =>
-               `<div class="checklist-item">
+      ? accBlock(
+          `<div class="week-chip">Checklist</div>`,
+          `<div class="week-section-body checklist-body" data-date="${date}">
+             ${e.checklist.map((item, idx2) =>
+               `<div class="checklist-item" data-date="${date}" data-idx="${idx2}">
                   <span class="checkmark">${item.checked ? "✔" : "◻"}</span>
                   <span>${item.text}</span>
                 </div>`
              ).join("")}
-           </div>
-         </div>`
+           </div>`
+        )
       : "";
+
+    let emotionBlocks = "";
+    if (e.emotions.length) {
+      const body = e.emotions.map((em, index) => `
+        ${makeChip(em)}
+        <div class="week-section-body">${e.reflections[index] || ""}</div>
+      `).join("");
+      emotionBlocks = accBlock(
+        `<div class="week-chip emotionize">Emotionize Reflections</div>`,
+        body
+      );
+    }
 
     const html = `
       <article class="week-slide${idx===0?" is-active":""}">
         <div class="week-card">
           <div class="week-card-day">${pretty}</div>
-          ${affBlock}
-          ${goalBlock}
-          ${checklistBlock}
-          ${emotionBlocks}
+
+          <div class="week-section">
+            ${affBlock}
+            ${goalBlock}
+            ${checklistBlock}
+            ${emotionBlocks}
+          </div>
         </div>
       </article>
     `;
@@ -319,8 +384,68 @@
     fills.forEach((f,idx)=>f.style.width=idx<=i?"100%":"0%");
   }
 
-  document.getElementById("tapLeft").onclick=()=>render(i-1);
-  document.getElementById("tapRight").onclick=()=>render(i+1);
+  function shouldIgnoreNavClick(target){
+    return !!(
+      target.closest(".checklist-item") ||
+      target.closest(".acc-head") ||
+      target.closest(".acc-body") ||
+      target.closest("a") ||
+      target.closest("button") ||
+      target.closest("textarea") ||
+      target.closest("input") ||
+      target.closest("select") ||
+      target.closest("label")
+    );
+  }
+
+  function handleNavFromClick(ev){
+    if (shouldIgnoreNavClick(ev.target)) return;
+    const x = ev.clientX;
+    const mid = window.innerWidth / 2;
+    x < mid ? render(i - 1) : render(i + 1);
+  }
+
+  document.addEventListener("click", handleNavFromClick);
+
+  document.addEventListener("click", (ev) => {
+    const head = ev.target.closest(".acc-head");
+    if (!head) return;
+    const acc = head.closest(".acc");
+    if (!acc) return;
+    acc.classList.toggle("is-open");
+  });
+
+  document.addEventListener("click", (ev) => {
+    const row = ev.target.closest(".checklist-item");
+    if (!row) return;
+
+    const date = row.getAttribute("data-date");
+    const idx2 = Number(row.getAttribute("data-idx"));
+    if (!date || Number.isNaN(idx2)) return;
+
+    const day = grouped[date];
+    if (!day || !day.checklist || !day.checklist[idx2]) return;
+
+    day.checklist[idx2].checked = !day.checklist[idx2].checked;
+    row.querySelector(".checkmark").textContent = day.checklist[idx2].checked ? "✔" : "◻";
+
+    const dailiesNow = JSON.parse(localStorage.getItem("nomy_dailies") || "[]");
+    let updated = false;
+
+    for (let k = dailiesNow.length - 1; k >= 0; k--) {
+      if (dailiesNow[k].date === date) {
+        dailiesNow[k].checklist = day.checklist;
+        updated = true;
+        break;
+      }
+    }
+
+    if (!updated) {
+      dailiesNow.push({ date: date, checklist: day.checklist });
+    }
+
+    localStorage.setItem("nomy_dailies", JSON.stringify(dailiesNow));
+  }, true);
 
   window.addEventListener("keydown",e=>{
     if(e.key==="ArrowRight") render(i+1);
@@ -330,8 +455,10 @@
   let startX=null;
   window.addEventListener("touchstart", e=>startX=e.touches[0].clientX,{passive:true});
   window.addEventListener("touchend", e=>{
+    if (startX == null) return;
     const dx=e.changedTouches[0].clientX-startX;
     if(Math.abs(dx)>40) dx<0?render(i+1):render(i-1);
+    startX=null;
   });
 
   render(0);
