@@ -44,7 +44,8 @@ CSRF_TRUSTED_ORIGINS = [
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 31536000
-SECURE_SSL_REDIRECT = not DEBUG  # redirect to https if in production
+SECURE_SSL_REDIRECT = False  # redirect to https if in production
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ------------------------------------------------------
 # APPLICATIONS
