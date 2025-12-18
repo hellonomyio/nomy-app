@@ -10,8 +10,6 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
-OPENAI_API_KEY = env("OPENAI_API_KEY")
-
 # ------------------------------------------------------
 # BASE DIRECTORY
 # ------------------------------------------------------
