@@ -30,7 +30,7 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "nomy.onrender.com",     # your Render free domain
+    "nomy-app.onrender.com",     # your Render free domain
     "yourdomain.com"         # replace with your custom domain later
 ]
 
