@@ -1,209 +1,205 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Emotionize - {{ title }}</title>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Emotionize – {{ title }}{% endblock %}
+{% block content %}
 
-  <style>
-    :root{
-      --bg:#ffffff;
-      --ink:#1b1230;
-      --muted:#3f335a;
-      --active:#22163c;
-      --inactive:#e9e6f7;
-      --pill-bg:#f4f5f7;
-    }
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#1b1230;
+    --muted:#3f335a;
+    --active:#22163c;
+    --inactive:#e9e6f7;
+    --pill-bg:#f4f5f7;
+  }
 
-    *{box-sizing:border-box;}
+  *{box-sizing:border-box;}
 
-    html,body{
-      height:100%;
-      margin:0;
-      background:var(--bg);
-      color:var(--ink);
-      font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
-      overflow:hidden; /* prevent reflow bounce */
-    }
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    overflow:hidden;
+  }
 
-    .story{
-      position:relative;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      padding-top:140px;
-    }
+  .story{
+    position:relative;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding-top:140px;
+  }
 
-    /* TOP PILL */
-    #stage-pill{
-      background:var(--pill-bg);
-      color:var(--active);
-      font-size:clamp(18px,2.5vw,24px);
-      padding:16px 44px;
-      border-radius:999px;
-      box-shadow:0 8px 24px rgba(0,0,0,.04);
-      margin-bottom:40px;
-      text-align:center;
-    }
+  /* TOP PILL */
+  #stage-pill{
+    background:var(--pill-bg);
+    color:var(--active);
+    font-size:clamp(18px,2.5vw,24px);
+    padding:16px 44px;
+    border-radius:999px;
+    box-shadow:0 8px 24px rgba(0,0,0,.04);
+    margin-bottom:40px;
+    text-align:center;
+  }
 
-    #stage-pill.energised  { background:#f4f8f3; }
-    #stage-pill.pleasant   { background:#fffaeb; }
-    #stage-pill.low-energy { background:#e9f0fa; }
-    #stage-pill.vulnerable { background:#f1eeff; }
+  #stage-pill.energised  { background:#f4f8f3; }
+  #stage-pill.pleasant   { background:#fffaeb; }
+  #stage-pill.low-energy { background:#e9f0fa; }
+  #stage-pill.vulnerable { background:#f1eeff; }
 
-    /* PROGRESS BAR */
-    .story__progress{
-      position:fixed;
-      top:90px;
-      left:50%;
-      transform:translateX(-50%);
-      display:flex;
-      gap:8px;
-      width:min(280px,60vw);
-      z-index:5;
-    }
-    .bar{
-      flex:1;
-      height:6px;
-      background:var(--inactive);
-      border-radius:999px;
-      overflow:hidden;
-    }
-    .bar__fill{
-      height:100%;
-      width:0%;
-      background:var(--active);
-      border-radius:inherit;
-      transition:width .25s ease;
-    }
+  /* PROGRESS BAR */
+  .story__progress{
+    position:fixed;
+    top:90px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:8px;
+    width:min(280px,60vw);
+    z-index:5;
+  }
+  .bar{
+    flex:1;
+    height:6px;
+    background:var(--inactive);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .bar__fill{
+    height:100%;
+    width:0%;
+    background:var(--active);
+    border-radius:inherit;
+    transition:width .25s ease;
+  }
 
-    /* SLIDES */
-    .slides{
-      width:min(800px,90vw);
-      height:calc(100vh - 300px); /* fixed viewport area */
-      position:relative;
-      overflow:hidden;
-    }
+  /* SLIDES */
+  .slides{
+    width:min(800px,90vw);
+    height:calc(100vh - 300px);
+    position:relative;
+    overflow:hidden;
+  }
 
-    .slide{
-      position:absolute;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      padding:20px 0 120px;
-      display:none;
-      flex-direction:column;
-      align-items:center;
-      text-align:center;
-      overflow-y:auto;
-      animation:fade .25s ease;
-    }
+  .slide{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    padding:20px 0 120px;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    overflow-y:auto;
+    animation:fade .25s ease;
+  }
 
-    .slide.is-active{display:flex;}
+  .slide.is-active{display:flex;}
 
-    @keyframes fade{
-      from{opacity:.001; transform:translateY(6px);}
-      to{opacity:1; transform:none;}
-    }
+  @keyframes fade{
+    from{opacity:.001; transform:translateY(6px);}
+    to{opacity:1; transform:none;}
+  }
 
-    .lead{
-      font-size:clamp(22px,3.2vw,36px);
-      font-weight:700;
-      margin-bottom:20px;
-      max-width:28ch;
-    }
-    .sub{
-      font-size:clamp(12px,1vw,16px);
-      line-height:1.7;
-      max-width:80ch;
-      margin-bottom:20px;
-    }
+  .lead{
+    font-size:clamp(22px,3.2vw,36px);
+    font-weight:700;
+    margin-bottom:20px;
+    max-width:28ch;
+  }
+  .sub{
+    font-size:clamp(12px,1vw,16px);
+    line-height:1.7;
+    max-width:80ch;
+    margin-bottom:20px;
+  }
 
-    /* ONE SINGLE FLOATING BUTTON (smooth & no bounce) */
-    #floating-next{
-      position:fixed;
-      bottom:90px;
-      left:50%;
-      transform:translateX(-50%);
-      padding:14px 30px;
-      min-width:220px;
-      text-align:center;
+  /* SINGLE FLOATING BUTTON */
+  #floating-next{
+    position:fixed;
+    bottom:90px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:14px 30px;
+    min-width:220px;
+    text-align:center;
 
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
 
-      background:var(--pill-bg);
-      border-radius:999px;
-      font-size:1rem;
-      font-weight:500;
-      color:var(--active);
-      box-shadow:0 10px 30px rgba(0,0,0,.08);
+    background:var(--pill-bg);
+    border-radius:999px;
+    font-size:1rem;
+    font-weight:500;
+    color:var(--active);
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 
-      border:none;
-      cursor:pointer;
-      transition:background .2s ease;
-      z-index:999;
-    }
+    border:none;
+    cursor:pointer;
+    transition:background .2s ease;
+    z-index:999;
+  }
 
-    #floating-next::after{
-      content:"→";
-      opacity:.7;
-      font-size:1.1rem;
-    }
+  #floating-next::after{
+    content:"→";
+    opacity:.7;
+    font-size:1.1rem;
+  }
 
-    #floating-next.last-slide::after{
-      content:""; /* no arrow */
-    }
+  #floating-next.last-slide::after{
+    content:"";
+  }
 
-    #floating-next:hover{
-      background:#ececf5;
-    }
+  #floating-next:hover{
+    background:#ececf5;
+  }
 
-    .back-btn{
-      position:fixed;
-      top:45px;
-      left:28px;
-      background:#fff;
-      border:1px solid #e6e0f5;
-      border-radius:999px;
-      padding:8px 16px;
-      font-size:15px;
-      color:#3a2c6b;
-      text-decoration:none;
-      box-shadow:0 6px 22px rgba(19,7,63,.06);
-      z-index:2000;
-    }
+  .tap{
+    position:fixed;
+    inset:0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    z-index:3;
+  }
 
-    .tap{
-      position:fixed;
-      inset:0;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      z-index:3;
-    }
+  .tap button{
+    background:none;
+    border:none;
+    cursor:pointer;
+  }
 
-    .tap button{
-      background:none;
-      border:none;
-      cursor:pointer;
-    }
+  .footer{
+    position:fixed;
+    bottom:5px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:14px;
+    color:var(--muted);
+  }
 
-    .footer{
-      position:fixed;
-      bottom:5px;
-      left:50%;
-      transform:translateX(-50%);
-      font-size:14px;
-      color:var(--muted);
-    }
-  </style>
-</head>
-
-<body>
+  /* MATCHING BACK BUTTON */
+  .back-btn{
+    position:fixed;
+    top:70px;
+    left:28px;
+    background:#fff;
+    border:1px solid #e6e0f5;
+    border-radius:999px;
+    padding:8px 16px;
+    font-size:15px;
+    color:#3a2c6b;
+    text-decoration:none;
+    box-shadow:0 6px 22px rgba(19,7,63,.06);
+    z-index:2000;
+  }
+</style>
 
 <main class="story" aria-live="polite">
 
@@ -226,7 +222,6 @@
     {% endfor %}
   </section>
 
-  <!-- THE SINGLE NON-BOUNCING BUTTON -->
   <button id="floating-next"></button>
 
   <div class="tap" aria-hidden="true">
@@ -259,7 +254,6 @@
     {% endfor %}
   ];
 
-  /* Build progress bars */
   for (let j=0; j<slides.length; j++){
     progressRoot.insertAdjacentHTML("beforeend",
       `<div class="bar"><div class="bar__fill"></div></div>`
@@ -290,11 +284,11 @@
       };
     }
     else {
-          fbtn.textContent = pillLabels[i+1];
-          fbtn.classList.remove("last-slide");
-          fbtn.onclick = () => go(i+1);
-        }
-      }
+      fbtn.textContent = pillLabels[i+1];
+      fbtn.classList.remove("last-slide");
+      fbtn.onclick = () => go(i+1);
+    }
+  }
 
   function go(n){
     i = Math.max(0, Math.min(slides.length-1, n));
@@ -323,5 +317,4 @@
 })();
 </script>
 
-</body>
-</html>
+{% endblock %}

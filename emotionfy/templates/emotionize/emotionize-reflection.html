@@ -238,7 +238,7 @@ textarea {
     
     function getTodayUKDate() {
       const d = new Date();
-      return d.toLocaleDateString("en-GB"); // e.g. 30/11/2025
+      return d.toLocaleDateString("en-GB");
     }
     
     finishBtn.onclick = () => {
@@ -252,26 +252,46 @@ textarea {
         return;
       }
     
-      const entry = {
-        date: getTodayUKDate(),
-        emotion: "{{ emotion|lower }}",
-        reflection: text
-      };
+      {% if user.is_authenticated %}
     
-      // Get all past emotion reflections
-      const all = JSON.parse(localStorage.getItem("nomy_emotion_reflections") || "[]");
-      all.push(entry);
+        fetch("/reflections/save/emotion/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({
+            emotion: "{{ emotion|lower }}",
+            text: text,
+          }),
+        })
+        .then(r => r.json())
+        .then(() => {
+          alert("Saved to your reflections");
+          window.location.href = "{% url 'dailies:dailies-story' %}";
+        });
     
-      localStorage.setItem("nomy_emotion_reflections", JSON.stringify(all));
+      {% else %}
     
-      modalOverlay.style.display = "none";
+        const entry = {
+          date: getTodayUKDate(),
+          emotion: "{{ emotion|lower }}",
+          reflection: text
+        };
     
-      alert("Saved to your reflections 🌿");
-      window.location.href = "{% url 'dailies:dailies-story' %}";
+        const all = JSON.parse(localStorage.getItem("nomy_emotion_reflections") || "[]");
+        all.push(entry);
+        localStorage.setItem("nomy_emotion_reflections", JSON.stringify(all));
+    
+        alert("Saved to your reflections");
+        window.location.href = "{% url 'dailies:dailies-story' %}";
+    
+      {% endif %}
     };
     
     discardBtn.onclick = () => {
       location.reload();
     };
-</script>
+    </script>
+    
 {% endblock %}

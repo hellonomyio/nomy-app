@@ -172,7 +172,7 @@ textarea {
   }
 </style>
 
-<a href="javascript:history.back()" class="back-btn">← Back to Response</a>
+<a href="javascript:history.back()" class="back-btn">← Response</a>
 
 <div class="express-text-page">
   <div class="scale-wrap">
@@ -217,9 +217,29 @@ finishBtn.onclick = () => {
   modalOverlay.style.display = "flex";
 };
 
+function getTodayUKDate() {
+  const d = new Date();
+  return d.toLocaleDateString("en-GB");
+}
+
 saveBtn.onclick = () => {
-  alert("Saved! (Connect this later)");
-  modalOverlay.style.display = "none";
+  const text = document.getElementById("userText").value.trim();
+  if (!text) {
+    alert("Please write something before saving.");
+    return;
+  }
+
+  const entry = {
+    date: getTodayUKDate(),
+    express: text
+  };
+
+  const all = JSON.parse(localStorage.getItem("nomy_express_reflections") || "[]");
+  all.push(entry);
+  localStorage.setItem("nomy_express_reflections", JSON.stringify(all));
+
+  alert("Saved to your reflections");
+  window.location.href = "{% url 'dailies:dailies-story' %}";
 };
 
 discardBtn.onclick = () => {

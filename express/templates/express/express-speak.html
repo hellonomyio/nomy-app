@@ -132,7 +132,7 @@
 </style>
 
 <div class="express-speak-page">
-  <a href="javascript:history.back()" class="back-btn">← Back to Response</a>
+  <a href="javascript:history.back()" class="back-btn">← Response</a>
 
   {% if response %}
     <h2 class="response-text">{{ response }}</h2>
@@ -193,8 +193,39 @@ startBtn.onclick = async () => {
   };
 };
 
+function getTodayUKDate(){
+  const d = new Date();
+  return d.toLocaleDateString("en-GB");
+}
+
 endBtn.onclick = () => {
-  window.location.href = "{% url 'express:express-home' %}";
+  if(!player.src){
+    window.location.href = "{% url 'express:express-home' %}";
+    return;
+  }
+
+  // turn blob data into something we can store
+  const blob = new Blob(chunks, { type:"audio/webm" });
+
+  const reader = new FileReader();
+  reader.onloadend = () => {
+
+    const entry = {
+      date: getTodayUKDate(),
+      express_audio: reader.result  // base64 audio data
+    };
+
+    const all = JSON.parse(localStorage.getItem("nomy_express_reflections") || "[]");
+    all.push(entry);
+
+    localStorage.setItem("nomy_express_reflections", JSON.stringify(all));
+
+    alert("Audio reflection saved");
+    window.location.href = "{% url 'dailies:dailies-story' %}";
+  };
+
+  reader.readAsDataURL(blob);
 };
+
 </script>
 {% endblock %}

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'experience',
     'express',
     'toolkit',
+    'reflections',
     'users.apps.UsersConfig',
 
     # Django defaults

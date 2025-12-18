@@ -120,7 +120,7 @@
     display: inline-flex;
     padding: 4px 10px;
     border-radius: 999px;
-    background: #e1dcf9;
+    background: #f1f1ff;
     font-size: 13px;
     font-weight: 500;
     color: #1f003d;
@@ -131,7 +131,7 @@
     background: #e9c3f1 !important;
     font-size: 15px;
     padding: 8px 16px;
-    font-weight: 700;
+    font-weight: 500;
     display: inline-flex;
   }
 
@@ -225,9 +225,17 @@
     align-items: center;
     gap: 10px;
   }
+  .week-chip.express {
+  background: #e1dcf9 !important;
+  font-size: 15px;
+  padding: 8px 16px;
+  font-weight: 500;
+  display: inline-flex;
+  color: #1f003d;
+}
 </style>
 
-<a href="{% url 'dailies:dailies-home' %}" class="week-back-btn">← Back to Dailies Menu</a>
+<a href="{% url 'dailies:dailies-home' %}" class="week-back-btn">← Dailies Menu</a>
 
 <div id="week-page">
 
@@ -247,221 +255,214 @@
 </div>
 
 <script>
+
   const slidesContainer = document.getElementById("weekSlides");
   const progressRoot = document.getElementById("weekProgress");
-
+  
   const dailies = JSON.parse(localStorage.getItem("nomy_dailies") || "[]");
-  const emotionReflections = JSON.parse(localStorage.getItem("nomy_emotion_reflections") || "[]");
-
-  const all = [...dailies, ...emotionReflections];
-
-  function parseUK(d){
-    const [day,month,year] = d.split("/").map(Number);
-    return new Date(year,month-1,day);
-  }
-
-  const grouped = {};
-  all.forEach(e=>{
-    if(!e.date) return;
-    if(!grouped[e.date])
-      grouped[e.date] = { affirm:[], goals:[], reflections:[], emotions:[], checklist:[] };
-
-    if(e.affirmation) grouped[e.date].affirm.push(e.affirmation);
-    if(e.goal) grouped[e.date].goals.push(e.goal);
-    if(e.reflection) grouped[e.date].reflections.push(e.reflection);
-    if(e.emotion) grouped[e.date].emotions.push(e.emotion);
-    if(e.checklist) grouped[e.date].checklist = e.checklist;
-  });
-
-  const sorted = Object.keys(grouped).sort((a,b)=>parseUK(b)-parseUK(a));
-
-  function formatDate(d){
-    const [day,month,year] = d.split("/").map(Number);
-    return new Date(year,month-1,day).toLocaleDateString("en-GB",
-      {weekday:"long", day:"numeric", month:"long"});
-  }
-
-  const MAP = {
-    excitement:"energised", curiosity:"energised", anxiety:"energised", frustration:"energised",
-    relief:"pleasant", happiness:"pleasant", amusement:"pleasant", contentment:"pleasant",
-    exhaustion:"low-energy", numbness:"low-energy", sadness:"low-energy", overwhelm:"low-energy", uncertainty:"low-energy",
-    shame:"vulnerable", embarrassment:"vulnerable", loneliness:"vulnerable", confusion:"vulnerable", stupidity:"vulnerable"
-  };
-
-  function makeChip(emotion){
-    const cat = MAP[emotion] || "low-energy";
-    const cap = emotion.charAt(0).toUpperCase() + emotion.slice(1);
-    return `<div class="emotion-chip chip-${cat}">${cap}</div>`;
-  }
-
-  function accBlock(titleChipHtml, bodyHtml, open=false) {
-    return `
-      <div class="acc${open ? " is-open" : ""}">
-        <button type="button" class="acc-head">
-          <span class="acc-chiprow">${titleChipHtml}</span>
-          <span class="acc-icon" aria-hidden="true"></span>
-        </button>
-        <div class="acc-body">${bodyHtml}</div>
-      </div>
-    `;
-  }
-
-  sorted.forEach((date, idx)=>{
-    const e = grouped[date];
-    const pretty = formatDate(date);
-
-    const affBlock = e.affirm.length
-      ? accBlock(
-          `<div class="week-chip">Affirmations</div>`,
-          `<div class="week-section-body">${e.affirm.join("<br><br>")}</div>`
-        )
-      : "";
-
-    const goalBlock = e.goals.length
-      ? accBlock(
-          `<div class="week-chip">Goals</div>`,
-          `<div class="week-section-body">${e.goals.join("<br><br>")}</div>`
-        )
-      : "";
-
-    const checklistBlock = e.checklist && e.checklist.length
-      ? accBlock(
-          `<div class="week-chip">Checklist</div>`,
-          `<div class="week-section-body checklist-body" data-date="${date}">
-             ${e.checklist.map((item, idx2) =>
-               `<div class="checklist-item" data-date="${date}" data-idx="${idx2}">
-                  <span class="checkmark">${item.checked ? "✔" : "◻"}</span>
-                  <span>${item.text}</span>
-                </div>`
-             ).join("")}
-           </div>`
-        )
-      : "";
-
-    let emotionBlocks = "";
-    if (e.emotions.length) {
-      const body = e.emotions.map((em, index) => `
-        ${makeChip(em)}
-        <div class="week-section-body">${e.reflections[index] || ""}</div>
-      `).join("");
-      emotionBlocks = accBlock(
-        `<div class="week-chip emotionize">Emotionize Reflections</div>`,
-        body
-      );
+  let emotionReflections = [];
+  const expressReflections = JSON.parse(localStorage.getItem("nomy_express_reflections") || "[]");
+  
+  {% if user.is_authenticated %}
+  
+  fetch("/reflections/get/emotion/")
+      .then(r => r.json())
+      .then(data => {
+          emotionReflections = data;
+          buildReflections();
+      });
+  
+  {% else %}
+  
+  emotionReflections = JSON.parse(localStorage.getItem("nomy_emotion_reflections") || "[]");
+  buildReflections();
+  
+  {% endif %}
+  
+  function buildReflections() {
+  
+    const all = [...dailies, ...emotionReflections, ...expressReflections];
+  
+    function parseUK(d){
+      const [day,month,year] = d.split("/").map(Number);
+      return new Date(year,month-1,day);
     }
-
-    const html = `
-      <article class="week-slide${idx===0?" is-active":""}">
-        <div class="week-card">
-          <div class="week-card-day">${pretty}</div>
-
-          <div class="week-section">
-            ${affBlock}
-            ${goalBlock}
-            ${checklistBlock}
-            ${emotionBlocks}
-          </div>
-        </div>
-      </article>
-    `;
-    slidesContainer.insertAdjacentHTML("beforeend", html);
-
-    const bar=document.createElement("div");
-    bar.className="week-bar";
-    const fill=document.createElement("div");
-    fill.className="week-bar__fill";
-    bar.appendChild(fill);
-    progressRoot.appendChild(bar);
-  });
-
-  const slides=[...document.querySelectorAll(".week-slide")];
-  const fills=[...document.querySelectorAll(".week-bar__fill")];
-  let i=0;
-
-  function render(n){
-    i=Math.max(0,Math.min(slides.length-1,n));
-    slides.forEach((s,idx)=>s.classList.toggle("is-active",idx===i));
-    fills.forEach((f,idx)=>f.style.width=idx<=i?"100%":"0%");
-  }
-
-  function shouldIgnoreNavClick(target){
-    return !!(
-      target.closest(".checklist-item") ||
-      target.closest(".acc-head") ||
-      target.closest(".acc-body") ||
-      target.closest("a") ||
-      target.closest("button") ||
-      target.closest("textarea") ||
-      target.closest("input") ||
-      target.closest("select") ||
-      target.closest("label")
-    );
-  }
-
-  function handleNavFromClick(ev){
-    if (shouldIgnoreNavClick(ev.target)) return;
-    const x = ev.clientX;
-    const mid = window.innerWidth / 2;
-    x < mid ? render(i - 1) : render(i + 1);
-  }
-
-  document.addEventListener("click", handleNavFromClick);
-
-  document.addEventListener("click", (ev) => {
-    const head = ev.target.closest(".acc-head");
-    if (!head) return;
-    const acc = head.closest(".acc");
-    if (!acc) return;
-    acc.classList.toggle("is-open");
-  });
-
-  document.addEventListener("click", (ev) => {
-    const row = ev.target.closest(".checklist-item");
-    if (!row) return;
-
-    const date = row.getAttribute("data-date");
-    const idx2 = Number(row.getAttribute("data-idx"));
-    if (!date || Number.isNaN(idx2)) return;
-
-    const day = grouped[date];
-    if (!day || !day.checklist || !day.checklist[idx2]) return;
-
-    day.checklist[idx2].checked = !day.checklist[idx2].checked;
-    row.querySelector(".checkmark").textContent = day.checklist[idx2].checked ? "✔" : "◻";
-
-    const dailiesNow = JSON.parse(localStorage.getItem("nomy_dailies") || "[]");
-    let updated = false;
-
-    for (let k = dailiesNow.length - 1; k >= 0; k--) {
-      if (dailiesNow[k].date === date) {
-        dailiesNow[k].checklist = day.checklist;
-        updated = true;
-        break;
+  
+    const grouped = {};
+    all.forEach(e=>{
+      if(!e.date) return;
+      if(!grouped[e.date])
+        grouped[e.date] = { affirm:[], goals:[], reflections:[], emotions:[], checklist:[], express:[], express_audio:[]};
+  
+      if(e.affirmation) grouped[e.date].affirm.push(e.affirmation);
+      if(e.goal) grouped[e.date].goals.push(e.goal);
+      if(e.reflection) grouped[e.date].reflections.push(e.reflection);
+      if(e.emotion) grouped[e.date].emotions.push(e.emotion);
+      if(e.checklist) grouped[e.date].checklist = e.checklist;
+      if(e.express) grouped[e.date].express.push(e.express);
+      if(e.express_audio) {
+        grouped[e.date].express_audio = grouped[e.date].express_audio || [];
+        grouped[e.date].express_audio.push(e.express_audio);
       }
+    });
+  
+    const sorted = Object.keys(grouped).sort((a,b)=>parseUK(b)-parseUK(a));
+  
+    function formatDate(d){
+      const [day,month,year] = d.split("/").map(Number);
+      return new Date(year,month-1,day).toLocaleDateString("en-GB",
+        {weekday:"long", day:"numeric", month:"long"});
     }
-
-    if (!updated) {
-      dailiesNow.push({ date: date, checklist: day.checklist });
+  
+    const MAP = {
+      excitement:"energised", curiosity:"energised", anxiety:"energised", frustration:"energised",
+      relief:"pleasant", happiness:"pleasant", amusement:"pleasant", contentment:"pleasant",
+      exhaustion:"low-energy", numbness:"low-energy", sadness:"low-energy", overwhelm:"low-energy", uncertainty:"low-energy",
+      shame:"vulnerable", embarrassment:"vulnerable", loneliness:"vulnerable", confusion:"vulnerable", stupidity:"vulnerable"
+    };
+  
+    function makeChip(emotion){
+      const cat = MAP[emotion] || "low-energy";
+      const cap = emotion.charAt(0).toUpperCase() + emotion.slice(1);
+      return `<div class="emotion-chip chip-${cat}">${cap}</div>`;
     }
-
-    localStorage.setItem("nomy_dailies", JSON.stringify(dailiesNow));
-  }, true);
-
-  window.addEventListener("keydown",e=>{
-    if(e.key==="ArrowRight") render(i+1);
-    if(e.key==="ArrowLeft") render(i-1);
-  });
-
-  let startX=null;
-  window.addEventListener("touchstart", e=>startX=e.touches[0].clientX,{passive:true});
-  window.addEventListener("touchend", e=>{
-    if (startX == null) return;
-    const dx=e.changedTouches[0].clientX-startX;
-    if(Math.abs(dx)>40) dx<0?render(i+1):render(i-1);
-    startX=null;
-  });
-
-  render(0);
-</script>
+  
+    function accBlock(titleChipHtml, bodyHtml, open=false) {
+      return `
+        <div class="acc${open ? " is-open" : ""}">
+          <button type="button" class="acc-head">
+            <span class="acc-chiprow">${titleChipHtml}</span>
+            <span class="acc-icon" aria-hidden="true"></span>
+          </button>
+          <div class="acc-body">${bodyHtml}</div>
+        </div>
+      `;
+    }
+  
+    sorted.forEach((date, idx)=>{
+      const e = grouped[date];
+      const pretty = formatDate(date);
+  
+      const affBlock = e.affirm.length
+        ? accBlock(
+            `<div class="week-chip">Affirmations</div>`,
+            `<div class="week-section-body">${e.affirm.join("<br><br>")}</div>`
+          )
+        : "";
+  
+        let expressCombinedBlock = "";
+        if (e.express.length || e.express_audio.length) {
+  
+          let inside = "";
+  
+          if (e.express.length) {
+            inside += `
+              <div class="week-section-body" style="margin-bottom:12px;">
+                ${e.express.join("<br><br>")}
+              </div>
+            `;
+          }
+  
+          if (e.express_audio.length) {
+            inside += `
+              <div class="week-section-body" style="margin-top:12px;">
+                ${e.express_audio
+                  .map(src => `<audio controls src="${src}" style="width:100%; margin-bottom:16px;"></audio>`)
+                  .join("")}
+              </div>
+            `;
+          }
+  
+          expressCombinedBlock = accBlock(
+            `<div class="week-chip express">Express</div>`,
+            inside
+          );
+        }
+  
+      const goalBlock = e.goals.length
+        ? accBlock(
+            `<div class="week-chip">Goals</div>`,
+            `<div class="week-section-body">${e.goals.join("<br><br>")}</div>`
+          )
+        : "";
+  
+      const checklistBlock = e.checklist && e.checklist.length
+        ? accBlock(
+            `<div class="week-chip">Checklist</div>`,
+            `<div class="week-section-body checklist-body" data-date="${date}">
+               ${e.checklist.map((item, idx2) =>
+                 `<div class="checklist-item" data-date="${date}" data-idx="${idx2}">
+                    <span class="checkmark">${item.checked ? "✔" : "◻"}</span>
+                    <span>${item.text}</span>
+                  </div>`
+               ).join("")}
+             </div>`
+          )
+        : "";
+  
+      let emotionBlocks = "";
+      if (e.emotions.length) {
+        const body = e.emotions.map((em, index) => `
+          ${makeChip(em)}
+          <div class="week-section-body">${e.reflections[index] || ""}</div>
+        `).join("");
+        emotionBlocks = accBlock(
+          `<div class="week-chip emotionize">Emotionize</div>`,
+          body
+        );
+      }
+  
+      const html = `
+        <article class="week-slide${idx===0?" is-active":""}">
+          <div class="week-card">
+            <div class="week-card-day">${pretty}</div>
+  
+            <div class="week-section">
+              ${affBlock}
+              ${goalBlock}
+              ${checklistBlock}
+              ${emotionBlocks}
+              ${expressCombinedBlock}
+            </div>
+          </div>
+        </article>
+      `;
+      slidesContainer.insertAdjacentHTML("beforeend", html);
+  
+      const bar=document.createElement("div");
+      bar.className="week-bar";
+      const fill=document.createElement("div");
+      fill.className="week-bar__fill";
+      bar.appendChild(fill);
+      progressRoot.appendChild(bar);
+    });
+  
+    const slides=[...document.querySelectorAll(".week-slide")];
+    const fills=[...document.querySelectorAll(".week-bar__fill")];
+    let i=0;
+  
+    function render(n){
+      i=Math.max(0,Math.min(slides.length-1,n));
+      slides.forEach((s,idx)=>s.classList.toggle("is-active",idx===i));
+      fills.forEach((f,idx)=>f.style.width=idx<=i?"100%":"0%");
+    }
+  
+    document.addEventListener("click", (ev)=>{
+      if(ev.target.closest(".acc-head")){
+        ev.target.closest(".acc").classList.toggle("is-open");
+      }
+    });
+  
+    window.addEventListener("keydown",e=>{
+      if(e.key==="ArrowRight") render(i+1);
+      if(e.key==="ArrowLeft") render(i-1);
+    });
+  
+    render(0);
+  
+  } // end buildReflections()
+  
+  </script>
+  
 
 {% endblock %}
