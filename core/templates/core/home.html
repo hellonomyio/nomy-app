@@ -92,7 +92,9 @@
   <a href="{% if user.is_authenticated %}{% url 'nomy-options' %}{% else %}{% url 'nomy-intro' %}{% endif %}" 
    class="hero" aria-labelledby="title">
     <h1 id="title" class="title">
-      <img src="static/images/nomy-l.svg" alt="NOMY" class="wordmark-img" />
+      {% load static %}
+      <img src="{% static 'images/nomy-l.svg' %}" alt="NOMY" class="wordmark-img" />
+
     </h1>
     <p class="subtitle">Here to support your journey of unmasking and self-expression</p>
   </a>
