@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-from openai import OpenAI
-client = OpenAI()
 
 from django.utils.text import slugify
 
