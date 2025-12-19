@@ -20,38 +20,31 @@
   background: var(--bg);
   width: 100%;
   min-height: calc(100vh - 60px);
-
-  /* ⭐ The missing piece — adds space under navbar */
   padding: 120px 16px 80px;
-
   display: flex;
   justify-content: center;
   font-family: "DM Sans", sans-serif;
   color: var(--ink);
 }
 
-/* CONTENT WRAPPER */
 .evening-page main {
   width: min(760px, 92vw);
   text-align: center;
 }
 
-/* TITLE */
 .evening-page h1 {
-  margin: 20px 0 24px; /* small top spacing */
+  margin: 20px 0 24px;
   color: #fff;
   font-weight: 700;
   font-size: clamp(20px, 3.2vw, 32px);
 }
 
-/* CARD (textarea container) */
 .evening-page .card {
   background: var(--panel);
   border-radius: 24px;
   box-shadow: var(--shadow);
 }
 
-/* TEXTAREA */
 .evening-page textarea {
   width: 100%;
   height: clamp(220px, 40vh, 320px);
@@ -65,19 +58,16 @@
   resize: vertical;
 }
 
-/* SUBTEXT */
 .evening-page .hint {
   margin: 12px 0 40px;
   color: var(--muted);
   font-size: clamp(13px, 1.6vw, 16px);
 }
 
-/* BUTTON WRAPPER */
 .evening-page .actions {
   margin-top: 16px;
 }
 
-/* BUTTON */
 .evening-page button {
   appearance:none;
   border:0;
@@ -96,9 +86,11 @@
   background:rgba(255,255,255,.06);
   box-shadow:0 16px 40px rgba(0,0,0,.25);
 }
+
 main {
   padding-top: 0 !important;
 }
+
 .back-btn {
     position: fixed;
     top: 84px;
@@ -114,12 +106,13 @@ main {
     box-shadow:0 0 0 2px rgba(255,255,255,.25);
     transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
     z-index: 2000;
-  }
-  .back-btn:hover {
+}
+
+.back-btn:hover {
     transform:translateY(-2px);
     background:rgba(255,255,255,.06);
     box-shadow:0 16px 40px rgba(0,0,0,.25);
-  }
+}
 </style>
 
 <a href="{% url 'dailies:dailies-home' %}" class="back-btn">← Dailies Menu</a>
@@ -128,7 +121,7 @@ main {
   <main>
     <h1>Let’s check in, how did today go?</h1>
 
-    <form action="#" method="post" novalidate>
+    <form id="eveningForm" novalidate>
       <div class="card">
         <textarea
           id="evening_reflection"
@@ -148,5 +141,41 @@ main {
     </form>
   </main>
 </div>
+
+<script>
+
+  const today = new Date().toLocaleDateString("en-GB");
+
+  let all = JSON.parse(localStorage.getItem("nomy_dailies") || "[]");
+  let todayEntry = all.find(e => e.date === today);
+
+  // Prefill if already entered
+  if (todayEntry && todayEntry.evening) {
+      document.getElementById("evening_reflection").value = todayEntry.evening;
+  }
+
+  document.getElementById("eveningForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const reflection = document.getElementById("evening_reflection").value.trim();
+      if (!reflection)
+          return alert("Please write something.");
+
+      if (!todayEntry) {
+          todayEntry = { date: today, evening: reflection };
+          all.push(todayEntry);
+      } else {
+          todayEntry.evening = reflection;
+      }
+
+      localStorage.setItem("nomy_dailies", JSON.stringify(all));
+
+      alert("Your evening reflection is saved. You can keep editing this page or return later.");
+
+      // do not redirect
+  });
+
+</script>
+
 
 {% endblock %}

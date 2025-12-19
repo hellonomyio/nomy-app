@@ -292,11 +292,12 @@
     all.forEach(e=>{
       if(!e.date) return;
       if(!grouped[e.date])
-        grouped[e.date] = { affirm:[], goals:[], reflections:[], emotions:[], checklist:[], express:[], express_audio:[]};
+        grouped[e.date] = { affirm:[], goals:[], reflections:[], emotions:[], checklist:[], express:[], express_audio:[], evening:[]};
   
       if(e.affirmation) grouped[e.date].affirm.push(e.affirmation);
       if(e.goal) grouped[e.date].goals.push(e.goal);
       if(e.reflection) grouped[e.date].reflections.push(e.reflection);
+      if(e.evening) grouped[e.date].evening.push(e.evening);
       if(e.emotion) grouped[e.date].emotions.push(e.emotion);
       if(e.checklist) grouped[e.date].checklist = e.checklist;
       if(e.express) grouped[e.date].express.push(e.express);
@@ -400,6 +401,7 @@
           )
         : "";
   
+      
       let emotionBlocks = "";
       if (e.emotions.length) {
         const body = e.emotions.map((em, index) => `
@@ -412,6 +414,13 @@
         );
       }
   
+      const eveningBlock = e.evening.length
+    ? accBlock(
+        `<div class="week-chip">Evening</div>`,
+        `<div class="week-section-body">${e.evening.join("<br><br>")}</div>`
+      )
+    : "";
+
       const html = `
         <article class="week-slide${idx===0?" is-active":""}">
           <div class="week-card">
@@ -421,6 +430,7 @@
               ${affBlock}
               ${goalBlock}
               ${checklistBlock}
+              ${eveningBlock}
               ${emotionBlocks}
               ${expressCombinedBlock}
             </div>
