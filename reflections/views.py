@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .models import DailyReflection, EmotionReflection, ExpressReflection
+from .models import EmotionReflection, ExpressReflection
 import datetime, json
 
 @login_required

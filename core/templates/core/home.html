@@ -89,7 +89,7 @@
 </head>
 
 <body>
-  <a href="{% if user.is_authenticated %}{% url 'nomy-options' %}{% else %}{% url 'nomy-intro' %}{% endif %}" 
+  <a href="{% url 'nomy-intro' %}" 
    class="hero" aria-labelledby="title">
     <h1 id="title" class="title">
       {% load static %}
