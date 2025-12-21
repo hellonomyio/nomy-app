@@ -23,5 +23,8 @@ def puzzles(request):
 def memoryPairing(request):
     return render(request, 'toolkit/memory-pairing.html')
 
+def matchObject(request):
+    return render(request, 'toolkit/match-object.html')
+
 def options(request):
     return render(request, 'toolkit/options.html')

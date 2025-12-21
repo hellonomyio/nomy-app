@@ -10,5 +10,5 @@ urlpatterns = [
     path('breathing/extended-exhale', views.extendedExhale, name='toolkit-extended-exhale'),
     path('puzzles/', views.puzzles, name='toolkit-puzzles'),
     path('puzzles/memory-pairing', views.memoryPairing, name='toolkit-memory-pairing'),
-
+    path('puzzles/match-object', views.matchObject, name='toolkit-match-object'),
 ]
