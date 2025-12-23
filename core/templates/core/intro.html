@@ -253,7 +253,7 @@
         i = Math.max(0, Math.min(slides.length - 1, n));
         slides.forEach((el, idx) => el.classList.toggle('is-active', idx === i));
         fills.forEach((f, idx) => f.style.width = idx <= i ? '100%' : '0%');
-        footer.textContent = i === slides.length - 1 ? 'Tap to enter NOMY' : 'Tap → to continue';
+        footer.textContent = i === slides.length - 1 ? 'Tap to enter NOMY' : 'Tap anywhere → to continue';
       }
 
       function next() {
