@@ -142,6 +142,14 @@
     opacity: 1;
   }
 
+  /* helper text */
+  .helper-text {
+    margin-top: 20px;
+    font-size: 15px;
+    color: rgba(31,0,61,0.65);
+    text-align: center;
+  }
+
   /* avatar bottom-left */
   .avatar {
     position: fixed;
@@ -157,7 +165,6 @@
     transform-origin: bottom center;
   }
 
-  /* ✨ gentle breathing + sway animations ✨ */
   @keyframes avatar-breathe {
     0% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-4px) scale(1.02); }
@@ -216,6 +223,11 @@
       </a>
 
     </div>
+
+    <p class="helper-text">
+      You can hover over the ⓘ icons to learn more about each option
+    </p>
+
   </main>
 </div>
 
