@@ -15,7 +15,6 @@
     --navbar-height:60px;
   }
 
-  /* IMPORTANT: scoped to this page so it won't affect your base nav */
   #express-response-page {
     background: var(--bg);
     color: var(--ink);
@@ -48,7 +47,6 @@
     text-align: center;
   }
 
-  /* keep your existing back button class */
   .back-btn {
     position: fixed;
     top: 84px;
@@ -65,58 +63,66 @@
     transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
     z-index: 2000;
   }
-  .back-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(19,7,63,.10);
-    background: #faf7ff;
-  }
 
-  /* NEW: scenario + choice text (minimal) */
   .context {
     max-width: 760px;
     color: var(--muted);
-    font-size: 15px;
+    font-size: 20px;
     line-height: 1.6;
     padding: 0 18px;
   }
 
   .choice {
     color: var(--muted);
-    font-size: 14px;
+    font-size: 18px;
     margin-top: -8px;
   }
 
-  /* your quoted response style preserved */
+  /* ---------- RESPONSE TEXT (AUTO-FITS ONE LINE) ---------- */
+
   .response-text {
-    font-size: clamp(20px, 2.2vw, 26px);
-    font-weight: 400;
-    line-height: 1.4;
-    color: var(--ink);
-    max-width: 720px;
+    max-width: 100%;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .quoted {
     text-align: center;
     position: relative;
-    padding: 0 24px;
+    display: inline-block;
+    padding: 0 0.9em;
+
+    font-size: clamp(16px, 2.2vw, 26px);
+
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--ink);
   }
 
-  .response-text::before {
+  .quoted::before,
+  .quoted::after {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.8em;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .quoted::before {
     content: "“";
-    font-size: 40px;
-    color: var(--muted);
-    position: absolute;
-    left: -4px;
-    top: -10px;
+    left: 0;
+    transform: translate(-100%, -50%);
   }
 
-  .response-text::after {
+  .quoted::after {
     content: "”";
-    font-size: 40px;
-    color: var(--muted);
-    position: absolute;
-    right: -4px;
-    bottom: -10px;
+    right: 0;
+    transform: translate(100%, -50%);
   }
 
-  /* your existing option pills preserved */
+  /* ---------- OPTIONS ---------- */
+
   .option {
     display: flex;
     align-items: center;
@@ -147,12 +153,24 @@
       transform:scale(1);
       padding-top:40px;
     }
-    .back-btn{top:76px;left:18px;font-size:14px;padding:6px 12px;}
-    .option{height:80px;font-size:16px;}
-    main.wrap{gap:18px;}
+    .back-btn{
+      top:76px;
+      left:18px;
+      font-size:14px;
+      padding:6px 12px;
+    }
+    .option{
+      height:80px;
+      font-size:16px;
+    }
+    main.wrap{
+      gap:18px;
+    }
   }
 
-  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none!important}
+  }
 </style>
 
 <div id="express-response-page">
@@ -167,12 +185,14 @@
 
       {% if tone %}
         <div class="choice">
-          You chose a {{ tone|lower }} style response.
+          You chose a {{ tone|lower }} style response
         </div>
       {% endif %}
 
       {% if response %}
-        <h2 class="response-text">{{ response }}</h2>
+        <h2 class="response-text">
+          <span class="quoted">{{ response }}</span>
+        </h2>
       {% endif %}
 
       <a class="option" href="{% url 'express:express-text' %}?response={{ response|urlencode }}">
